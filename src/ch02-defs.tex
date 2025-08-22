@@ -1,0 +1,80 @@
+\section{Definitions}
+\label{ch:defs}
+
+%TODO: Bild
+Our type of SNN should be thought of as a composition of an initial input layer, a number of hidden spiking layers with internal state and an affine-linear layer mapping spikes activations over time, so called spike trains, to the value of the output layer.
+The following definitions deviate slightly from~\cite{nguyen2025timespikeunderstandingrepresentational}, since we already bake in some of the assumptions (direct encoding and membrane-potential outputs) the paper makes at a later point.
+We shall first define the membrane potential \(u^l(t)\) and the spike activations \(s^l(t)\) of the hidden layers:
+
+%TODO: herleitung
+\begin{definition}
+  The \textbf{input vector} \(i^l(t)∈\{0,1\}^{n_l}\), the \textbf{spike vector} \(s^l(t)∈\{0,1\}^{n_l}\) and the \textbf{membrane potential vector} \(u^l(t)\) of a hidden layer \(l∈[L]\) are recursively defined as
+  \begin{align}
+    i^l(t) & = α^li^l(t-1)+W^ls^{l-1}(t)+V^ls^l(t-1) \\
+    p^l(t) & = β^lu^l(t-1)+i^l(t)+b^l \\
+    s^l(t) & = H(p^l(t)-ϑ1_{n_l}) \\
+    u^l(t) & = p^l(t)-ϑs^l(t)
+  \end{align}
+  with \(s^l(0)=0\) and given
+  \begin{enumerate}
+    \item[•] \textbf{first layer spike activations}: \((s^0(t))_{t∈[T]}∈\{0,1\}^{n_0×T}\)
+    \item[•] \textbf{initial membrane potential}: \(u^l(0)∈ℝ^{n_l}\)
+    \item[•] \textbf{initial input}: \(i^l(0)∈ℝ^{n_l}\)
+    \item[•] \textbf{weight matrices}: \(W^l∈ℝ^{n_l×n_{l-1}}\)
+    \item[•] \textbf{bias vectors}: \(b^l∈ℝ^{n_l}\)
+    \item[•] \textbf{leaky terms}: \(α^l,β^l∈[0,1]\)
+    \item[•] \textbf{threshold}: \(ϑ^l∈(0,∞)\)
+  \end{enumerate}
+  where \(H≔𝟙_{[0,∞)}\) is a step function and \(T∈ℕ\) is the number of simulated time steps.
+\end{definition}
+
+In the definition of \(s^l(t)\) we first check whether the additional activation by spikes \(W^ls^{l-1}(t)\) of the previous layers and the bias \(b^l\) plus the decayed previous activation \(β^lu^l(t-1)\) passes over a certain threshold \(ϑ^l1_{n_l}\). If that is not the case we use the just computed value for \(u^l(t)\). If the neuron activates, we remove a threshold worth of value. Of course, we do this for the neurons of the whole layer in parallel.
+
+We further define d.t. LIF-SNN and the function the network realizes:
+
+\begin{definition}
+  A \textbf{discrete-time LIF-SNN} of \textbf{depth} \(L\) with \textbf{layer-widths} \((n_0,…,n_{L+1})\) is given by
+  \[ Φ≔((W^l,b^l,u^l(0),i^l(0),α^l,β^l,ϑ^l)_{l∈[L]},T,((a_t)_{t∈[T]},c,V) \]
+  where \((a_t)_{t∈[T]}∈ℝ^T\), \(c∈ℝ^{n_{L+1}}\) and \(V∈ℝ^{n_{L+1}×n_L}\) are the parameters of the output layer.
+\end{definition}
+
+\begin{definition}
+  A discrete-time LIF-SNN \(ϕ\) \textbf{realizes} the function \(R(Φ):ℝ^{n_0}→ℝ^{n_{L+1}}\):
+  \[ R(Φ)(x)=D((s^L(t))_{t∈[T]})\quad \text{with }s^0(t)≔x\]
+  where the last layer \(D\) is defined by \( D((s(t))_{t∈[T]})=\sum^T_{t=1}a_t(Vs(t)+c)\).
+\end{definition}
+
+Let us now take a look at some simple examples:
+
+\begin{example}
+  Let \(T,L∈ℕ\). Then there exists a d.t. LIF-SNN with \(∀_{t∈[T]}s^L(t)=s^0(t)\) for any \(s^0∈\{0,1\}^{n_0×T}\).
+
+  We can proof this by using constant width \(n_l=n\), weights \(W^l=I_n\), biases \(b^l=0\), initial membrane potential \(u^l(0)=0\), leaky term \(β^l=0\) and threshold \(ϑ^l=1\) for all \(l∈[L]\).
+
+  We then get by definition:
+  \begin{alignat*}{3}
+    s^l(t) & = H(& s^{l-1}(t)-1_{n_l})  &= \ s^{l-1}(t) \\
+    u^l(t) & = & s^{l-1}(t)-s^l(t)     &= 0
+  \end{alignat*}
+\end{example}
+
+\begin{example}\label{ex:2}
+  Let \(T,L∈ℕ\). Then there exists a d.t. LIF-SNN with \(∀_{t∈T}s^L(t)=\max_{t'∈[t-1]}(s^0(t'))\) for any \(s^0∈\{0,1\}^{n_0×T}\): In this network an output neuron switches on when the corresponding input neurons fires and does not switch off later.
+
+  We can proof this by using constant width \(n_l=n\), weights \(W^l=T·I_n\), biases \(b^l=0\), initial membrane potential \(u^l(0)=0\), leaky term \(β^l=1\) and threshold \(ϑ^l=1\) for all \(l∈[L]\).
+
+  We then get by definition:
+  \begin{alignat*}{2}
+    s^l(t) & = H(&u^l(t-1)+T·s^{l-1}(t)-1_{n_l}) \\
+    u^l(t) & = &u^l(t-1)+T·s^{l-1}(t)-s^l(t)
+  \end{alignat*}
+  By adding over all timesteps we obtain
+  \begin{alignat*}{1}
+    s^l(t) & = H(T\sum_{i=1}^ts^{l-1}(i)-(\sum_{t=i}^{t-1}s^l(i))+1_{n_l}) ) \\
+    u^l(t) & = \sum_{i=1}^t(T·s^{l-1}(i)-s^l(i))
+  \end{alignat*}
+  Since \(\sum_{i=1}^{t-1}s^l(i)+1_{n_l}≤T\), once there is any \(t_0∈[T]\) with \(s^{l-1}_i(t_0)=1\) for an \(i\), we get \(∀_{t≥t_0}s^l_i(t)=1\).
+  By induction over the layers we clearly get the required property.
+\end{example}
+
+\cleardoublepage

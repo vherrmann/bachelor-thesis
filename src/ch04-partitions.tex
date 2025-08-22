@@ -1,0 +1,44 @@
+\section{Complexity of input partitions}
+\label{ch:partitions}
+
+% TODO: what kind of shapes a d.t. …
+In the following we will analyze how many different values a d.t. LIF-SNN with recurrent edges dependent on parameters can obtain.
+Since the first hidden layer only communicates by spike trains to the following layers, the maximal number of different output values is bound by the number of different spike trains the first hidden layer can emit.
+We therefore simplify the notation by writing \(n,W,b,V,β,ϑ,u,s\) for \(n_1,W^{(1)},b^{(1)},V^{(1)},β^{(1)},ϑ^{(1)},u^{(1)},s^{(1)}\) respectively.
+Further we can assume \(n_0=n_1=n\), \(W=I_{n_1}\) and \(b=0_{n_1}\), since we can instead just precompose our SNN \(Φ\) with \(x↦Wx+b\). Since precomposition can only decrease the number of different values, we can instead just study \(Φ\) by itself.
+We have now
+\begin{align*}
+ u(t;x)&=βu(t-1;x)+x+(V-ϑI_n)s(t-1;x) \\
+ s(t;x)&=H(u(t;x)-ϑ𝟙_n)
+\end{align*}
+By repeatedly substituting \(u(t-1;x)\) we get
+\begin{align*}
+ u(t;x)=β^tu(0)+(\sum_{i=0}^{t-1}β^i)x+(V-ϑ·𝟙_n)\sum_{i=1}^{t-1}β^is(i;x)
+\end{align*}
+
+\begin{lemma}
+The constant regions of a d.t. LIF-SNN with recurrent edges with \(W=I_{n_1}\), \(b=0_{n_1}\) are half-open cuboids.
+\end{lemma}
+
+\begin{proof}
+  Let \(x,y∈ℝ^n\). We will first proof that the constant regions are convex. Assume that \(s(·;x)\) and \(s(·;y)\) are equal. Let us assume that there is a \(z=x+(y-x)τ\) with \(τ∈[0,1]\) and \(s(·,z)≠s(·;x)\). In that case there exists a minimal \(t∈[T]\) with \(∃_is_i(t;z)≠s_i(t;x)\).
+  Let us now regard any \(i\) with \(s_i(t;z)≠s_i(t;x)\). We can assume w.l.o.g. that \(x_i≤y_i\). Due to minimality of \(t\) we have \(∀_{t'∈[t-1]}s(t';z)=s(t';x)=s(t';y)\). Since further \(β≥0\) we get that \(u_i(t;x)\) is monotone in \(x_i\). Since further \(H\) is monotone, we conclude
+  \[ s_i(t;x)≤s_i(t;z)≤s_i(t;y) \]
+  Since \(s_i(t;x)=s_i(t;y)\), we get \(s_i(t;x)=s_i(t;z)=s_i(t;y)\).
+
+  Let us now consider a maximal constant region \(C⊂ℝ^n\) with spiketrain.
+  We now get \(C=\cap_{t∈[T],i∈[n]}\{x\mid s_i(t;x)=\}\)
+  We will now proof that borders between constant regions are along coordinate hyperplanes.
+  Let us yet again consider \(x∈ℝ^n\), but this time with \(s(·,x)≠s(·,y)\). Let us assume there is \(z=x+(y-x)τ_0\) with \(τ_0∈[0,1]\) minimal so that \(s(·,x)≠s(·,z)\).
+  Let \(t∈[T]\) be yet again minimal with \(∃_is_i(t;x)≠s_i(t;y)\).
+\end{proof}
+
+\begin{lemma}
+  For \(y∈ℝ^{n_0}\) the mapping \(f_y:ℝ→\{0,1\}^T\) defined by \(x↦s_i\) with \(s^{(0)}(t)=y+xe_i\) is monotone regarding lexical ordering.
+\end{lemma}
+
+\begin{theorem}
+For \(β=1\) a d.t. LIF-SNN with recurrent edges can obtain \(O(T^{2n})\) different values.
+\end{theorem}
+
+\cleardoublepage

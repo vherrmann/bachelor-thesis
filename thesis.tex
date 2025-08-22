@@ -1,8 +1,25 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{theme/lmuthesis}
 
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{unicode-math}
+\usepackage{amsmath, amsfonts}
+\usepackage{wasysym}
+\usepackage{amsthm, thmtools}
+\declaretheorem[numberwithin=section]{lemma, proposition, theorem}
+\declaretheorem[numberwithin=section, style=plain]{example}
+\declaretheorem[numberwithin=section]{definition}
+
+\usepackage{epstopdf}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepackage{physics}
+
 % this for draft water mark
-\input{condition}
+\setboolean{release}{true}
+\IfFileExists{condition}{\input{condition}}{}
 \ifthenelse{\boolean{release}}{
 }{
     \usepackage{draftwatermark}
@@ -11,12 +28,12 @@
 }
 
 % meta informations
-\department{Institut f\"ur Informatik}
-\lfe{Lehr- und Forschungseinheit Medieninformatik}
+\department{Institut für TODO}
+\lfe{Lehr- und Forschungseinheit TODO}
 \professor{Prof.\ Dr.\ PROFESSORS NAME}
-\type{Master's Thesis}
+\type{Bachelor's Thesis}
 \title{THESIS TITLE}
-\author{AUTHOR}
+\author{Valentin Herrmann}
 \email{EMAIL}
 \bearbeitungszeitraum{START bis END}
 \supervisor{SUPERVISOR}
@@ -37,6 +54,9 @@
     This thesis proposes ...
 }
 
+\newcommand{\dtlifsnn}{d.t. LIF-SNN}
+\newcommand{\Dtlifsnn}{D.t. LIF-SNN}
+
 \begin{document}
 
 \makecover
@@ -50,6 +70,9 @@
 \cleardoublepage
 
 \input{src/ch01-intro}
+\input{src/ch02-defs}
+\input{src/ch03-struct}
+\input{src/ch04-partitions}
 \input{literatures/bib.tex}
 
 \end{document}
