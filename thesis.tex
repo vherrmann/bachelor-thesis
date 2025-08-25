@@ -9,7 +9,8 @@
 \usepackage{amsthm, thmtools}
 \declaretheorem[numberwithin=section]{lemma, proposition, theorem}
 \declaretheorem[numberwithin=section, style=plain]{example}
-\declaretheorem[numberwithin=section]{definition}
+\declaretheorem[style=definition, numberwithin=section]{definition}
+\declaretheorem[style=remark, numberwithin=section]{remark}
 
 \usepackage{epstopdf}
 \usepackage{tikz}
@@ -54,8 +55,9 @@
     This thesis proposes ...
 }
 
-\newcommand{\dtlifsnn}{d.t. LIF-SNN}
-\newcommand{\Dtlifsnn}{D.t. LIF-SNN}
+\newcommand{\dtlifsnn}{r. d.t. LIF-SNN }
+\newcommand{\Dtlifsnn}{R. d.t. LIF-SNN }
+\newcommand{\proofofref}[1]{Proof of~\autoref{#1}.}
 
 \begin{document}
 
@@ -69,10 +71,11 @@
 % \listoftables
 \cleardoublepage
 
-\input{src/ch01-intro}
-\input{src/ch02-defs}
-\input{src/ch03-struct}
-\input{src/ch04-partitions}
+\input{src/ch01-intro} \cleardoublepage
+\input{src/ch02-defs} \cleardoublepage
+\input{src/ch03-struct} \cleardoublepage
+\input{src/ch04-partitions} \cleardoublepage
+\input{src/ch05-experimental-results} \cleardoublepage
 \input{literatures/bib.tex}
 
 \end{document}

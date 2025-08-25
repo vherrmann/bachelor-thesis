@@ -2,43 +2,168 @@
 \label{ch:partitions}
 
 % TODO: what kind of shapes a d.t. …
-In the following we will analyze how many different values a d.t. LIF-SNN with recurrent edges dependent on parameters can obtain.
-Since the first hidden layer only communicates by spike trains to the following layers, the maximal number of different output values is bound by the number of different spike trains the first hidden layer can emit.
-We therefore simplify the notation by writing \(n,W,b,V,β,ϑ,u,s\) for \(n_1,W^{(1)},b^{(1)},V^{(1)},β^{(1)},ϑ^{(1)},u^{(1)},s^{(1)}\) respectively.
-Further we can assume \(n_0=n_1=n\), \(W=I_{n_1}\) and \(b=0_{n_1}\), since we can instead just precompose our SNN \(Φ\) with \(x↦Wx+b\). Since precomposition can only decrease the number of different values, we can instead just study \(Φ\) by itself.
-We have now
-\begin{align*}
- u(t;x)&=βu(t-1;x)+x+(V-ϑI_n)s(t-1;x) \\
- s(t;x)&=H(u(t;x)-ϑ𝟙_n)
-\end{align*}
-By repeatedly substituting \(u(t-1;x)\) we get
-\begin{align*}
- u(t;x)=β^tu(0)+(\sum_{i=0}^{t-1}β^i)x+(V-ϑ·𝟙_n)\sum_{i=1}^{t-1}β^is(i;x)
-\end{align*}
+In the following we will analyze what shape the graph of a \dtlifsnn has.
+Since the output of the following layers only depends on the spike trains of the first hidden layer, those layers are only able to merge different output regions of the first hidden layer. We will therefore only study the output landscape of the first hidden layer.
 
-\begin{lemma}
-The constant regions of a d.t. LIF-SNN with recurrent edges with \(W=I_{n_1}\), \(b=0_{n_1}\) are half-open cuboids.
+We can therefore simplify the notation in this section by writing \(W,b,V,β,ϑ,u,s\) for \(W^{[1]},b^{[1]},V^{[1]},β^{[1]},ϑ^{[1]},u^{[1]},s^{[1]}\) respectively. Since we are using direct encoding, we will write \(x\) for \(s^{[0]}∈ℝ^{n_0}\):
+% We can assume \(n_0=n_1=n\), \(W=I_{n_1}\) and \(b=0_{n_1}\), since we can instead just precompose our SNN \(Φ\) with \(x↦Wx+b\). Since precomposition can only decrease the number of different values, we can instead just study \(Φ\) by itself.
+  \begin{align}
+    i(t) & = αi(t-1)+Wx+Vs(t-1) \\
+    p(t) & = βu(t-1)+i(t)+b \\
+    s(t) & = H(p(t)-ϑ1_n) \\
+    u(t) & = p(t)-ϑs(t)
+  \end{align}
+
+By using the simplified notation, we obtain the following explicitely formulated definitions from~\autoref{lem:non-recursive-defs} for \(x∈ℝ^{n_0}\) and \(s:\{0,1\}^{n_1×t'}\) for \(t'\) chosen such that the following equations are well-defined:
+\begin{align}
+    i(t;x;s_p) &= α^ti(0)+\sum_{k=1}^tα^{t-k}\left(Wx+Vs_p(k-1)\right), \\\label{eq:1}
+    u(t;x;s_p) &= β^tu(0)+\sum_{k=1}^tβ^{t-k}\left(i(k;x;s_p)+b-ϑs_p(k)\right), \\\label{eq:2}
+    p(t;x;s_p) &= β^tu(0)+\sum_{k=1}^tβ^{t-k}\left(i(k;x;s_p)+b\right)-ϑ\sum_{k=1}^{t-1}β^{t-k}s_p(k), \\
+    s(t;x;s_p) &= H(p(t;x;s_p)-ϑ1_{n_1})
+\end{align}
+
+\begin{remark}\label{rem:regions-non-recursive-defs}
+  We will sometimes just write \(i(t;x)\) instead of \(i(t;x;s_p)\), with which we imply to use \(s\) (at \(x\)) for \(s_p\). The same holds for \(u,p,s\).
+
+  It is furthermore quite obvious that \(i\) grows linear in \(x\), given fixed \(s_p\). The same holds therefore for \(u\) and \(p\). Further, the interdependence of the different components in \(i/u/p/s\) is gone using a constant \(s_p\). We can therefore split e.g. \(p\) into functions \(p_{i;s_p}\) such that \(p(t,x)=p_{1;s_p}(t;x_1)×…×p_{n_1;s_p}(t;x_{n_1})\).
+  The functions \(p_{i;s_p}\) are not only linear in \(x\), but also grow monotonically in \(x\) since \(α,β≥0\).
+  So we in particular have that \(p\) to is growing monotonically (regarding by-component ordering).
+  Since \(H\) is a monotonically growing function, \(s\) is also growing monotonically.
+\end{remark}
+We will examine the graph by investigating the shape and location of the constant regions of a \dtlifsnn:
+
+\begin{definition}
+  The set of constant regions of a \dtlifsnn \(Φ\) is defined as the partition
+  \[ C_Φ≔\{R(Φ)^{-1}(\{y\})\mid y∈\operatorname{im}(R(Φ))\} \]
+  of \(ℝ^{n_0}\). The set of constant regions of the first layer of a \dtlifsnn \(Φ\) is defined as
+  \[ C_{Φ,1}≔\{\{x∈ℝ^{n_0}\mid∀_ts(t;x)=s'(t)\}\mid s'∈\{0,1\}^{n_1×T}\} \]
+\end{definition}
+
+% TODO: remark about the connection between C_Φ and C_{Φ,1}
+
+\begin{proposition}\label{prop:const-regions-cuboids}
+  The constant regions of the first layer of a \dtlifsnn \(Φ\) with \(W=I_{n_1}\) are half-open cuboids.
+\end{proposition}
+
+\begin{lemma}\label{lem:intersection-and-product}
+  \(\bigcap_{j∈J}\prod_{i∈[n]}M_{i,j}=\prod_{i∈[n]}\bigcap_{j∈J}M_{i,j}\) for an index set \(J\) and sets \((M_{i,j})_{i∈[n],j∈J}\).
 \end{lemma}
 
-\begin{proof}
-  Let \(x,y∈ℝ^n\). We will first proof that the constant regions are convex. Assume that \(s(·;x)\) and \(s(·;y)\) are equal. Let us assume that there is a \(z=x+(y-x)τ\) with \(τ∈[0,1]\) and \(s(·,z)≠s(·;x)\). In that case there exists a minimal \(t∈[T]\) with \(∃_is_i(t;z)≠s_i(t;x)\).
-  Let us now regard any \(i\) with \(s_i(t;z)≠s_i(t;x)\). We can assume w.l.o.g. that \(x_i≤y_i\). Due to minimality of \(t\) we have \(∀_{t'∈[t-1]}s(t';z)=s(t';x)=s(t';y)\). Since further \(β≥0\) we get that \(u_i(t;x)\) is monotone in \(x_i\). Since further \(H\) is monotone, we conclude
-  \[ s_i(t;x)≤s_i(t;z)≤s_i(t;y) \]
-  Since \(s_i(t;x)=s_i(t;y)\), we get \(s_i(t;x)=s_i(t;z)=s_i(t;y)\).
+\begin{proof}[\proofofref{lem:intersection-and-product}]
+  For every \(x=(x_i)_{i∈[n]}∈M≔\prod_{i∈[n]}\bigcup_{j∈J}M_{i,j}\) holds:
+  \begin{equation*}
+   x∈\bigcap_{j∈J}\prod_{i∈[n]}M_{i,j}⇔∀_{j∈J}x∈\prod_{i∈[n]}M_{i,j} ⇔∀_{j∈J}∀_{i∈[n]}x_i∈M_{i,j}
+  \end{equation*}
+  On the other hand, we have
+  \begin{equation*}
+    x∈\prod_{i∈[n]}\bigcap_{j∈I}M_{i,j}⇔∀_{i∈[n]}x_i\bigcap_{j∈I}M_{i,j}⇔∀_{i∈[n]}∀_{j∈J}x_i∈M_{i,j}
+  \end{equation*}
+  In total we get
+  \[ \bigcap_{j∈J}\prod_{i∈[n]}M_{i,j}=M∩\bigcap_{j∈J}\prod_{i∈[n]}M_{i,j}=M∩\prod_{i∈[n]}\bigcap_{j∈I}M_{i,j}=\prod_{i∈[n]}\bigcap_{j∈I}M_{i,j} \]
+\end{proof}
 
-  Let us now consider a maximal constant region \(C⊂ℝ^n\) with spiketrain.
-  We now get \(C=\cap_{t∈[T],i∈[n]}\{x\mid s_i(t;x)=\}\)
-  We will now proof that borders between constant regions are along coordinate hyperplanes.
-  Let us yet again consider \(x∈ℝ^n\), but this time with \(s(·,x)≠s(·,y)\). Let us assume there is \(z=x+(y-x)τ_0\) with \(τ_0∈[0,1]\) minimal so that \(s(·,x)≠s(·,z)\).
-  Let \(t∈[T]\) be yet again minimal with \(∃_is_i(t;x)≠s_i(t;y)\).
+\begin{lemma}\label{lem:intersection-cuboid}
+  The intersection \(C_1∩C_2\) of half-open cuboids \(C_1,C_2⊂ℝ^n\) is a half-open cuboid.
+\end{lemma}
+
+\begin{proof}[\proofofref{lem:intersection-cuboid}]
+  %TODO: explicitely show case n=1?
+  By definition of a half-open cuboid, we have half-open intervals \([c_{i,j},d_{i,j})\) with \(j∈[n]\) such that \(C_i≔\prod_{j∈[n]}[c_{i,j},d_{i,j})\) for \(i∈[2]\). We therefore have
+  \[ C_1∩C_2=\prod_{j∈[n]}([c_{1,j},d_{1,j})∩[c_{2,j},d_{2,j}))=\prod_{j∈[n]}([\max(c_{1,j},c_{2,j}),\min(d_{1,j},d_{2,j}))) \]
+  by~\autoref{lem:intersection-and-product}
+\end{proof}
+%TODO: remark, we do allow empty cuboids?
+
+%TODO: define cuboid/half-open?
+
+\begin{lemma}\label{lem:pre-image-half-open-int}
+  Let \([c,d)\) be a half-open interval and \(φ:ℝ→ℝ\) be an affine linear function. Then \(φ^{-1}([c,d))\) is a half-open interval.
+\end{lemma}
+
+%TODO: properly define half-open cuboid
+
+\begin{proof}
+  If \(φ\) is constant, then \(φ^{-1}([c,d))\) is either \(ℝ=[-∞,∞)\) or \(∅=[0,0)\).
+  If \(φ\) is not constant, then \(φ=ax+b\) with \(a>0\) and \(φ^{-1}([c,d))=[\frac{c-b}{a},\frac{d-b}{a})\), if \(c,d∈ℝ\); if \(c=-∞\) or \(d=∞\) the lower limit or upper limit of \(φ^{-1}([c,d))\) is \(-∞\) or \(∞\) respectively.
+\end{proof}
+
+\begin{proof}[\proofofref{prop:const-regions-cuboids}]
+  Let \(C∈C_{Φ,1}\) be such a region and \(s_C\) the corresponding spike train. We then get
+  \begin{align*}
+    C&=\bigcap_{i∈[n_1],t∈[T]}\{x\mid (s_C)_i(t) =s_i(t;x)\} \\
+     &=\bigcap_{i∈[n_1],t∈[T]}\{x\mid (s_C)_i(t) =s_i(t;x;s_C)\} \\
+     &= \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=0}}\{x\mid p_i(t;x;s_C)<ϑ\}\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=1}}\{x\mid p_i(t;x;s_C)≥ϑ\}\right) \\
+  \end{align*}
+  So \(C\) is an intersection of pre-images of half-open intervals regarding functions \(p_i(t;·;s_C)\). Since \(p_i(t;x;s_C)=p_{i;s_C}(t;π_i(x);s_C)\) for all \(x∈ℝ^{n_0}\), and since \(p_{i;s_C}\) is linear and growing monotonically, we can apply~\autoref{lem:pre-image-half-open-int}. A pre-image of a half-open interval regarding \(p_i(t;·;s_C)\) is therefore a pre-image of a half-open interval regarding \(π_i\), so a half-open cuboid.
+
+  We can now apply~\autoref{lem:intersection-cuboid} and obtain that \(C\) is indeed a half-open cuboid.
+
+  % . Let further \(x,y∈C\). We now define the compact cuboid spanned by \(x,y\) as \(D_{x,y}≔[x,y]\).
+  % % Here \([x_i,y_i]\) with \(x_i>y_i\) is to be understood as the interval \([y_i,x_i]\).
+  % The first step of our proof is showing \(D_{x,y}⊂C_{Φ,1}\). W.l.o.g. we can assume that \(x≤y\) (in each component), otherwise we can replace \(x\) by \((\min(x_i,y_i))_i\) and \(y\) by \((\max(x_i,y_i))_i\). We therefore get \(z∈D_{x,y}⇔x≤z≤y\).
+
+  % % TODO: widerspruchsbeweis unnötig? Geht auch per Induktion
+  % Suppose now a \(z∈D_{x,y}∖C_{Φ,1}\) exists. We therefore have a \(t\) such that \(s(t;x)=s(t;y)≠s(t;z)\). Let \(t_0\) be the smallest such \(t\). We therefore have \(∀_{t<t_0}s(t;x)=s(t;y)=s(t;z)\) and therefore get \(i(t;x)≤i(t;z)≤i(t;y)\) by~\eqref{eq:1} due to \(W=I_{n_1}\). From \(i(t;x)≤i(t;z)≤i(t;y)\) we can easily deduce \(p(t;x)≤p(t;z)≤p(t;y)\) and from that yet again we can conclude \(s(t;x)≤s(t;z)≤s(t;y)\), since \(H=χ_{[1,∞]}\) rises monotonically.
+
+  % Let us further consider
+
+  % % We define \(q_C≔(\inf_{x∈C}x_i)_i\), \(p_C≔(\sup_{x∈C}x_i)_i\)
+\end{proof}
+
+We will add an ordering to spike trains based on lexicographical ordering. We define \(s'≤_ls''\) for \(s',s''∈\{0,1\}^{n_1×T}\) to mean that either \(s'=s''\) or \(s'(t)<s''(t)\) holds for the minimal time \(t\) such that the spike trains have different values.
+
+\begin{lemma}
+  Let us regard a \dtlifsnn \(Φ\) with \(W=I_{n_1}\).
+  Let further \(x,y∈ℝ^{n_0}\). We then have \(x≤y⇒s(·;x)≤s(·;y)\).
+\end{lemma}
+
+% TODO: introduce a<b means a≤b and ∃_i(a_i<b_i)
+\begin{proof}
+  We first proof \(x≤y⇒s(·;x)≤s(·;y)\). Suppose \(s(·;x)≠s(·;y)\). We then have a minimal \(t∈[T]\) such \(s(t;x)≠s(t;y)\). Now due to \(∀_{t'<t}s(t';x)=s(t';y)\) and~\autoref{rem:regions-non-recursive-defs} we have \(s(t;x)≤s(t;y)\) and therefore \(s(t;x)<s(t;y)\).
 \end{proof}
 
 \begin{lemma}
-  For \(y∈ℝ^{n_0}\) the mapping \(f_y:ℝ→\{0,1\}^T\) defined by \(x↦s_i\) with \(s^{(0)}(t)=y+xe_i\) is monotone regarding lexical ordering.
+  All (finite) vertices of the constant regions of the first layer of a \dtlifsnn \(Φ\) with \(W=I_{n_1}\) are contained in \([a,b]\), where
+  % where \(a_0\) is the higher vertex of the region \(C_0≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=0\}\), \(C_0=[a_0,b_0)\), with constant \(0\) spike train and \(b_1\) is the lower vertex of the region \(C_1≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=1\}\), \(C_1=[a_1,b_1)\) with constant \(1\) spike train.
+  %TODO: improve inequalities
+  \begin{align*}
+   a &≔ \\
+   b &≔\max(-βu(0)-αi(0),)+(-b)+ϑ·𝟙_{n_1}
+  \end{align*}
 \end{lemma}
 
+\begin{proof}
+  Let \(\)
+\end{proof}
+
+% TODO: lexiographic ordering even in general case (with specific def.) and
+
+% TODO: the regions appear only between …
+
+% TODO: generalize for W arbitrary
+
+% TODO: show that limit can be reached/refer to previous paper
+
+% \begin{lemma}
+%   For \(y∈ℝ^{n_0}\) the mapping \(f_y:ℝ→\{0,1\}^T\) defined by \(x↦s_i\) with \(s^{[0]}(t)=y+xe_i\) is monotone regarding lexical ordering.
+% \end{lemma}
+
+% TODO: motivation for theorem
+While in theory we would expect the number of constant regions to grow exponentially with time, it grows only quadratically.
+
 \begin{theorem}
-For \(β=1\) a d.t. LIF-SNN with recurrent edges can obtain \(O(T^{2n})\) different values.
+A \dtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) different constant regions.
 \end{theorem}
 
-\cleardoublepage
+\begin{proof}
+  Since the number of constant regions of a \dtlifsnn are just unions of the constant regions of the corresponding first layer, it suffices to compute the maximum number of constant regions of that layer.
+
+  Let us consider by how much the regions can increase going from \(t-1\) to \(t∈[T]\). We can categorize the regions at \(t-1\) by the number of spikes they have in each component.
+\end{proof}
+
+\begin{corollary}
+  %TODO: versions for W arbitrary
+\end{corollary}
+
+\begin{proof}
+\end{proof}

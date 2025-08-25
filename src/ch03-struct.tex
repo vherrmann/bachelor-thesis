@@ -28,9 +28,9 @@ We will now provide an alternative version of this theorem which uses an increas
 \begin{theorem}\label{thm:approx-snn}
   Let \(f∈𝒞^1(Ω,ℝ^m)\) be a continuously differentiable function on a compact set \(Ω⊂ℝ^n\). For all \(ε>0\), there exists a d.t. LIF-SNN \(Φ\) with direct encoding, membrane potential output, \(L=2\) and
   \begin{align*}
-   T &= TODO \\
-   n_1 &= (K-1)·n+n \\ %TODO: add def for K
-   n_2 &=K^n·m
+   T &= 2K \\
+   n_1 &= n+1 \\ %TODO: add def for K
+   n_2 &=K^n·(m+1)
   \end{align*}
   such that
   \[ \norm{R(Φ)-f}_{∞}≤ε\]
@@ -40,15 +40,16 @@ We will now provide an alternative version of this theorem which uses an increas
   Let \(Ω⊂ℝ^n\) be compact. Then there exists a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) such that \(Ω⊂\overline{C}\).
 \end{lemma}
 
-\begin{proof}[Proof of~\autoref{lem:smallest-cube}.]
-  We can first define \(a≔(\min_{x∈Ω} x_i)_i\) since \(Ω\) is compact We further have \(b≔a+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔[a,b)\). Suppose now a point \(y∈Ω∖\overline{C}\) exists. By definition of \(a\), we have \(a≤y\). By definition of \(C\) we further get \(y\nleq b\), and therefore \(∃_ib_i<y_i\) by definition of \(C\). But this means \(\norm{a-y}_∞>\operatorname{diam}_∞(Ω)\)
+%TODO: we later use [y,z) instead of [a,b); unify notation
+\begin{proof}[\proofofref{lem:smallest-cube}.]
+  We can first define \(a≔(\min_{x∈Ω} x_i)_i\) since \(Ω\) is compact We further have \(b≔a+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔[a,b)\). Suppose now a point \(y∈Ω∖\overline{C}\) exists. By definition of \(a\), we have \(a≤y\). By definition of \(C\) we further get \(y\nleq b\), and therefore \(∃_ib_i<y_i\) by definition of \(C\). But this means \(\norm{a-y}_∞>\operatorname{diam}_∞(Ω)\).
 \end{proof}
 
 % TODO: differentiable, but defined on compact subset of euclidean space???
 % TODO: quote formulation?
 % TODO: instead of fixing \(ε^{t}\), get supremum of
 
-\def\dsqe{δ(ξ)}
+\newcommand{\dsqe}{δ(ξ)}
 \begin{lemma}\label{lem:approx-by-lin}
   Let \(f∈𝒞^1(Ω,ℝ^m)\) be a continuously differentiable function on a compact set \(Ω⊂ℝ^n\) and \(ε>0\). Then there exists a half-open cube \(C\) with \(Ω⊂C\) that can be composed in
   \[ K^n≔\min_{\substack{ξ,θ>0\\ξθ=ε}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(\dsqe ,θ)} \right\rceil\right\}^n \]
@@ -57,7 +58,7 @@ We will now provide an alternative version of this theorem which uses an increas
 \end{lemma}
 
 % TODO: fix issue with C_i s not completely fitting in open \sqrt{2}δ(ε) balls due to closed part of C_i
-\begin{proof}[Proof of~\autoref{lem:approx-by-lin}.]
+\begin{proof}[\proofofref{lem:approx-by-lin}.]
   By~\autoref{lem:smallest-cube} we have a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) and \(Ω⊂\overline{C}\).
   Let further \(ε>0\) be given. Since \(Ω\) is compact and \(f∈𝒞^1(Ω,ℝ^m)\), \(dF\) is uniformly continuous on \(Ω\). Let \(δ(ε)\) be \(dF\)s modulus of continuity.
   We will now partition \(C\) in
@@ -81,25 +82,44 @@ We will now provide an alternative version of this theorem which uses an increas
   \end{align*}
 \end{proof}
 
-\begin{proof}[Proof of~\autoref{thm:approx-snn}.]
+\begin{proof}[\proofofref{thm:approx-snn}.]
   Let a continuously differentiable function \(f∈𝒞^1(Ω,ℝ^m)\) on a compact set \(Ω⊂ℝ^n\) be given. Let there further be a \(ε>0\).
+  %TODO: clarify notation [y,z) (line or proper subspace)
   By~\autoref{lem:approx-by-lin} we have a half-open cube \(C=[y,z)\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<ετ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
   We will now define a \dtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<ε(1-τ)\).
-  Before anything else we shall set the following basic parameters: \(i^l(0)=0\), \(α^l=0\) and \(β^l=ϑ^l=1\).
-  We obtain the equations:
+  Before anything else we shall set the following basic parameters: \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\).
+  We obtain the simplified equations:
   \begin{align*}
-    p^l(t) & = u^l(t-1)+W^ls^{l-1}(t)+V^ls^l(t-1)+b^l \\
-    s^l(t) & = H(p^l(t)-1_{n_l}) \\
-    u^l(t) & = p^l(t)-s^l(t)
+    p^{[l]}(t) & = u^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)+b^{[l]} \\
+    s^{[l]}(t) & = H(p^{[l]}(t)-1_{n_l}) \\
+    u^{[l]}(t) & = p^{[l]}(t)-s^{[l]}(t)
   \end{align*}
-  We will now define the first layer in a similar fashion to~\cite{nguyen2025timespikeunderstandingrepresentational} in the proof of~\autoref{thm:approx-snn-constant}.
-  We define the neuron \(j+(k-1)i\), \(j∈[k-1]\), of the \(k-1\) neurons for each dimension \(i∈[n]\) by weights \(w_{j+i(k-1)}=e_i\) and bias \(b^1_{j+i(k-1)}=y_i+\frac{j}{K}(z_i-y_i)\).
-  These neurons represent hyperplanes separating the subcubes in the input space. Indeed we have
-  \(s^1(t)≤\)
+  % TODO: graphic
+  The intuitive idea is the following… %TODO
+  We define the \(i\)-th neuron of the first \(n\) of the first layer by parameters \(w=\frac{1}{z_i-y_i}e_i\), \(b=-\frac{y_i}{z_i-y_i}\), \(v=-e_{n+1}\), \(u_0=0\), \(i_0=0\).
+  We obtain
+  \[ p^{[1]}_i(t) = u^{[1]}_i(t-1)+\frac{1}{z_i-y_i}s_i^{[0]}(t)-s^{[1]}_{n+1}(t-1)-\frac{y_i}{z_i-y_i} \]
+  and therefore \(1=s^{[1]}_i(t)⇔\)
+
+  % TODO: why K≠0
+  % TODO: check on „off by one errors“
+  We further define the \(n+1\)-th neuron by parameters \(w=0\), \(b=1\), \(v=e_{n+1}\), \(u_0=-(K-1)\), \(i_0=0\).
+
+  Let us now regard the second layer.
 \end{proof}
+
+%TODO: remark about SNN construction. By adding more neurons to first layer ((K-1)n to be exact) you can half the required time steps.
+
+%TODO: mollification
+
 
 comparison:
 sin mit kleiner ampitude, extrem hoher frequenz
+
+%TODO: better for ε→0
+\begin{theorem}
+
+\end{theorem}
 
 The proof works by first showing that a continuous function can be arbitrarily approximated by step functions, in particular by step functions constant on hypercubes in \(Ω\).
 Then the d.t. LIF-SNN is constructed by using the first layer to cut the input space by hyperplanes along the cubes and using the second layer to represent the hypercubes.
@@ -134,5 +154,3 @@ Then the d.t. LIF-SNN is constructed by using the first layer to cut the input s
 
 
 % TODO: encoding with fewer layers for on finite segments continuously differentiable functions
-
-\cleardoublepage
