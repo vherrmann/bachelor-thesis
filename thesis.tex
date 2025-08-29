@@ -7,13 +7,14 @@
 \usepackage{amsmath, amsfonts}
 \usepackage{wasysym}
 \usepackage{amsthm, thmtools}
-\declaretheorem[numberwithin=section]{lemma, proposition, theorem}
+\declaretheorem[numberwithin=section]{lemma, proposition, theorem, corollary}
 \declaretheorem[numberwithin=section, style=plain]{example}
 \declaretheorem[style=definition, numberwithin=section]{definition}
 \declaretheorem[style=remark, numberwithin=section]{remark}
 
 \usepackage{epstopdf}
 \usepackage{tikz}
+\usetikzlibrary{positioning, chains, shapes.geometric, fit, shapes, arrows.meta, calc, backgrounds}
 \usepackage{pgfplots}
 
 \usepackage{physics}
@@ -55,15 +56,17 @@
     This thesis proposes ...
 }
 
-\newcommand{\dtlifsnn}{r. d.t. LIF-SNN }
-\newcommand{\Dtlifsnn}{R. d.t. LIF-SNN }
+\newcommand{\dtlifsnn}{d.t. LIF-SNN }
+\newcommand{\Dtlifsnn}{d.t. LIF-SNN }
+\newcommand{\rdtlifsnn}{r. d.t. LIF-SNN }
+\newcommand{\Rdtlifsnn}{R. d.t. LIF-SNN }
 \newcommand{\proofofref}[1]{Proof of~\autoref{#1}.}
 
 \begin{document}
 
 \makecover
-\maketaskdescription
-\makededication
+%\maketaskdescription
+%\makededication
 \makeabstract
 \maketoc
 % optional:

@@ -2,7 +2,7 @@
 \label{ch:partitions}
 
 % TODO: what kind of shapes a d.t. …
-In the following we will analyze what shape the graph of a \dtlifsnn has.
+In the following we will analyze what shape the graph of a \rdtlifsnn has.
 Since the output of the following layers only depends on the spike trains of the first hidden layer, those layers are only able to merge different output regions of the first hidden layer. We will therefore only study the output landscape of the first hidden layer.
 
 We can therefore simplify the notation in this section by writing \(W,b,V,β,ϑ,u,s\) for \(W^{[1]},b^{[1]},V^{[1]},β^{[1]},ϑ^{[1]},u^{[1]},s^{[1]}\) respectively. Since we are using direct encoding, we will write \(x\) for \(s^{[0]}∈ℝ^{n_0}\):
@@ -30,19 +30,19 @@ By using the simplified notation, we obtain the following explicitely formulated
   So we in particular have that \(p\) to is growing monotonically (regarding by-component ordering).
   Since \(H\) is a monotonically growing function, \(s\) is also growing monotonically.
 \end{remark}
-We will examine the graph by investigating the shape and location of the constant regions of a \dtlifsnn:
+We will examine the graph by investigating the shape and location of the constant regions of a \rdtlifsnn:
 
 \begin{definition}
-  The set of constant regions of a \dtlifsnn \(Φ\) is defined as the partition
+  The set of constant regions of a \rdtlifsnn \(Φ\) is defined as the partition
   \[ C_Φ≔\{R(Φ)^{-1}(\{y\})\mid y∈\operatorname{im}(R(Φ))\} \]
-  of \(ℝ^{n_0}\). The set of constant regions of the first layer of a \dtlifsnn \(Φ\) is defined as
+  of \(ℝ^{n_0}\). The set of constant regions of the first layer of a \rdtlifsnn \(Φ\) is defined as
   \[ C_{Φ,1}≔\{\{x∈ℝ^{n_0}\mid∀_ts(t;x)=s'(t)\}\mid s'∈\{0,1\}^{n_1×T}\} \]
 \end{definition}
 
 % TODO: remark about the connection between C_Φ and C_{Φ,1}
 
 \begin{proposition}\label{prop:const-regions-cuboids}
-  The constant regions of the first layer of a \dtlifsnn \(Φ\) with \(W=I_{n_1}\) are half-open cuboids.
+  The constant regions of the first layer of a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\) are half-open cuboids.
 \end{proposition}
 
 \begin{lemma}\label{lem:intersection-and-product}
@@ -92,7 +92,7 @@ We will examine the graph by investigating the shape and location of the constan
   \begin{align*}
     C&=\bigcap_{i∈[n_1],t∈[T]}\{x\mid (s_C)_i(t) =s_i(t;x)\} \\
      &=\bigcap_{i∈[n_1],t∈[T]}\{x\mid (s_C)_i(t) =s_i(t;x;s_C)\} \\
-     &= \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=0}}\{x\mid p_i(t;x;s_C)<ϑ\}\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=1}}\{x\mid p_i(t;x;s_C)≥ϑ\}\right) \\
+     &= \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=0}}\{x\mid p_i(t;x;s_C)<ϑ\}\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=1}}\{x\mid p_i(t;x;s_C)≥ϑ\}\right)
   \end{align*}
   So \(C\) is an intersection of pre-images of half-open intervals regarding functions \(p_i(t;·;s_C)\). Since \(p_i(t;x;s_C)=p_{i;s_C}(t;π_i(x);s_C)\) for all \(x∈ℝ^{n_0}\), and since \(p_{i;s_C}\) is linear and growing monotonically, we can apply~\autoref{lem:pre-image-half-open-int}. A pre-image of a half-open interval regarding \(p_i(t;·;s_C)\) is therefore a pre-image of a half-open interval regarding \(π_i\), so a half-open cuboid.
 
@@ -113,27 +113,30 @@ We will examine the graph by investigating the shape and location of the constan
 We will add an ordering to spike trains based on lexicographical ordering. We define \(s'≤_ls''\) for \(s',s''∈\{0,1\}^{n_1×T}\) to mean that either \(s'=s''\) or \(s'(t)<s''(t)\) holds for the minimal time \(t\) such that the spike trains have different values.
 
 \begin{lemma}
-  Let us regard a \dtlifsnn \(Φ\) with \(W=I_{n_1}\).
+  Let us regard a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\).
   Let further \(x,y∈ℝ^{n_0}\). We then have \(x≤y⇒s(·;x)≤s(·;y)\).
 \end{lemma}
 
 % TODO: introduce a<b means a≤b and ∃_i(a_i<b_i)
 \begin{proof}
-  We first proof \(x≤y⇒s(·;x)≤s(·;y)\). Suppose \(s(·;x)≠s(·;y)\). We then have a minimal \(t∈[T]\) such \(s(t;x)≠s(t;y)\). Now due to \(∀_{t'<t}s(t';x)=s(t';y)\) and~\autoref{rem:regions-non-recursive-defs} we have \(s(t;x)≤s(t;y)\) and therefore \(s(t;x)<s(t;y)\).
+  Let \(x≤y\) and \(s(·;x)≠s(·;y)\). We then have a minimal \(t∈[T]\) such \(s(t;x)≠s(t;y)\). Now due to \(∀_{t'<t}s(t';x)=s(t';y)\) and~\autoref{rem:regions-non-recursive-defs} we have \(s(t;x)≤s(t;y)\) and therefore \(s(t;x)<s(t;y)\).
 \end{proof}
 
 \begin{lemma}
-  All (finite) vertices of the constant regions of the first layer of a \dtlifsnn \(Φ\) with \(W=I_{n_1}\) are contained in \([a,b]\), where
-  % where \(a_0\) is the higher vertex of the region \(C_0≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=0\}\), \(C_0=[a_0,b_0)\), with constant \(0\) spike train and \(b_1\) is the lower vertex of the region \(C_1≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=1\}\), \(C_1=[a_1,b_1)\) with constant \(1\) spike train.
+  All (finite) vertices of the constant regions of the first layer of a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\) are contained in the convex hull of the points
+  %TODO: imprecise notation
+  \[ P≔\{x∈ℝ^{n_1}\mid σ∈\{0,T\}^{n_1},C_{σ,T}=[a,b),∀_ix_i∈\{a_i,b_i\},∀_i(x_i=a_i⇔σ_i=0)\} \]
+  We further have \(\operatorname{conv}(P)⊂[a,b]\) where
   %TODO: improve inequalities
   \begin{align*}
    a &≔ \\
    b &≔\max(-βu(0)-αi(0),)+(-b)+ϑ·𝟙_{n_1}
   \end{align*}
+  % where \(a_0\) is the higher vertex of the region \(C_0≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=0\}\), \(C_0=[a_0,b_0)\), with constant \(0\) spike train and \(b_1\) is the lower vertex of the region \(C_1≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=1\}\), \(C_1=[a_1,b_1)\) with constant \(1\) spike train.
 \end{lemma}
 
 \begin{proof}
-  Let \(\)
+  \(P\) is well-defined, since…
 \end{proof}
 
 % TODO: lexiographic ordering even in general case (with specific def.) and
@@ -152,14 +155,22 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 While in theory we would expect the number of constant regions to grow exponentially with time, it grows only quadratically.
 
 \begin{theorem}
-A \dtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) different constant regions.
+A \rdtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) different constant regions.
 \end{theorem}
 
 \begin{proof}
-  Since the number of constant regions of a \dtlifsnn are just unions of the constant regions of the corresponding first layer, it suffices to compute the maximum number of constant regions of that layer.
+  Since the number of constant regions of a \rdtlifsnn are just unions of the constant regions of the corresponding first layer, it suffices to compute the maximum number of constant regions of that layer.
 
-  Let us consider by how much the regions can increase going from \(t-1\) to \(t∈[T]\). We can categorize the regions at \(t-1\) by the number of spikes they have in each component.
+  Let us consider by how much the regions can increase going from \(t-1\) to \(t∈[T]\). We can categorize the regions at \(t-1\) by the number of spikes they have in each component. We shall write \(C_{σ,t-1}\) for the region with sums \((σ_1,…,σ_{n_1})=σ∈[t-1]_0^{n_1}\) at time-step \(t-1\). Let further \(C_{Σ,t-1}≔\{C_{σ,t-1}\mid σ∈[t-1]_0^{n_1}\}\). By definition we have \(\abs{C_{Σ,t-1}}≤t^{n_1}\)..
+
+  We will now show in each region \(C_{σ,t-1}\) only
 \end{proof}
+% Bobachtungen:
+% In den Regionen zwischen Kreuzen ist die Anzahl der gestapelten Regionen nie größer gleich T
+% In den Regionen um die Kreuze ähnliches
+
+% Überlegungen
+% Regionen mit gleicher spike train in einer komponente anschauen, mit linien vergleichen?
 
 \begin{corollary}
   %TODO: versions for W arbitrary
@@ -167,3 +178,5 @@ A \dtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) d
 
 \begin{proof}
 \end{proof}
+
+%TODO: β<1 is essential

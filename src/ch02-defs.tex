@@ -35,6 +35,9 @@ We further define recurrent d.t. LIF-SNN and the function the network realizes:
   where the \textbf{input encoder} \(E:ℝ^{n_0}→ℝ^{n_0×T}\) maps a vector \(x∈ℝ^{n_0}\) to a corresponding first layer spike activation \(s^{[0]}=E(x)\) and the \textbf{output decoder} \(D:\{0,1\}^{n_L×T}→ℝ^{n_{L+1}}\) maps the spike activations of the last hidden layer to real values.
 \end{definition}
 
+% TODO: remark about layers being kinda useless
+% TODO: remark comparison with previous model
+
 \begin{definition}
   A recurrent discrete-time LIF-SNN \(ϕ\) \textbf{realizes} the function \(R(Φ):ℝ^{n_0}→ℝ^{n_{L+1}}\):
   \[ R(Φ)(x)=D((s^{[L]}(t))_{t∈[T]})\quad \text{with }s^{[0]}≔E(x)\]
@@ -47,18 +50,18 @@ We further define recurrent d.t. LIF-SNN and the function the network realizes:
   \[ D((s(t))_{t∈[T]})=\sum_{t=1}^Ta_t(W^{L+1}s(t)+b^{L+1}) \]
   for some \((a_t)_{t∈[T]}∈ℝ^T\), \(b^{L+1}∈ℝ^{n_{L+1}}\) and \(W^{L+1}∈ℝ^{n_{L+1}×n_L}\).
 \end{definition}
-We will only consider recurrent discrete-time LIF-SNN with direct encoding and membrane potential outputs. In fact, we will use “recurrent discrete-time LIF-SNN” to mean “\dtlifsnn with direct encoding and membrane potential”.
+We will only consider recurrent discrete-time LIF-SNN with direct encoding and membrane potential outputs. In fact, we will use “recurrent discrete-time LIF-SNN” to mean “\rdtlifsnn with direct encoding and membrane potential”.
 
 For clearer construction of our networks we will additionally define neurons:
 
 % TODO: just notation?
 \begin{definition}
-  The \(i\)-th neuron of a hidden layer \(λ=(W^{[l]},b^{[l]},V^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\) of a \dtlifsnn is a tuple \((w,b,v,u_0,i_0)\) with \(w∈ℝ^{n_{l-1}}\), \(v∈ℝ^{n_l}\) and \(b,u_0,i_0∈ℝ\), such that \(b\), \(u_0\), \(i_0\) are the \(i\)-th component of \(b^{[l]}\), \(u^{[l]}(0)\), \(i^{[l]}(0)\) respectively and \(w\), \(v\) are the \(i\)-th row vector of \(W^{[l]}\), \(V^{[l]}\) respectively.
+  The \(i\)-th neuron of a hidden layer \(λ=(W^{[l]},b^{[l]},V^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\) of a \rdtlifsnn is a tuple \((w,b,v,u_0,i_0)\) with \(w∈ℝ^{n_{l-1}}\), \(v∈ℝ^{n_l}\) and \(b,u_0,i_0∈ℝ\), such that \(b\), \(u_0\), \(i_0\) are the \(i\)-th component of \(b^{[l]}\), \(u^{[l]}(0)\), \(i^{[l]}(0)\) respectively and \(w\), \(v\) are the \(i\)-th row vector of \(W^{[l]}\), \(V^{[l]}\) respectively.
 \end{definition}
 
-The following lemma will be very helpful for the proofs in the following sections:
+The following lemmas will be very helpful for the proofs in the following sections:
 \begin{lemma}\label{lem:non-recursive-defs}
-  We define the following non-recursive formulas with explicit reference to the previous spikes. Let \(1≤t≤T\) and \((s_p^{[l]})_{l∈\{0…L'\}}\) such that \(s_p^{[l]}:\{0,1\}^{n_l×t'_l}\) for \(l∈\{0…L'\}\). \(L'\) and \(∀_lt'_l\) have to be chosen such that the following terms are well-defined, e.g. \(l'=L\) and \(∀_lt'_l=T\)
+  We define the following non-recursive formulas with explicit reference to the previous spikes. Let \(1≤t≤T\) and \((s_p^{[l]})_{l∈\{0…L'\}}\) such that \(s_p^{[l]}:\{0,1\}^{n_l×t'_l}\) for \(l∈\{0…L'\}\). \(L'\) and \(∀_lt'_l\) have to be chosen such that the following terms are well-defined, e.g. \(L'=L\) and \(∀_lt'_l=T\)
   \begin{align}
    i^{[l]}(t;(s_p^{[l]})_l)&≔(α^{[l]})^ti^{[l]}(0)+\sum_{k=1}^t(α^{[l]})^{t-k}\left(W^{[l]}s_p^{[l-1]}(k)+V^{[l]}s_p^{[l]}(k-1)\right), \\
    p^{[l]}(t;(s_p^{[l]})_l) &≔ (β^{[l]})^tu^{[l]}(0)+\sum_{k=1}^t(β^{[l]})^{t-k}\left(i^{[l]}(k;(s_p^{[l]})_l)+b^{[l]}\right)-ϑ\sum_{k=1}^{t-1}(β^{[l]})^{t-k}s_p^{[l]}(k),\\
@@ -78,6 +81,36 @@ The following lemma will be very helpful for the proofs in the following section
   follows by induction.
   By substituting \(u^{[l]}\) in \(p^{[l]}\) we further obtain:
   \[ p^{[l]}(t) = (β^{[l]})^tu^{[l]}(0)+\sum_{i=1}^t(β^{[l]})^{t-i}\left(i^{[l]}(i)+b^{[l]}\right)-ϑ\sum_{i=1}^{t-1}(β^{[l]})^{t-i}s^{[l]}(i) \]
+\end{proof}
+
+\begin{lemma}
+  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≤ϑ\) and \(u^{[l]}_j(t_0-1)<ϑ\), then \(∀_{t∈\{t_0…t_{ω}\}}u^{[l]}_j(t)<ϑ\).
+
+  If further \(β=1\) and \(u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j)≥0\)
+  \[ \left( u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right) - ϑ\sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) <ϑ \]
+  If either \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_j(t)=0\) or \(∀_{t∈\{t'…t_{ω}\}}i^{[l]}_j(t)≥0\), where \(t'\) is the latest time \(≤t_{ω}\) such that \(s^{[l]}_j(t')=0\), then we even get
+  \[ 0≤\left( u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right) - ϑ\sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) \]
+\end{lemma}
+
+\begin{remark}
+  If \(ϑ=1\), we get in particular
+  \[ \left\lfloor u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right\rfloor = \sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) \]
+\end{remark}
+
+\begin{proof}
+  We proof the first part by induction: Let \(t∈\{t_0…t_{ω}\}\). By definition of \(p^{[l]}\), by the given assumptions and by induction hypothesis we have
+  \[ p^{[l]}_j(t)=β^{[l]}u^{[l]}_j(t-1)+i^{[l]}_j(t)+b^{[l]}_j ≤ u^{[l]}_j(t-1)+i^{[l]}_j(t)+b^{[l]}_j<2ϑ  \]
+  By definition of \(u^{[l]}\) and \(s^{[l]}\), we further get \(u^{[l]}_j(t)<ϑ\).
+
+  Let us further assume \(β=1\) and \(u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j)≥0\).
+  We now get
+  \[ u^{[l]}(t_{ω}) = u^{[l]}(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}(k)+b^{[l]}-ϑs^{[l]}(k)\right),  \]
+  due to~\autoref{lem:non-recursive-defs}. From which we immediately obtain
+  \[ \left( u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right) - ϑ\sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) <ϑ \]
+  by the first part of the proof. Let us further proof the left part of the inequality: Let \(t'\) be the latest time that \(s^{[l]}_j(t')=1\) has held for \(t'∈\{t_0…t_{ω}\}\). We may assume that \(t'\) exists since we are otherwise immediately finished. We then get \(ϑ≤p^{[l]}_j(t')\) and therefore
+  \[ 0≤u^{[l]}_j(t')=u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t'}\left(i^{[l]}_j(k)+b^{[l]}_j-ϑs^{[l]}_j(k)\right) \]
+  by~\autoref{lem:non-recursive-defs}. By assumption and choice of \(t'\) we can conclude
+  \[ ≤u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}_j(k)+b^{[l]}_j-ϑs^{[l]}_j(k)\right) \]
 \end{proof}
 
 Let us now take a look at some simple examples:

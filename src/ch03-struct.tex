@@ -1,4 +1,4 @@
-\section{Structure of computations in \dtlifsnn s}
+\section{Structure of computations in \rdtlifsnn s}
 \label{ch:struct}
 
 This section concern itself with the approximation of continuous functions by d.t. LIF-SNN.
@@ -19,21 +19,88 @@ In~\cite{nguyen2025timespikeunderstandingrepresentational} the following theorem
   See~\cite{nguyen2025timespikeunderstandingrepresentational}.
 \end{proof}
 
+\begin{figure}[h!]
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        axis lines=middle,
+        xmin=0, xmax=5,
+        ymin=0, ymax=5,
+        xtick={0, 1, 2, 3, 4},
+        ytick={0, 1, 2, 3, 4},
+        domain=0:5,
+        samples=200,
+        thick,
+        legend pos=north west,
+        width=\textwidth,
+        height=6cm
+        ]
+        \addplot[blue]{x};
+        \addplot[red]{floor(x)+0.5};
+        \addlegendentry{$ε=0.5$}
+      \end{axis}
+    \end{tikzpicture}
+    \caption{A \dtlifsnn approximating the identity}
+    \label{id:sin-approx-by-dtlifsnn}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.55\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        axis lines=middle,
+        xmin=0, xmax=pi,
+        ymin=0, ymax=1.2,
+        xtick={0, pi/2, pi},
+        xticklabels={$0$, $\frac{\pi}{2}$, $\pi$},
+        ytick={0, 1},
+        domain=0:pi,
+        samples=200,
+        thick,
+        legend pos=north west,
+        width=\textwidth,
+        height=6cm
+        ]
+        \addplot[blue]{sin(deg(x))};
+        \addplot[red]{(-cos(deg(floor(x*2+1)/2))+cos(deg(floor(x*2)/2)))*2};
+        \addlegendentry{$ε=0.25$} % ε≈0.5*(1/2) (since sin(x)≈x for x≪1)
+        \addplot[purple]{(-cos(deg(floor(x*5+1)/5))+cos(deg(floor(x*5)/5)))*5};
+        \addlegendentry{$ε=0.1$} % ε≈0.5*(1/5) (since sin(x)≈x for x≪1)
+      \end{axis}
+    \end{tikzpicture}
+    \caption{A \dtlifsnn approximating a sinus wave}
+    \label{fig:sin-approx-by-dtlifsnn}
+  \end{subfigure}
+\end{figure}
+
+The proof of~\autoref{thm:approx-snn-constant} works by first showing that a continuous function can be arbitrarily approximated by step functions, in particular by step functions constant on hypercubes in \(Ω\).
+Then the \dtlifsnn is constructed by using the first layer to cut the input space by hyperplanes along the cubes and using the second layer to represent the hypercubes.
+
+While quite simple, this construction does not use the unique feature of (r.) \dtlifsnn, the ability of neurons to accumulate state over time. It therefore needs quite a lot more neurons than actually needed for many functions with (almost) linear segments, e.g. a sinus wave, see also~\autoref{fig:sin-approx-by-dtlifsnn}.
+
+We will now show a more efficient construction for \rdtlifsnn that uses the fact that \rdtlifsnn can quite efficiently approximate linear segments. The general intuition behind is to use piece-wise linear functions to approximate continuously differentiable functions and then approximate those piece-wise linear functions by \rdtlifsnn. In the end, we will see that we can in fact approximate any continuous function like this, by using mollification to extract an continuously differentiable approximation of the function.
+
 % TODO: motivation (previous theorem + previous lower bound example), insatisfactory since d.t. SNN. have somewhat linear structure
 
 % TODO: extend to arbitrarily continuous functions by choosing an continuously diff. function close to it
 % TODO: extend to continuously differentiable functions apart from lebesgue-zero sets (where they are still continuous?)
 % TODO: differentiable, but defined on compact subset of euclidean space???
+%
+% TODO: use generalized inverse of the modulus of continuity
+
 We will now provide an alternative version of this theorem which uses an increased latency to reduce the number of neurons:
 \begin{theorem}\label{thm:approx-snn}
-  Let \(f∈𝒞^1(Ω,ℝ^m)\) be a continuously differentiable function on a compact set \(Ω⊂ℝ^n\). For all \(ε>0\), there exists a d.t. LIF-SNN \(Φ\) with direct encoding, membrane potential output, \(L=2\) and
+  Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set. For all \(ε,ξ,θ>0\), \(ε=ξ+θ\), there exists a \rdtlifsnn \(Φ\) with \(L=3\) and
   \begin{align*}
-   T &= 2K \\
-   n_1 &= n+1 \\ %TODO: add def for K
-   n_2 &=K^n·(m+1)
+   T   &= (K(ξ)+1)T_r(θ) \\
+   n_1 &= n+1 \\
+   n_2 &= K^n(ξ)·(n+1)
   \end{align*}
   such that
-  \[ \norm{R(Φ)-f}_{∞}≤ε\]
+  \[ \norm{(R(Φ)-f)|_{Ω}}_{∞,2}≤ε.\]
+  Here \(T_r(θ)≔\frac{\operatorname{diam}(Ω)}{K}\frac{\norm{f'}_{∞,2}}{2θ}\).
+  The definition of \(K(ξ)\) is given in~\autoref{lem:approx-by-lin}.
 \end{theorem}
 
 \begin{lemma}\label{lem:smallest-cube}
@@ -42,7 +109,18 @@ We will now provide an alternative version of this theorem which uses an increas
 
 %TODO: we later use [y,z) instead of [a,b); unify notation
 \begin{proof}[\proofofref{lem:smallest-cube}.]
-  We can first define \(a≔(\min_{x∈Ω} x_i)_i\) since \(Ω\) is compact We further have \(b≔a+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔[a,b)\). Suppose now a point \(y∈Ω∖\overline{C}\) exists. By definition of \(a\), we have \(a≤y\). By definition of \(C\) we further get \(y\nleq b\), and therefore \(∃_ib_i<y_i\) by definition of \(C\). But this means \(\norm{a-y}_∞>\operatorname{diam}_∞(Ω)\).
+  We can first define \(x≔(\min_{x∈Ω} x_i)_i\) since \(Ω\) is compact We further have \(y≔x+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔[x,y)\). Suppose now a point \(z∈Ω∖\overline{C}\) exists. By definition of \(x\), we have \(x≤z\). By definition of \(C\) we further get \(z\nleq y\), and therefore \(∃_iy_i<z_i\) by definition of \(C\). But this means \(\norm{x-z}_∞>\operatorname{diam}_∞(Ω)\).
+\end{proof}
+
+\begin{lemma}\label{lem:uniform-cont-≤}
+  Let \(M\) be a normed vector space and \(N\) be a metric space. Let \(f:M→N\) be uniformly continuous with modulus \(δ\). We then have for every \(ε>0\):
+  \[ ∀_{x,y∈M}(\norm{x-y}_M≤δ(ε)⇒d_N(x,y)≤ε). \]
+\end{lemma}
+
+\begin{proof}
+  Let \(ε>0\) with modulus \(δ(ε)\), as well as \(x∈M\) be given. Since \(f\) is uniformly continuous with modulus \(δ(ε)\), we have \(f(B_{δ}(x))⊂B_{ε}(f(x))\). Since \(f\) is in particular continuous, we get
+  \[ f(\overline{B}_{δ}(x))=f(\overline{B_{δ}(x)})⊂\overline{f(B_{δ}(x))}⊂\overline{B}_{ε}(f(x)) \]
+  We need to use the fact that \(M\) is a normed vector space in the first equality to get \(\overline{B}_{δ}(x)=\overline{B_{δ}(x)}\).
 \end{proof}
 
 % TODO: differentiable, but defined on compact subset of euclidean space???
@@ -51,106 +129,164 @@ We will now provide an alternative version of this theorem which uses an increas
 
 \newcommand{\dsqe}{δ(ξ)}
 \begin{lemma}\label{lem:approx-by-lin}
-  Let \(f∈𝒞^1(Ω,ℝ^m)\) be a continuously differentiable function on a compact set \(Ω⊂ℝ^n\) and \(ε>0\). Then there exists a half-open cube \(C\) with \(Ω⊂C\) that can be composed in
-  \[ K^n≔\min_{\substack{ξ,θ>0\\ξθ=ε}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(\dsqe ,θ)} \right\rceil\right\}^n \]
-  half-open subcubes \((C_i)_{i=1..K^n}\) such that \(Ω⊂C\) and linear functions \(g_i:C_i→ℝ^m\) exists, such that \(\norm{f-g|_Ω}_∞<ε\) for \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
-  Here \(δ(ε)\) is the modulus of uniform continuity of the total derivative \(dF\).
+  Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set.
+
+  For very \(ε>0\) there exists a half-open cube \(C\) with \(Ω⊂\overline{C}\) that can be composed in
+  \[ K^n≔K(ε)^n≔\min_{\substack{ξ,θ>0\\ξθ=ε}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(\dsqe ,θ)} \right\rceil\right\}^n \]
+  half-open subcubes \((C_i)_{i=1..K^n}\) such that affine linear functions \(g_i:C_i→ℝ^m\) exist with \(\norm{f-g}_{∞,2}<ε\), where \(g\) is the continuous extension of \((\sum_{i=1}^mg_i𝟙_{C_i})|_C\) on \(\overline{C}\).
+  Here \(δ(ε)\) is the modulus of uniform continuity of the total derivative \(dF|_{Ω}\) (with regard to \(\norm{·}_2\)).
 \end{lemma}
+
+% TODO: remark about why we are using 2-norm
 
 % TODO: fix issue with C_i s not completely fitting in open \sqrt{2}δ(ε) balls due to closed part of C_i
 \begin{proof}[\proofofref{lem:approx-by-lin}.]
   By~\autoref{lem:smallest-cube} we have a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) and \(Ω⊂\overline{C}\).
-  Let further \(ε>0\) be given. Since \(Ω\) is compact and \(f∈𝒞^1(Ω,ℝ^m)\), \(dF\) is uniformly continuous on \(Ω\). Let \(δ(ε)\) be \(dF\)s modulus of continuity.
+  Let further \(ε>0\) be given. Since \(Ω\) is compact and \(f∈𝒞^1(Ω,ℝ^m)\), \(dF\) is uniformly continuous on \(Ω\). Let \(δ(ε)\) be \(dF\)s modulus of uniform continuity.
   We will now partition \(C\) in
   \[K^n≔\min_{\substack{ξ,θ>0\\ξθ=ε}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(\dsqe ,θ)} \right\rceil\right\}^n\]
   smaller half-open cubes. There are \(ξ,θ\) such that the minimum in the definition of \(K^n\) is obtained, since we take it over the set of natural numbers.
   The subcubes have width \(w≔\frac{\operatorname{diam}_∞(Ω)}{K}≤\frac{2}{\sqrt{n}}\min(\dsqe,θ)\). % TODO: should be < instead of ≤ in def of w???
-  Let us further define \(g_i:C_i→ℝ^m\) by \(g_i(x)≔f(c_i)+df_{c_i}(x-c_i)\) where \(c_i\) is the center of \(C_i\).
-  It suffices now to show \(\norm{f|_{C_i}-g_i}_∞<ε\). Let \(x∈C_i\). We get:
-  %TODO: ausführlicher
 
+  %TODO: why do we not have to proof <ε on the boundary of C, on the extension
+
+  Let us further define \(g_i:C_i→ℝ^m\) by \(g_i(x)≔f(c_i)+df_{c_i}(x-c_i)\) where \(c_i\) is the center of \(C_i\), so in particular
+  \[\norm{x-c_i}_2^2=\sum_{j=1}^n\norm{(x-c_i)_je_j}_2^2≤\frac{w^2}{4}n≤\min(δ(ξ),θ)^2.\]
+
+  It suffices now to show \(\norm{f|_{C_i}-g_i}_∞<ε\). Let \(x∈C_i\) and \(h(t)≔f(t(x-c_i)+c_i)\) with
+  \[h'(t)=(df_{(x-c_i)t+c_i}∘d(t↦t(x-c_i)+c_i)_t)(1)=df_{(x-c_i)t+c_i}(x-c_i).\]
+  We obtain by the Fundamental theorem of calculus:
   \begin{align*}
-   \norm{f(x)-f(c_i)-df_{c_i}(x-c_i)}_p &= \norm{f(x)-f(c_i)-df_{c_i}(x-c_i)}_p \\
-                                    &= \norm{\int_0^1df_{c_i+(x-c_i)t}(x-c_i)dt-df_{c_i}(x-c_i)}_p \\ % h(t)=f(c_i+(x-c_i)t); dh_t = (df_{c_i+(x-c_i)t}∘d_t(t↦c_i+(x-c_i)t))(t) = (df_{c_i+(x-c_i)t}((x-c_i)t))
-                                    &≤ \int_0^1\norm{df_{c_i+(x-c_i)t}(x-c_i)-df_{c_i}(x-c_i)}_pdt \\ % Minkowski
-                                    &= \int_0^1\norm{(df_{c_i+(x-c_i)t}-df_{c_i})(x-c_i)}_pdt \\
-                                    &≤ \int_0^1\norm{(df_{c_i+(x-c_i)t}-df_{c_i})}\norm{x-c_i}_pdt \\
-                                    &≤ \int_0^1ξ\norm{x-c_i}_pdt \\ % w≤2\sqrt{n}^{-1}\dsqe %TODO: should be <???
-                                    &= ξ\norm{x-c_i}_p \\
+  \norm{f(x)-f(c_i)-df_{c_i}(x-c_i)}_2 &= \norm{h(1)-h(0)-df_{c_i}(x-c_i)}_2 \\
+                                    &= \norm{\int_0^1df_{(x-c_i)t+c_i}(x-c_i)dt-df_{c_i}(x-c_i)}_2
+  \end{align*}
+  Due to the generalized Minkowski-Inequality we can move the norm inside the integral:
+  %TODO: ref for gen. Minkowski-Ineq?
+  \begin{align*}
+   \norm{\int_0^1df_{(x-c_i)t+c_i}(x-c_i)dt-df_{c_i}(x-c_i)}_2 &≤ \int_0^1\norm{df_{(x-c_i)t+c_i}(x-c_i)-df_{c_i}(x-c_i)}_2dt \\
+                                    &= \int_0^1\norm{(df_{(x-c_i)t+c_i}-df_{c_i})(x-c_i)}_2dt \\
+                                    &≤ \int_0^1\norm{df_{(x-c_i)t+c_i}-df_{c_i}}\norm{x-c_i}_2dt \\
+                                    &≤ \int_0^1ξ\norm{x-c_i}_2dt \\ % w≤2\sqrt{n}^{-1}\dsqe %TODO: should be <???
+                                    &= ξ\norm{x-c_i}_2 \\
                                     &≤ ξθ \\
                                     &= ε
   \end{align*}
+  In the fourth step we use \(\norm{df_{(x-c_i)t+c_i}-df_{c_i}}≤ξ\), which holds due to \(∀_{t∈[0,1]}(x-c_i)t+c_i∈C_i\) and \autoref{lem:uniform-cont-≤}.
 \end{proof}
+%TODO: change notation of c_i to sth clearly not meant component
 
 \begin{proof}[\proofofref{thm:approx-snn}.]
   Let a continuously differentiable function \(f∈𝒞^1(Ω,ℝ^m)\) on a compact set \(Ω⊂ℝ^n\) be given. Let there further be a \(ε>0\).
   %TODO: clarify notation [y,z) (line or proper subspace)
-  By~\autoref{lem:approx-by-lin} we have a half-open cube \(C=[y,z)\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<ετ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
-  We will now define a \dtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<ε(1-τ)\).
-  Before anything else we shall set the following basic parameters: \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\).
+  By~\autoref{lem:approx-by-lin} we have a half-open cube \(C=[x^C,y^C)\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<ετ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
+  We will now define a \rdtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<ε(1-τ)\).
+  Before anything else we shall set the following basic parameters \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\) for all layers.
   We obtain the simplified equations:
   \begin{align*}
     p^{[l]}(t) & = u^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)+b^{[l]} \\
     s^{[l]}(t) & = H(p^{[l]}(t)-1_{n_l}) \\
     u^{[l]}(t) & = p^{[l]}(t)-s^{[l]}(t)
   \end{align*}
+  and in particular by~\autoref{lem:non-recursive-defs}
+  \begin{align*}
+   p^{[l]}(t) &= u^{[l]}(0)+\sum_{k=1}^t\left(W^{[l]}s^{[l-1]}(k)+V^{[l]}s^{[l]}(k-1)+b^{[l]}\right)-\sum_{k=1}^{t-1}s^{[l]}(k).
+  \end{align*}
   % TODO: graphic
-  The intuitive idea is the following… %TODO
-  We define the \(i\)-th neuron of the first \(n\) of the first layer by parameters \(w=\frac{1}{z_i-y_i}e_i\), \(b=-\frac{y_i}{z_i-y_i}\), \(v=-e_{n+1}\), \(u_0=0\), \(i_0=0\).
-  We obtain
-  \[ p^{[1]}_i(t) = u^{[1]}_i(t-1)+\frac{1}{z_i-y_i}s_i^{[0]}(t)-s^{[1]}_{n+1}(t-1)-\frac{y_i}{z_i-y_i} \]
-  and therefore \(1=s^{[1]}_i(t)⇔\)
+
+  The intuitive idea for the construction of the network is the following: In the first layer we have \(n\) neurons which capture the position of the input vector regarding \(C\) in their respective dimension and one last neuron that acts as an “alarm clock” that shuts down the other neurons of the layer after …
+
+  In the second layer we have \(n+1\)-neurons for each affine linear region \(C_i\). Each of the first \(n\) neurons encodes the linear part of a component of the input vector. They are connected to the corresponding neuron of the first layer and the last neuron of their group. That last, additional neuron acts as an activator to the region. It get's enabled by getting a spike of all other neurons of the group and by getting a spike from the clock neuron from the first layer. The other \(n\) neurons of the group disable themselves after their first spike.
+
+  % In the second layer we have \(m+1\)-neurons for each affine linear region \(C_i\). Each of the first \(m\) neurons encodes the linear part of a component of the output vector. The last, additional neuron acts as an activator to the specific region by recursively enabling the other neurons of this region and disabling all regions with smaller base point (that would otherwise be enabled).
+
+  We define the \(i\)-th neuron of the \(n\) neurons of the first layer by parameters
+  \[ w=\frac{1}{y^C_i-x^C_i}e_i, \quad b=-\frac{x^C_i}{y^C_i-x^C_i}, \quad v=, -e_{n+1}\quad u_0=0, \quad i_0=0. \]
+  The last neuron of the first layer, with index \(n+1\), is defined by:
+  \begin{equation*}
+    w=0, \quad b=\frac{1}{K(ξ)T_r(θ)}, \quad v=e_{n+1}, \quad u_0=0, \quad i_0=0.
+  \end{equation*}
+  We therefore get:
+  \begin{equation*}
+   p^{[1]}_{n+1}(t) = \frac{t}{K(ξ)T_r(θ)}+\sum_{k=1}^ts^{[1]}_{n+1}(k-1)-\sum_{k=1}^{t-1}s^{[1]}_{n+1}(k) = \frac{t}{K(ξ)T_r(θ)}
+  \end{equation*}
+  So \(s^{[1]}_{n+1}(t)=1⇔t≥K(ξ)T_r(θ)\).
+  We further get for \(i∈[n]\):
+  \begin{align*}
+   p^{[1]}_i(t) = \sum_{k=1}^t\left(\frac{s_i^{[0]}(k)-x^C_i}{y^C_i-x^C_i}-s^{[1]}_{n+1}(k-1)\right)-\sum_{k=1}^{t-1}s_i^{[1]}(k)
+  \end{align*}
+  We clearly have \(0≤s_i^{[0]}(k)-x^C_i<y^C_i-x^C_i\), \(s^{[1]}_{n+1}(t-1)=0\) and therefore \(0≤p_i^{[1]}(t)≤1\) for \(s^{[0]}(k)∈C\) and \(t≤K(ξ)T_r(θ)\).
+  We therefore have \(\sum_{k=1}^{t-1}s_i^{[1]}(k)=\sum_{k=1}^t\left(\frac{s_i^{[0]}(k)-x^C_i}{y^C_i-x^C_i}-s^{[1]}_{n+1}(k-1)\right)+p^{[1]}_i(t)\).
+  %TODO:
+
+
+  % TODO: check that proof works for x∈\(\overline{C}∖C\)
+
+  % We further define the \(n+1\)-th neuron of the first layer by \(w=0\), \(b=\frac{1}{K-1}\), \(v=\)
+  % By~\autoref{lem:non-recursive-defs} we get
+
+  % TODO: proof correct behaviour
+
+  For each of the \(K^n(ξ)\) subcubes in \(C\) we define \(m+1\) neurons in the following way:
+  Let \(C_j=[x^{C_j},y^{C_j})\) be one such subcube with position \(q∈\{0,…,K(ξ)-1\}^{n_1}\) in \(C\).
+  The \(i\)-th neuron of the first \(m\) neurons, with index \(j(m+1)+i\) in its layer, has the parameters
+  \begin{gather*}
+    w=e_n, \quad b=0, \\
+    v=K(ξ)T_r(θ)\left(-e_{j(m+1)+i}+e_{(j+1)(m+1)}-\sum_{\substack{q'∈\{0,…,K(ξ)-1\}^{n_1} \\ q'≤q}}e_{j(q)(m+1)+(m+1)}\right), \\
+    u_0=-q_iT_r(θ), \quad i_0=0.
+  \end{gather*}
+  where \(j(q)\) is the index of the subcube at position \(q\).
+
+  The final neuron of the group, with index \((j+1)(m+1)\) in its layer, has the parameters
+  \begin{gather*}
+    w=\frac{1}{n+1}e_{n+1}, \quad b=0, \quad v=e_{(j+1)(m+1)}+\frac{1}{n+1}\sum_{i=1}^ne_{j(m+1)+i}, \\
+    u_0=0, \quad i_0=0.
+  \end{gather*}
+  The final neuron of the layer, with index \((K^n(ξ)(m+1)+1)\), has the parameters
+
+  % TODO: proof correct behaviour
+
+  %TODO: show construction that has binary state (flip-flop; )
 
   % TODO: why K≠0
   % TODO: check on „off by one errors“
-  We further define the \(n+1\)-th neuron by parameters \(w=0\), \(b=1\), \(v=e_{n+1}\), \(u_0=-(K-1)\), \(i_0=0\).
-
-  Let us now regard the second layer.
 \end{proof}
 
+%TODO (maybe): mollification
+
 %TODO: remark about SNN construction. By adding more neurons to first layer ((K-1)n to be exact) you can half the required time steps.
+% TODO: steelman comparison by arguing that L can be replaced by sth like 1/δ(ε)
+Sadly the size of the network in this construction is not always smaller than the one from~\autoref{thm:approx-snn-constant}. A concrete counter example is a sinus wave with high frequency and small ampitude, like \(f(x)≔\frac{\sin(nx)}{n}\) with \(n∈ℕ\) on \(Ω=[0,2π]\). Since \(f'(x)=\cos(nx)\) and \(\norm{f'|_{Ω}}_{∞}=1\), we can choose \(L=1\) as a Lipschitz constant for \(f\). At the same time, since \(f''(x)=n\sin(nx)\) and \(\norm{f''|_{Ω}}_{∞}=n\), the biggest possible modulus of uniform continuity on \(Ω\) we can give for \(f'\) is \(δ(ε)≔\frac{ε}{n}\). So we get
+\[ \max_{\substack{ξ,θ>0\\ξθ=ε}}\min(δ(ξ),θ)=\max_{\substack{ξ>0}}\min(\frac{ξ}{n},\frac{ε}{ξ})=\sqrt{\frac{ε}{n}} \]
+So we get that \(K(ε)\) has a value of \(\lfloor \frac{π\sqrt{n}}{\sqrt{ε}} \rfloor\) by definition. We therefore get for the layer sizes:
+\begin{alignat*}{2}
+   & \autoref{thm:approx-snn-constant} \qquad &\qquad  &\autoref{thm:approx-snn} \\
+  &n_1 =\left\lceil \tfrac{2π}{ε} \right\rceil+1 \qquad &\qquad &n_1 = 1 \\
+  &n_2 =\left\lceil \tfrac{2π}{ε} \right\rceil \qquad &\qquad &n_2 = 3 \\
+                                             & \qquad &\qquad &n_3 = 2\lfloor \tfrac{π\sqrt{n}}{\sqrt{ε}} \rfloor
+\end{alignat*}
+While the first and second layer are clearly far smaller than the first layer of the other construction, especially for small \(ε\), the third layer of our construction is arbitrarily bad for \(n→∞\) compared to the last layer of the other construction.
 
-%TODO: mollification
+But there is one big difference. Since the size of last layer grows only proportionally to \(\frac{1}{\sqrt{ε}}\) and not proportionally to \(\frac{1}{ε}\), it is arbitrarily smaller than the other constructions last layer for \(ε→0\) and any \(n∈ℕ\).
+%TODO: image
 
-
-comparison:
-sin mit kleiner ampitude, extrem hoher frequenz
-
-%TODO: better for ε→0
+We will generalize this observation with the following theorem:
 \begin{theorem}
+  Let \(f∈𝒞^1(U,ℝ)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set.
 
+  Let \((ξ_{ε})_{ε>0}\) be given with \(∀_{ε>0}ξ_{ε}<ε\), such that
+  \[ \lim_{ε→0}\left(\frac{K(ξ_{ε})}{\left\lceil\frac{\operatorname{diam}_∞(Ω)}{ε}Γ\right\rceil}\right)=0 \]
+  where \(Γ\) is the Lipschitz-constant of \(f\).
 \end{theorem}
 
-The proof works by first showing that a continuous function can be arbitrarily approximated by step functions, in particular by step functions constant on hypercubes in \(Ω\).
-Then the d.t. LIF-SNN is constructed by using the first layer to cut the input space by hyperplanes along the cubes and using the second layer to represent the hypercubes.
+\begin{proof}
+  %TODO: why it suffices
+  %TODO: what is δ
+  It suffices to show there exist \((ξ_{ξ})_{ξ>0}\) and \((θ_{ξ})_{ξ>0}\) with \(∀_{ξ>0}ξ_{ξ}θ_{ξ}=1\) and
+  \[ \lim_{ε→0}\frac{ε}{\min(δ(ξ_{ξ}),θ_{ξ})}=0 \]
+\end{proof}
 
-\autoref{fig:sinus} shows a sinus function getting approximated in this way.
+%TODO: betrachtung durch kombinatorik/wahrscheinlichkeit?
 
-\begin{figure}[h!]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[
-      axis lines=middle,
-      xmin=0, xmax=2*pi,
-      ymin=-1.2, ymax=1.2,
-      xtick={0, pi/2, pi, 3*pi/2, 2*pi},
-      xticklabels={$0$, $\frac{\pi}{2}$, $\pi$, $\frac{3\pi}{2}$, $2\pi$},
-      ytick={-1, 0, 1},
-      domain=0:2*pi,
-      samples=200,
-      smooth,
-      thick,
-      legend style={at={(0.5,-0.2)}, anchor=north},
-      width=12cm,
-      height=6cm
-      ]
-      \addplot[blue]{sin(deg(x))};
-      \addplot[red]{(-cos(deg(floor(x*3+1)/3))+cos(deg(floor(x*3)/3)))*3};
-    \end{axis}
-  \end{tikzpicture}
-  \caption{A \dtlifsnn approximating a sinus wave}
-  \label{fig:sinus}
-\end{figure}
-
+%TODO: there are also constructions for \dtlifsnn that use far less neurons, general structure like…
 
 % TODO: encoding with fewer layers for on finite segments continuously differentiable functions
