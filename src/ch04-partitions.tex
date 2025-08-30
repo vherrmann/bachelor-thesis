@@ -26,17 +26,20 @@ By using the simplified notation, we obtain the following explicitely formulated
   We will sometimes just write \(i(t;x)\) instead of \(i(t;x;s_p)\), with which we imply to use \(s\) (at \(x\)) for \(s_p\). The same holds for \(u,p,s\).
 
   It is furthermore quite obvious that \(i\) grows linear in \(x\), given fixed \(s_p\). The same holds therefore for \(u\) and \(p\). Further, the interdependence of the different components in \(i/u/p/s\) is gone using a constant \(s_p\). We can therefore split e.g. \(p\) into functions \(p_{i;s_p}\) such that \(p(t,x)=p_{1;s_p}(t;x_1)×…×p_{n_1;s_p}(t;x_{n_1})\).
-  The functions \(p_{i;s_p}\) are not only linear in \(x\), but also grow monotonically in \(x\) since \(α,β≥0\).
-  So we in particular have that \(p\) to is growing monotonically (regarding by-component ordering).
-  Since \(H\) is a monotonically growing function, \(s\) is also growing monotonically.
+
+  The functions \(i_{i;s_p}\),\(u_{i;s_p}\),\(p_{i;s_p}\) are not only linear in \(x\), but also grow monotonically in \(x\) since \(α,β≥0\). If \(t≥1\), then \(i_{i;s_p}\),\(u_{i;s_p}\),\(p_{i;s_p}\) grow even strictly monotonically in \(x\).
+
+  So we in particular have that \(p\) to is growing monotonically (regarding by-component ordering) on fixed \(s_p\).
+  Since \(H\) is a monotonically growing function, \(s\) is also growing monotonically with fixed \(s_p\).
 \end{remark}
 We will examine the graph by investigating the shape and location of the constant regions of a \rdtlifsnn:
 
 \begin{definition}
   The set of constant regions of a \rdtlifsnn \(Φ\) is defined as the partition
   \[ C_Φ≔\{R(Φ)^{-1}(\{y\})\mid y∈\operatorname{im}(R(Φ))\} \]
-  of \(ℝ^{n_0}\). The set of constant regions of the first layer of a \rdtlifsnn \(Φ\) is defined as
-  \[ C_{Φ,1}≔\{\{x∈ℝ^{n_0}\mid∀_ts(t;x)=s'(t)\}\mid s'∈\{0,1\}^{n_1×T}\} \]
+  of \(ℝ^{n_0}\). A constant region with spike train \(s'∈\{0,1\}^{n_1×T}\), of the first layer of a \rdtlifsnn \(Φ\) is defined as
+  \[ C_{s'}≔\{x∈ℝ^{n_0}\mid∀_{t∈[T]}s(t;x)=s'(t)\} \]
+  We further notate the set of these regions by \( C_{Φ,1}≔\{C_{s'}\mid s'∈\{0,1\}^{n_1×T},C_{s'}≠∅\} \).
 \end{definition}
 
 % TODO: remark about the connection between C_Φ and C_{Φ,1}
@@ -123,9 +126,31 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 \end{proof}
 
 \begin{lemma}
+  Let \(s'∈\{0,1\}^{n_1×T}\) such that \(∀_{i∈[n_1]}∀_{t,t'}s'_i(t)=s'_i(t')\). Let further \(C_{s'}=[x^{s'},y^{s'})\) be the corresponding region. Then \(C_{s'}≠∅\) and \(x_i=-∞\) if \(∀_ts'_i(t)=0\) and \(y_i=∞\) if \(∀_ts'_i(t)=0\) for all \(i∈[n_1]\).
+\end{lemma}
+
+\begin{proof}
+  By~\autoref{rem:regions-non-recursive-defs} \(p_{i;s_p}(t;x)\) is a non-constant linear function for \(t≥1\) and fixed \(s_p\). We have therefore \(∃_zs_{i;s_p}(t;(-∞,z_i))=0\) and \(∃_zs_{i;s_p}(t;[z_i,∞))=1\) for any fixed \(t∈[T]\) and \(s_p\). Since there are only finitely many time-steps \(t∈[T]\) and spike trains \(s_p\) and, we can choose \(z\) with \(z_i\) small or large enough such that \(s_{i;s_p}(t;(-∞,z_i))=0\) or \(s_{i;s_p}(t;[z_i,∞))=1\) respectively for any \(s_p\) and \(t∈[T]\).
+
+  By choosing the component \(z_i\) correctly small or large enough we therefore get a \(z∈C_{s'}\). We further get for any \(i∈[n_1]\) that if \(∀_ts'_i(t)=0\), then by construction \(s_i(t;(-∞,z_i))=1\), so \(∀_{δ>0}z-δe_i∈C_{s'}\) and therefore \(x_i=-∞\). If on the other hand \(∀_ts'_i(t)=1\), then \(s_i(t;[z_i,∞))=0\), so \(∀_{δ≥0}z+δe_i∈C_{s'}\) and therefore \(y_i=∞\).
+\end{proof}
+
+\begin{lemma}
+  If \(q∈ℝ^{n_1}\) is a (finite) vertice of a region \(C_{s'}=[x^{s'},y^{s'})∈C_{Φ,1}\), \(s'∈\{0,1\}^{n_1×T}\), then \(∀_{i∈[n_1]}∀_{δ>0}s_i(·;q)≠s_i(·;q-δ(∂_q)_ie_i)\).
+  Here \(∂_q≔2H(x^{s'}+y^{s'}-2q)-1\) points is a vector pointing from \(q\) roughly in the direction of the opposite vertice of the cube \(C_{s'}\) (We allow \(x^{s'},y^{s'}\) to have \(-∞\) or \(∞\) as components here).
+\end{lemma}
+
+\begin{proof}
+  Proof by contradiction: If the statement is wrong, than there exists an \(i∈[n_1]\), such that for every \(δ>0\) with \(s_i(·;q)=s_i(·;q-δ∂_q_ie_i)\).
+  Since the other components of \(p(·;x)\) as well as \(s(·;x)\) are only affected by the value of \(x_i\) through \(s_i(·;x)\) we further get \(s(·;q)=s(·;q-δ∂_q_ie_i)\). So \(q-δ∂_q_ie_i∈C_{s'}\).
+
+  On the other hand \(x^{s'}_i≤q_i-δ(∂_q)_i<y^{s'}_i\) cannot be true: Assume that it is. Since \(q\) is a (finite) vertice of \([x^{s'},y^{s'})\), we have \(q_i∈\{x^{s'}_i,y^{s'}_i\}\). Case distinction: Suppose \(q_i=x^{s'}_i\). Then \((∂_q)_i=1\) and \(x^{s'}_i≤q_i-δ(∂_q)_i\) is wrong. Suppose on the other hand \(q_i=y^{s'}_i\). Then \((∂_q)_i=-1\) and \(q_i-δ(∂_q)_i<y^{s'}_i\) is wrong.
+\end{proof}
+
+\begin{lemma}
   All (finite) vertices of the constant regions of the first layer of a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\) are contained in the convex hull of the points
   %TODO: imprecise notation
-  \[ P≔\{x∈ℝ^{n_1}\mid σ∈\{0,T\}^{n_1},C_{σ,T}=[a,b),∀_ix_i∈\{a_i,b_i\},∀_i(x_i=a_i⇔σ_i=0)\} \]
+  \[ P≔\{z∈ℝ^{n_1}\mid σ∈\{0,T\}^{n_1},C_{σ,T}=[x,y),∀_iz_i∈\{x_i,y_i\},∀_i(z_i=x_i⇔σ_i=0)\} \]
   We further have \(\operatorname{conv}(P)⊂[a,b]\) where
   %TODO: improve inequalities
   \begin{align*}
@@ -137,6 +162,8 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 
 \begin{proof}
   \(P\) is well-defined, since…
+
+  Let \(s'∈\{0,1\}^{n_1×T}\) with \(C_{s'}≠∅\) and \(C_{s'}=[x^{s'},y^{s'})\). Let further \(q∈ℝ^{n_1}\) be a (finite) vertice of \(C_{s'}\), so \(∀_{i∈[n_1]}q_i∈\{x^{s'}_i,y^{s'}_i\}\). Suppose we have
 \end{proof}
 
 % TODO: lexiographic ordering even in general case (with specific def.) and
@@ -154,7 +181,7 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 % TODO: motivation for theorem
 While in theory we would expect the number of constant regions to grow exponentially with time, it grows only quadratically.
 
-\begin{theorem}
+\begin{theorem}\label{thm:bound-regions}
 A \rdtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) different constant regions.
 \end{theorem}
 
@@ -171,6 +198,7 @@ A \rdtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) 
 
 % Überlegungen
 % Regionen mit gleicher spike train in einer komponente anschauen, mit linien vergleichen?
+% TODO: comparison with β=1.5
 
 \begin{corollary}
   %TODO: versions for W arbitrary

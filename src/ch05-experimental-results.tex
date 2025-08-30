@@ -1,3 +1,46 @@
 \section{Experimental results} \label{ch:experiments}
 
+To try to better understand the landscape of the input of a \rdtlifsnn to proof~\autoref{thm:bound-regions}, we have created a few programs.
+
+\subsection{Computing the number of regions}
+
+We assume \(W=I_n\) yet again, since we the algorithms become much simpler and more efficient. Also once we understand the situation for \(W=I_n\), we are hopeful to proof it for arbitrary \(W\).
+
+For the first algorithm we define a function \(g(t;s_p)\) such that we have \(∀_{i∈[n_1]}s_i(t;x;s_p)=1⇔x_i≥g_i(t;s_p)\) (using notation from~\autoref{ch:partitions})
+We compute for a \(i∈[n_1]\):
+\begin{align*}
+  &H(p_i(t;x;s_p)-ϑ) \\
+ =& H\left(\sum_{k=1}^tβ^{t-k}\left(i_i(k;x;s_p)+b_i\right)+\underset{(*)}{\underbrace{β^tu_i(0)-ϑ\left(1+\sum_{k=1}^{t-1}β^{t-k}(s_p)_i(k)\right)}}\right)  \\
+ =& H\left(\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+\sum_{l=1}^kα^{k-l}\left(x_i+(Vs_p(l-1))_i\right)+b_i\right) +(*)\right) \\
+ =& H\left(\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}x_i+\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+b_i+\sum_{l=1}^kα^{k-l}(Vs_p(l-1))_i\right) +(*)\right) \\
+ =& H\left(x_i+\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+b_i+\sum_{l=1}^kα^{k-l}(Vs_p(l-1))_i\right) +(*)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}\right) \\
+\end{align*}
+So we get
+\[ g(t;s_{p})=-\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki(0)+b+\sum_{l=1}^kα^{k-l}Vs_p(l-1)\right) +(*)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}\right) \]
+
+\begin{algorithm}[H]
+\caption{Recursive Region Computation}
+\label{alg:compute_regions}
+\begin{algorithmic}
+\Function{ComputeRegionsStartingWithST}{$t, st, x^C, y^C$}
+    \If{$t > T$}
+        \State \Return $\{(st, x^C, y^C)\} $
+    \EndIf
+    \State $x \gets g(t;st) $
+    \For{$ C \gets \{\} $}
+    \EndFor
+\EndFunction
+
+%TODO: implement α stuff
+
+\Function{ComputeRegions}{$ $}
+
+    \Call{ComputeRegionsStartingWithST}{$1,[(0,…,0)],(-∞,…,-∞),(∞,…,∞)$}
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
 % TODO: abstract algorithms
+% TODO: images
+% TODO: numerical considerations

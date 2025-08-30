@@ -6,7 +6,7 @@ This section concern itself with the approximation of continuous functions by d.
 In~\cite{nguyen2025timespikeunderstandingrepresentational} the following theorem was proved:
 \begin{theorem}\label{thm:approx-snn-constant}
   Let \(f\) be a continuous function on a compact set \(Ω⊂ℝ^{n_0}\). For all \(ε>0\), there exists a d.t. LIF-SNN \(Φ\) with direct encoding, membrane potential output, \(L=2\) and \(T=1\) such that
-  \[ \norm{R(Φ)-f}_{∞}≤ε\]
+  \[ \norm{(R(Φ)-f)|_{Ω}}_{∞}≤ε\]
   Moreover, if \(f\) is \(Γ\)-Lipschitz, then \(Φ\) can be chosen with width parameter \(n=(n_1,n_2)\) given by
   \begin{align*}
    n_1 &=\left(\max\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{ε}Γ \right\rceil,1\right\}+1\right)n_0  \\
@@ -89,6 +89,7 @@ We will now show a more efficient construction for \rdtlifsnn that uses the fact
 %
 % TODO: use generalized inverse of the modulus of continuity
 
+%TODO: demand differentiability only for Ω°
 We will now provide an alternative version of this theorem which uses an increased latency to reduce the number of neurons:
 \begin{theorem}\label{thm:approx-snn}
   Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set. For all \(ε,ξ,θ>0\), \(ε=ξ+θ\), there exists a \rdtlifsnn \(Φ\) with \(L=3\) and
@@ -140,6 +141,7 @@ We will now provide an alternative version of this theorem which uses an increas
 % TODO: remark about why we are using 2-norm
 
 % TODO: fix issue with C_i s not completely fitting in open \sqrt{2}δ(ε) balls due to closed part of C_i
+% TODO: F might not be defined at c_i, since \(Ω≠\overline{C}\)
 \begin{proof}[\proofofref{lem:approx-by-lin}.]
   By~\autoref{lem:smallest-cube} we have a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) and \(Ω⊂\overline{C}\).
   Let further \(ε>0\) be given. Since \(Ω\) is compact and \(f∈𝒞^1(Ω,ℝ^m)\), \(dF\) is uniformly continuous on \(Ω\). Let \(δ(ε)\) be \(dF\)s modulus of uniform continuity.
@@ -176,12 +178,13 @@ We will now provide an alternative version of this theorem which uses an increas
 %TODO: change notation of c_i to sth clearly not meant component
 
 \begin{proof}[\proofofref{thm:approx-snn}.]
-  Let a continuously differentiable function \(f∈𝒞^1(Ω,ℝ^m)\) on a compact set \(Ω⊂ℝ^n\) be given. Let there further be a \(ε>0\).
+  Let a continuously differentiable function \(f∈𝒞^1(Ω,ℝ^m)\) on a compact set \(Ω⊂ℝ^n\) be given. Let there further be \(ε,ξ,θ>0\) with \(ε=ξ+θ\).
   %TODO: clarify notation [y,z) (line or proper subspace)
-  By~\autoref{lem:approx-by-lin} we have a half-open cube \(C=[x^C,y^C)\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<ετ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
-  We will now define a \rdtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<ε(1-τ)\).
-  Before anything else we shall set the following basic parameters \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\) for all layers.
-  We obtain the simplified equations:
+  By~\autoref{lem:approx-by-lin} we have a half-open cube \(C=[x^C,y^C)\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<ξ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
+
+  We will now define a \rdtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<θ\).
+
+  Before anything else we shall set the following basic parameters \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\) for all layers. We obtain the simplified equations:
   \begin{align*}
     p^{[l]}(t) & = u^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)+b^{[l]} \\
     s^{[l]}(t) & = H(p^{[l]}(t)-1_{n_l}) \\
@@ -189,6 +192,7 @@ We will now provide an alternative version of this theorem which uses an increas
   \end{align*}
   and in particular by~\autoref{lem:non-recursive-defs}
   \begin{align*}
+   i^{[l]}(t)&≔W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)  \\
    p^{[l]}(t) &= u^{[l]}(0)+\sum_{k=1}^t\left(W^{[l]}s^{[l-1]}(k)+V^{[l]}s^{[l]}(k-1)+b^{[l]}\right)-\sum_{k=1}^{t-1}s^{[l]}(k).
   \end{align*}
   % TODO: graphic
@@ -200,7 +204,7 @@ We will now provide an alternative version of this theorem which uses an increas
   % In the second layer we have \(m+1\)-neurons for each affine linear region \(C_i\). Each of the first \(m\) neurons encodes the linear part of a component of the output vector. The last, additional neuron acts as an activator to the specific region by recursively enabling the other neurons of this region and disabling all regions with smaller base point (that would otherwise be enabled).
 
   We define the \(i\)-th neuron of the \(n\) neurons of the first layer by parameters
-  \[ w=\frac{1}{y^C_i-x^C_i}e_i, \quad b=-\frac{x^C_i}{y^C_i-x^C_i}, \quad v=, -e_{n+1}\quad u_0=0, \quad i_0=0. \]
+  \[ w=\frac{1}{y^C_i-x^C_i}e_i, \quad b=-\frac{x^C_i}{y^C_i-x^C_i}, \quad v=-e_{n+1},\quad u_0=0, \quad i_0=0. \]
   The last neuron of the first layer, with index \(n+1\), is defined by:
   \begin{equation*}
     w=0, \quad b=\frac{1}{K(ξ)T_r(θ)}, \quad v=e_{n+1}, \quad u_0=0, \quad i_0=0.
@@ -212,12 +216,11 @@ We will now provide an alternative version of this theorem which uses an increas
   So \(s^{[1]}_{n+1}(t)=1⇔t≥K(ξ)T_r(θ)\).
   We further get for \(i∈[n]\):
   \begin{align*}
-   p^{[1]}_i(t) = \sum_{k=1}^t\left(\frac{s_i^{[0]}(k)-x^C_i}{y^C_i-x^C_i}-s^{[1]}_{n+1}(k-1)\right)-\sum_{k=1}^{t-1}s_i^{[1]}(k)
+   i^{[1]}_i(t)&≔\frac{1}{y^C_i-x^C_i}s^{[0]}_i(t)-s^{[1]}_{n+1}(t-1)
   \end{align*}
-  We clearly have \(0≤s_i^{[0]}(k)-x^C_i<y^C_i-x^C_i\), \(s^{[1]}_{n+1}(t-1)=0\) and therefore \(0≤p_i^{[1]}(t)≤1\) for \(s^{[0]}(k)∈C\) and \(t≤K(ξ)T_r(θ)\).
-  We therefore have \(\sum_{k=1}^{t-1}s_i^{[1]}(k)=\sum_{k=1}^t\left(\frac{s_i^{[0]}(k)-x^C_i}{y^C_i-x^C_i}-s^{[1]}_{n+1}(k-1)\right)+p^{[1]}_i(t)\).
-  %TODO:
-
+  So we can use~\autoref{lem:sum-spikes-over-time} for \(x^C_i≤s^{[0]}_i(t)<y_i\) and \(t≤K(ξ)T_r(θ)\) to obtain
+  \[ \left\lfloor \frac{1}{y^C_i-x^C_i}\sum_{t=1}^{K(ξ)T_r(θ)}(s^{[0]}_i(t)-x^C_i) \right\rfloor =\left\lfloor u^{[1]}_i(0)+\sum_{t=1}^{K(ξ)T_r(θ)}(i^{[1]}_i(t)+b^{[1]}_i) \right\rfloor = \sum_{t=1}^{K(ξ)T_r(θ)}s^{[1]}_i(t) \]
+  The equation clearly also holds for \(s^{[0]}_i(t)=y_i\).
 
   % TODO: check that proof works for x∈\(\overline{C}∖C\)
 
@@ -226,22 +229,34 @@ We will now provide an alternative version of this theorem which uses an increas
 
   % TODO: proof correct behaviour
 
-  For each of the \(K^n(ξ)\) subcubes in \(C\) we define \(m+1\) neurons in the following way:
-  Let \(C_j=[x^{C_j},y^{C_j})\) be one such subcube with position \(q∈\{0,…,K(ξ)-1\}^{n_1}\) in \(C\).
-  The \(i\)-th neuron of the first \(m\) neurons, with index \(j(m+1)+i\) in its layer, has the parameters
+  Let us know construct the second layer in the following way: For each of the \(K^n(ξ)\) subcubes in \(C\) we define \(n+1\) neurons like so: Let \(C_j=[x^{C_j},y^{C_j})\) be one such subcube with position \(q∈\{0,…,K(ξ)-1\}^{n_1}\) in \(C\). We will write \(ι_j(i)≔j(n+1)+i\) to index the first \(n\) neurons in the layer and \(ω_j≔(j+1)(n+1)\) to index the last neuron of each group.
+
+  The \(i\)-th neuron of the first \(n\) neurons, with index \(ι_j(i)\) in the second layer, has the parameters
   \begin{gather*}
-    w=e_n, \quad b=0, \\
-    v=K(ξ)T_r(θ)\left(-e_{j(m+1)+i}+e_{(j+1)(m+1)}-\sum_{\substack{q'∈\{0,…,K(ξ)-1\}^{n_1} \\ q'≤q}}e_{j(q)(m+1)+(m+1)}\right), \\
+    w=e_i, \quad b=0, \\
+    v=K(ξ)T_r(θ)\left(-e_{ι_j(i)}+e_{ω_j}-\sum_{\substack{q'∈\{0,…,K(ξ)-1\}^{n_1} \\ q'<q}}e_{ω_j(q)}\right), \\
     u_0=-q_iT_r(θ), \quad i_0=0.
   \end{gather*}
   where \(j(q)\) is the index of the subcube at position \(q\).
+  We get
+  \[ p^{[2]}_{ι_j(i)}(t) = -q_iT_r(θ)+\sum_{k=1}^ts^{[1]}_{ι_j(i)}(k)-(K(ξ)T_r(θ)+1)\sum_{k=1}^{t-1}s^{[2]}_{ι_j(i)}(k). \]
+  for \(t≤K(ξ)T_r(θ)\), since as we will later show, \(s^{[1]}_{ω_j}(t)=0\) for all \(j∈[K^n]\) and \(t≤K(ξ)T_r(θ)\).
 
-  The final neuron of the group, with index \((j+1)(m+1)\) in its layer, has the parameters
+  We further have
+
+  The final neuron of the group, with index \(ω_j\) in its layer, has the parameters
   \begin{gather*}
-    w=\frac{1}{n+1}e_{n+1}, \quad b=0, \quad v=e_{(j+1)(m+1)}+\frac{1}{n+1}\sum_{i=1}^ne_{j(m+1)+i}, \\
+    w=\frac{1}{n+1}e_{n+1}, \quad b=0, \quad v=e_{ω_j}+\frac{1}{n+1}\sum_{i=1}^ne_{ι_j(i)}, \\
     u_0=0, \quad i_0=0.
   \end{gather*}
-  The final neuron of the layer, with index \((K^n(ξ)(m+1)+1)\), has the parameters
+  We get
+  \[ p^{[2]}_{ω_j}(t) = u^{[2]}_{ω_j}(t-1)+s^{[2]}_{ω_j}(t-1)+\frac{1}{n+1}\left(s^{[1]}_{n+1}(t)+\sum_{i=1}^ns^{[2]}_{ι_j(i)}(t-1)\right) \]
+
+  We further define the parameters of the output decoder by \(a_t=0\), for \(t≤K(ξ)T_r(θ)\) and otherwise \(a_t=1\). We further set \(b^{[L+1]}=0\) and \((W^{[L+1]})_{l,ι_j(i)}=g(x^{C_j}+\frac{1}{T_{θ}(θ)}e_i)-g(x^{C_j})\) for \(l∈[m]\), \(j∈K^n(ξ)\) and \(i∈[n]\), as well as \((W^{[L+1]})_{l,ω_j}=\frac{1}{T_{θ}(θ)}g(x^{C_j})\) for \(l∈[m]\) and \(j∈K^n(ξ)\).
+
+  Let now \(s^{[0]}(t)=x∈C\). We will proof \(\norm{R(Φ)(x)-g(x)}_{∞,2}≤θ\).
+
+  Let now \(s^{[0]}(t)=x∈\overline{C}∖C\).
 
   % TODO: proof correct behaviour
 
@@ -260,9 +275,8 @@ Sadly the size of the network in this construction is not always smaller than th
 So we get that \(K(ε)\) has a value of \(\lfloor \frac{π\sqrt{n}}{\sqrt{ε}} \rfloor\) by definition. We therefore get for the layer sizes:
 \begin{alignat*}{2}
    & \autoref{thm:approx-snn-constant} \qquad &\qquad  &\autoref{thm:approx-snn} \\
-  &n_1 =\left\lceil \tfrac{2π}{ε} \right\rceil+1 \qquad &\qquad &n_1 = 1 \\
-  &n_2 =\left\lceil \tfrac{2π}{ε} \right\rceil \qquad &\qquad &n_2 = 3 \\
-                                             & \qquad &\qquad &n_3 = 2\lfloor \tfrac{π\sqrt{n}}{\sqrt{ε}} \rfloor
+  &n_1 =\left\lceil \tfrac{2π}{ε} \right\rceil+1 \qquad &\qquad &n_1 = 2 \\
+  &n_2 =\left\lceil \tfrac{2π}{ε} \right\rceil \qquad &\qquad &n_2 = 2\lfloor \tfrac{π\sqrt{n}}{\sqrt{ε}} \rfloor
 \end{alignat*}
 While the first and second layer are clearly far smaller than the first layer of the other construction, especially for small \(ε\), the third layer of our construction is arbitrarily bad for \(n→∞\) compared to the last layer of the other construction.
 

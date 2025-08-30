@@ -37,6 +37,7 @@ We further define recurrent d.t. LIF-SNN and the function the network realizes:
 
 % TODO: remark about layers being kinda useless
 % TODO: remark comparison with previous model
+% TODO: layers mit kursiv?
 
 \begin{definition}
   A recurrent discrete-time LIF-SNN \(ϕ\) \textbf{realizes} the function \(R(Φ):ℝ^{n_0}→ℝ^{n_{L+1}}\):
@@ -47,8 +48,8 @@ We further define recurrent d.t. LIF-SNN and the function the network realizes:
   A recurrent discrete-time LIF-SNN employs \textbf{direct encoding} if we have
   \[ ∀_{t∈[T]}E(x)(t)=x \]
   for the input encoder and has \textbf{membrane potential outputs} if the output decoder can be written as
-  \[ D((s(t))_{t∈[T]})=\sum_{t=1}^Ta_t(W^{L+1}s(t)+b^{L+1}) \]
-  for some \((a_t)_{t∈[T]}∈ℝ^T\), \(b^{L+1}∈ℝ^{n_{L+1}}\) and \(W^{L+1}∈ℝ^{n_{L+1}×n_L}\).
+  \[ D((s(t))_{t∈[T]})=\sum_{t=1}^Ta_t(W^{[L+1]}s(t)+b^{[L+1]}) \]
+  for some \((a_t)_{t∈[T]}∈ℝ^T\), \(b^{[L+1]}∈ℝ^{n_{L+1}}\) and \(W^{[L+1]}∈ℝ^{n_{L+1}×n_L}\).
 \end{definition}
 We will only consider recurrent discrete-time LIF-SNN with direct encoding and membrane potential outputs. In fact, we will use “recurrent discrete-time LIF-SNN” to mean “\rdtlifsnn with direct encoding and membrane potential”.
 
@@ -68,7 +69,7 @@ The following lemmas will be very helpful for the proofs in the following sectio
    s^{[l]}(t;(s_p^{[l]})_l) & ≔ H(p^{[l]}(t;(s_p^{[l]})_l)-ϑ1_{n_l}) \\
    u^{[l]}(t;(s_p^{[l]})_l) &≔ (β^{[l]})^tu^{[l]}(0)+\sum_{k=1}^t(β^{[l]})^{t-k}\left(i^{[l]}(k;s_p)+b^{[l]}-ϑs_p^{[l]}(k)\right),
   \end{align}
-  These formulas are equivalent to the previous recursive definitions, given \(s_p^{[l]}=s^{[l]}\) for \(l∈\{0…L'\}\).
+  We use the convention \(∀_{α,β∈[0,1]}α^0,β^0=1\). These formulas are equivalent to the previous recursive definitions, given \(s_p^{[l]}=s^{[l]}\) for \(l∈\{0…L'\}\).
 \end{lemma}
 
 \begin{proof}
@@ -83,12 +84,12 @@ The following lemmas will be very helpful for the proofs in the following sectio
   \[ p^{[l]}(t) = (β^{[l]})^tu^{[l]}(0)+\sum_{i=1}^t(β^{[l]})^{t-i}\left(i^{[l]}(i)+b^{[l]}\right)-ϑ\sum_{i=1}^{t-1}(β^{[l]})^{t-i}s^{[l]}(i) \]
 \end{proof}
 
-\begin{lemma}
-  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≤ϑ\) and \(u^{[l]}_j(t_0-1)<ϑ\), then \(∀_{t∈\{t_0…t_{ω}\}}u^{[l]}_j(t)<ϑ\).
+\begin{lemma}\label{lem:sum-spikes-over-time}
+  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≤ϑ\) and \(u^{[l]}_j(t_0-1)<ϑ\), then \(∀_{t∈\{t_0…t_{ω}\}}u^{[l]}_j(t)<ϑ\).
 
   If further \(β=1\) and \(u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j)≥0\)
   \[ \left( u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right) - ϑ\sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) <ϑ \]
-  If either \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_j(t)=0\) or \(∀_{t∈\{t'…t_{ω}\}}i^{[l]}_j(t)≥0\), where \(t'\) is the latest time \(≤t_{ω}\) such that \(s^{[l]}_j(t')=0\), then we even get
+  If either \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_j(t)=0\) or \(∀_{t∈\{t'…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≥0\), where \(t'\) is the latest time \(≤t_{ω}\) such that \(s^{[l]}_j(t')=0\), then we even get
   \[ 0≤\left( u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right) - ϑ\sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) \]
 \end{lemma}
 
