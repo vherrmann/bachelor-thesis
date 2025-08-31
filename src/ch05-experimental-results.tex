@@ -16,7 +16,7 @@ We compute for a \(i∈[n_1]\):
  =& H\left(x_i+\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+b_i+\sum_{l=1}^kα^{k-l}(Vs_p(l-1))_i\right) +(*)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}\right) \\
 \end{align*}
 So we get
-\[ g(t;s_{p})=-\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki(0)+b+\sum_{l=1}^kα^{k-l}Vs_p(l-1)\right) +(*)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}\right) \]
+\[ g(t;s_{p})=-\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki(0)+b+\sum_{l=1}^kα^{k-l}Vs_p(l-1)\right) +(*)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}} \]
 
 \begin{algorithm}[H]
 \caption{Recursive Region Computation}
@@ -27,7 +27,10 @@ So we get
         \State \Return $\{(st, x^C, y^C)\} $
     \EndIf
     \State $x \gets g(t;st) $
-    \For{$ C \gets \{\} $}
+    \State $ subRegions \gets \{ [x',y') \mid x'<y',\ x'_i∈\{x^C_i,x_i\},\ y'_i∈\{y^C_i,x_i\} \} $
+    \For{$ C ∈ subRegions $}
+      \State $ newST \gets \operatorname{append}(st,[(\mathbf{1}_{\{x_i≤x'_i\}})_{i∈[n_1]}]) $
+      \State \Call{ComputeRegionsStartingWithST}{$t+1,newST,x',y'$}
     \EndFor
 \EndFunction
 
@@ -35,7 +38,7 @@ So we get
 
 \Function{ComputeRegions}{$ $}
 
-    \Call{ComputeRegionsStartingWithST}{$1,[(0,…,0)],(-∞,…,-∞),(∞,…,∞)$}
+    \State \Call{ComputeRegionsStartingWithST}{$1,[(0,…,0)],(-∞,…,-∞),(∞,…,∞)$}
 \EndFunction
 
 \end{algorithmic}

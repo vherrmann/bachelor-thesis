@@ -1,0 +1,36 @@
+\tikzstyle{descript} = [text = black,align=center, minimum height=1.8cm, align=center, outer sep=0pt,font = \footnotesize]
+\tikzstyle{activity} =[align=center,outer sep=1pt]
+\definecolor{ColorOne}{named}{MidnightBlue}
+\definecolor{ColorTwo}{named}{Dandelion}
+\definecolor{ColorThree}{named}{Plum}
+\begin{tikzpicture}[very thick, black]
+  \small
+  %% Coordinates
+  \coordinate (O) at (0,0); % Origin
+  \coordinate (P1) at (4,0);
+  \coordinate (P2) at (8,0);
+  \coordinate (F) at (13,0); %End
+  \coordinate (E1) at (5,0); %Event
+  %% Filled regions
+  \fill[color=ColorOne!20] rectangle (O) -- (P1) -- ($(P1)+(0,1)$) -- ($(O)+(0,1)$); % Studies
+  \path [pattern color=ColorOne, pattern=north east lines, line width = 1pt, very thick] rectangle ($(O)+(0.5,0)$) -- ($(O)+(2,0)$) -- ($(O)+(2,1)$) -- ($(O)+(0.5,1)$); % Something else
+  \fill[color=ColorTwo!20] rectangle (P1) -- (P2) -- ($(P2)+(0,1)$) -- ($(P1)+(0,1)$); % Work
+  %% Text inside filled regions
+  \draw ($(P1)+(-2.5,0.5)$) node[activity,ColorOne] {Studies};
+  \draw ($(P2)+(-2,0.5)$) node[activity,ColorTwo] {Work};
+  % \draw ($(P3)+(-2,0.5)$)  node[activity, ColorThree] {Current activity};
+
+  %% Events
+  \draw[<-,thick,color=black] ($(E1)+(0,0.1)$) -- ($(E1)+(0,1.5)$) node [above=0pt,align=center,black] {Unexpected\\event};
+  %% Arrow
+  \draw[->] (O) -- (F);
+  %% Ticks
+  \foreach \x in {0,2,...,12}
+  \draw(\x cm,3pt) -- (\x cm,-3pt);
+  %% Labels
+  \foreach \i \j in {0/0,2/T_r(θ),4/2T_r(θ),10/K(ξ)T_r(θ),12/T}{
+    \draw (\i,0) node[below=3pt] {$\j$} ;
+  }
+\end{tikzpicture}
+
+% adapted from https://www.overleaf.com/project/68b326ec3dceb466ee45cc28

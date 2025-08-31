@@ -125,32 +125,93 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
   Let \(x≤y\) and \(s(·;x)≠s(·;y)\). We then have a minimal \(t∈[T]\) such \(s(t;x)≠s(t;y)\). Now due to \(∀_{t'<t}s(t';x)=s(t';y)\) and~\autoref{rem:regions-non-recursive-defs} we have \(s(t;x)≤s(t;y)\) and therefore \(s(t;x)<s(t;y)\).
 \end{proof}
 
-\begin{lemma}
-  Let \(s'∈\{0,1\}^{n_1×T}\) such that \(∀_{i∈[n_1]}∀_{t,t'}s'_i(t)=s'_i(t')\). Let further \(C_{s'}=[x^{s'},y^{s'})\) be the corresponding region. Then \(C_{s'}≠∅\) and \(x_i=-∞\) if \(∀_ts'_i(t)=0\) and \(y_i=∞\) if \(∀_ts'_i(t)=0\) for all \(i∈[n_1]\).
+\begin{lemma}\label{lem:inf-regions}
+  Let \(s'∈\{0,1\}^{n_1×T}\) such that \(∀_{i∈[n_1]}∀_{t,t'∈[T]}s'_i(t)=s'_i(t')\). Let further \(C_{s'}=[x^{s'},y^{s'})\) be the corresponding region. Then \(C_{s'}\) is non-empty, i.e. \(∀_{i∈[n_1]}x^{s'}_i<y^{s'}_i\), and \(x^{s'}_i=-∞\) exactly if \(∀_{t∈[T]}s'_i(t)=0\) and \(y^{s'}_i=∞\) exactly if \(∀_{t∈[T]}s'_i(t)=1\) for all \(i∈[n_1]\).
+
+  Furthermore, \(C_{s'}\) has exactly one finite vertex.
 \end{lemma}
 
 \begin{proof}
-  By~\autoref{rem:regions-non-recursive-defs} \(p_{i;s_p}(t;x)\) is a non-constant linear function for \(t≥1\) and fixed \(s_p\). We have therefore \(∃_zs_{i;s_p}(t;(-∞,z_i))=0\) and \(∃_zs_{i;s_p}(t;[z_i,∞))=1\) for any fixed \(t∈[T]\) and \(s_p\). Since there are only finitely many time-steps \(t∈[T]\) and spike trains \(s_p\) and, we can choose \(z\) with \(z_i\) small or large enough such that \(s_{i;s_p}(t;(-∞,z_i))=0\) or \(s_{i;s_p}(t;[z_i,∞))=1\) respectively for any \(s_p\) and \(t∈[T]\).
+  By~\autoref{rem:regions-non-recursive-defs} \(p_{i;s_p}(t;x)\) is a non-constant linear function for \(t≥1\) and fixed \(s_p\). We have therefore \(∃_zs_{i;s_p}(t;(-∞,z_i))=0\) and \(∃_zs_{i;s_p}(t;[z_i,∞))=1\) for any fixed \(t∈[T]\) and \(s_p\). Since there are only finitely many time-steps \(t∈[T]\) and spike trains \(s_p\) and, we get \(s_{i;s_p}(t;(-∞,z_i))=0\) or \(s_{i;s_p}(t;[z_i,∞))=1\) respectively for any \(s_p\) and \(t∈[T]\), as well as any \(z\) with \(z_i\) small or large enough.
 
   By choosing the component \(z_i\) correctly small or large enough we therefore get a \(z∈C_{s'}\). We further get for any \(i∈[n_1]\) that if \(∀_ts'_i(t)=0\), then by construction \(s_i(t;(-∞,z_i))=1\), so \(∀_{δ>0}z-δe_i∈C_{s'}\) and therefore \(x_i=-∞\). If on the other hand \(∀_ts'_i(t)=1\), then \(s_i(t;[z_i,∞))=0\), so \(∀_{δ≥0}z+δe_i∈C_{s'}\) and therefore \(y_i=∞\).
+
+  Since \(T≥1\) by definition, we have either \(x^{s'}_i=-∞\) or \(y^{s'}_i=∞\) by definition of \(s'\) for each \(i∈[n_1]\). By choosing the only finite one from \(\{x^{s'}_i,y^{s'}_i\}\) for each \(i∈[n_1]\) we get the only finite vertex of \(C_{s'}\).
 \end{proof}
 
-\begin{lemma}
-  If \(q∈ℝ^{n_1}\) is a (finite) vertice of a region \(C_{s'}=[x^{s'},y^{s'})∈C_{Φ,1}\), \(s'∈\{0,1\}^{n_1×T}\), then \(∀_{i∈[n_1]}∀_{δ>0}s_i(·;q)≠s_i(·;q-δ(∂_q)_ie_i)\).
-  Here \(∂_q≔2H(x^{s'}+y^{s'}-2q)-1\) points is a vector pointing from \(q\) roughly in the direction of the opposite vertice of the cube \(C_{s'}\) (We allow \(x^{s'},y^{s'}\) to have \(-∞\) or \(∞\) as components here).
+%TODO: compute rough position
+\begin{lemma}\label{lem:region-vertex}
+  If \(q∈ℝ^{n_1}\) is a (finite) vertex of a region \(C_{s'}=[x^{s'},y^{s'})∈C_{Φ,1}\), \(s'∈\{0,1\}^{n_1×T}\), then \(∀_{i∈[n_1]}∀_{δ>0}s_i(·;q)≠s_i(·;q-δ(∂_q)_ie_i)\).
+  Here \(∂_q≔2H(x^{s'}+y^{s'}-2q)-1\) points is a vector pointing from \(q\) roughly in the direction of the opposite vertex of the cube \(C_{s'}\) (We allow \(x^{s'},y^{s'}\) to have \(-∞\) or \(∞\) as components here).
 \end{lemma}
 
 \begin{proof}
-  Proof by contradiction: If the statement is wrong, than there exists an \(i∈[n_1]\), such that for every \(δ>0\) with \(s_i(·;q)=s_i(·;q-δ∂_q_ie_i)\).
-  Since the other components of \(p(·;x)\) as well as \(s(·;x)\) are only affected by the value of \(x_i\) through \(s_i(·;x)\) we further get \(s(·;q)=s(·;q-δ∂_q_ie_i)\). So \(q-δ∂_q_ie_i∈C_{s'}\).
+  Proof by contradiction: If the statement is wrong, than there exists an \(i∈[n_1]\), such that for every \(δ>0\) with \(s_i(·;q)=s_i(·;q-δ(∂_q)_ie_i)\).
+  Since the other components of \(p(·;x)\) as well as \(s(·;x)\) are only affected by the value of \(x_i\) through \(s_i(·;x)\) we further get \(s(·;q)=s(·;q-δ(∂_q)_ie_i)\). So \(q-δ(∂_q)_ie_i∈C_{s'}\).
 
-  On the other hand \(x^{s'}_i≤q_i-δ(∂_q)_i<y^{s'}_i\) cannot be true: Assume that it is. Since \(q\) is a (finite) vertice of \([x^{s'},y^{s'})\), we have \(q_i∈\{x^{s'}_i,y^{s'}_i\}\). Case distinction: Suppose \(q_i=x^{s'}_i\). Then \((∂_q)_i=1\) and \(x^{s'}_i≤q_i-δ(∂_q)_i\) is wrong. Suppose on the other hand \(q_i=y^{s'}_i\). Then \((∂_q)_i=-1\) and \(q_i-δ(∂_q)_i<y^{s'}_i\) is wrong.
+  On the other hand \(x^{s'}_i≤q_i-δ(∂_q)_i<y^{s'}_i\) cannot be true: Assume that it is. Since \(q\) is a (finite) vertex of \([x^{s'},y^{s'})\), we have \(q_i∈\{x^{s'}_i,y^{s'}_i\}\). Case distinction: Suppose \(q_i=x^{s'}_i\). Then \((∂_q)_i=1\) and \(x^{s'}_i≤q_i-δ(∂_q)_i\) is wrong. Suppose on the other hand \(q_i=y^{s'}_i\). Then \((∂_q)_i=-1\) and \(q_i-δ(∂_q)_i<y^{s'}_i\) is wrong.
 \end{proof}
 
-\begin{lemma}
-  All (finite) vertices of the constant regions of the first layer of a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\) are contained in the convex hull of the points
-  %TODO: imprecise notation
-  \[ P≔\{z∈ℝ^{n_1}\mid σ∈\{0,T\}^{n_1},C_{σ,T}=[x,y),∀_iz_i∈\{x_i,y_i\},∀_i(z_i=x_i⇔σ_i=0)\} \]
+%TODO: not essential/not actually needed in proof? still leave it?
+\begin{lemma}\label{lem:convex-closure}
+  Let \(M⊂ℝ^n\) be convex. Then the closure \(\overline{M}\) is convex as well.
+\end{lemma}
+
+\begin{proof}
+  Let \(x,y∈\operatorname{M}\) and \(t∈[0,1]\). We will proof \(z≔x+(y-x)t∈\operatorname{M}\). By definition of the closure have sequences \((x_n)_{n∈ℕ},(y_n)_{n∈ℕ}⊂M\) with \(x_n→x\), \(y_n→y\) for \(n→∞\). We get a corresponding sequence \(z_n≔x_n+(y_n-x_n)t\) with \(z_n→z\), since
+  \begin{align*}
+   \abs{z-z_n} &=\abs{(x-x_n)(1-t)+(y-y_n)t} \\
+               &≤(1-t)\abs{x-x_n}+t\abs{y-y_n} \\
+               &→0
+  \end{align*}
+  for \(n→∞\).
+\end{proof}
+
+%TODO: remove collission of notation for H
+\begin{lemma}\label{lem:sep-conv-set-and-point-by-hypr}
+  Let \(M⊂ℝ^n\) and \(x∈ℝ^m∖\overline{\operatorname{conv}(M)}\). Then there exists an affine hyperplane \(H⊂ℝ^m\) with \(x∈H\) and \(H∩\operatorname{conv}(M)=∅\).
+\end{lemma}
+
+% TODO: image
+\begin{proof}
+  Let now \(δ=\operatorname{dist}(x,\operatorname{conv}(M))≔\inf_{y∈\operatorname{conv}(M)}(\norm{x-y}_2)\). We clearly have \(δ>0\), since otherwise \(x∈\operatorname{\operatorname{conv(M)}}\). Let \((y_n)_{n∈ℕ}\) be a sequence with \(\norm{x,y_n}_2→δ\) for \(n→∞\). Since \(ℝ^n\) is complete we can assume w.l.o.g. that \((y_n)_n\) converges to \(y∈ℝ^n\). We now choose \(H≔x+\{z∈ℝ^n\mid ⟨z,x-y⟩=0\}\). This is indeed a hyperplane, since \(\norm{x-y}_2=δ>0\) and therefore \(x≠y\).
+
+  Suppose there is a \(z∈H∩\operatorname{conv}(M)\). We then have \(y'≔y+(z-y)\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}\). By using \(\norm{·}_2^2=⟨·,·⟩\) we get
+  \[ \norm{x-y'}_2^2=\norm{x-y-(z-y)\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}}_2^2=\norm{x-y}_2^2-\norm{(z-y)\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}}_2^2 \]
+  since \(x-y'⊥y'-y\):
+  \begin{align*}
+    &⟨x-y',(z-y)\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}⟩ \\
+    &=\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}⟨x-y-(z-y)\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2},z-y⟩ \\
+    &=\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}⟨x-y,z-y⟩-\frac{⟨x-y,z-y⟩^2}{\norm{z-y}_2^4}⟨z-y,z-y⟩ \\
+    &=0
+  \end{align*}
+  So \(\norm{x-y'}_2<\norm{x-y}_2=δ\), since \(x≠y\) and \(z≠y\) (\(y∉H\)). We further have \(\operatorname{dist}(y',\operatorname{conv}(M))=0\):
+
+  First notice that \(0≤\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}<1\). Since \(z∈H\), we have \(⟨z-x,x-y⟩=0\) and therefore \(\norm{x-y}_2^2+\norm{z-x}^2_2=\norm{z-y}_2^2\), so we get
+  \[ ⟨x-y,z-y⟩≤\norm{z-y}\norm{x-y}<\norm{z-y}^2 \]
+  by the Cauchy-Schwarz-Inequality and \(z≠x\). Notice that we can proof \(\frac{⟨z-x,z-y⟩}{\norm{z-y}_2^2}<1\) in the same way.
+  Since we have \(\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}+\frac{⟨z-x,z-y⟩}{\norm{z-y}_2^2}=1\) we get \(0≤\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}\).
+
+  %TODO: notation [y,z]
+  So \(y'∈[y,z]⊂\overline{\operatorname{conv}(M)}\) by~\autoref{lem:convex-closure}.
+
+  So there are \(y''∈\operatorname{conv}(M)\) with \(\norm{y''-y'}_2<δ-\norm{x-y'}_2\) and we get \(\norm{x-y''}<δ\). This contradicts the definition of \(δ\).
+\end{proof}
+
+\begin{lemma}\label{lem:pov-hyprplane}
+  If \(H⊂ℝ^n\) is an affine hyperplane, then there exists a dimension \(i∈[n]\) such that \(π_{[n]∖\{i\}}(H)=ℝ^{n-1}\).
+\end{lemma}
+
+%TODO: intuition there is pov such that the plane appears to cover everything
+
+\begin{proof}
+  Suppose this is not the case. Let \(x∈H\). Then \(0≠\ker(π_{[n]∖\{i\}}|_{H-x})⊂\ker(π_{[n]∖\{i\}}|_{ℝ^n})≅ℝ\), and therefore \(e_i∈H-x\). But this contradicts \(H-x\) having dimension \(n-1\).
+\end{proof}
+
+%TODO: general assumption W=I_{n_1}
+\begin{proposition}
+  Let \(P\) be the set of all finite vertices of regions \(C_{s'}\), \(s'∈\{0,1\}^{n_1×T}\), with \(∀_{i∈[n_1]}∀_{t,t'∈[T]}s'_i(t)=s'_i(t')\). Then all (finite) vertices of the constant regions \(C_{s'}∈C_{Φ,1}\) with \(W=I_{n_1}\) are contained in the convex hull of \(P\).
+
   We further have \(\operatorname{conv}(P)⊂[a,b]\) where
   %TODO: improve inequalities
   \begin{align*}
@@ -158,12 +219,20 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
    b &≔\max(-βu(0)-αi(0),)+(-b)+ϑ·𝟙_{n_1}
   \end{align*}
   % where \(a_0\) is the higher vertex of the region \(C_0≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=0\}\), \(C_0=[a_0,b_0)\), with constant \(0\) spike train and \(b_1\) is the lower vertex of the region \(C_1≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=1\}\), \(C_1=[a_1,b_1)\) with constant \(1\) spike train.
-\end{lemma}
+\end{proposition}
+
+%TODO: add image
+
+%TODO: add name for spike trains/regions with constant spike trains, simplify proofs/propositions
 
 \begin{proof}
-  \(P\) is well-defined, since…
+  %TODO: put in proposition
+  We will first proof that if \(x∈ℝ^{n_1}\) is a point with \(∃_{i∈[n_1]}∃_{t,t'∈[T]}s'_i(t)≠s'_i(t')\), then \(x∈\operatorname{conv}(P)\). Suppose \(x∉\operatorname{conv}(P)\). Then there is an affine hyperplane \(H⊂ℝ^{n_1}∖\operatorname{conv}(P)\) with \(x∈H\) by~\autoref{lem:sep-conv-set-and-point-by-hypr}. We further have by~\autoref{lem:pov-hyprplane}, that there is a dimension \(i'∈[n]\) such that \(π_{[n]∖\{i'\}}(H)=ℝ^{n-1}\). So \(x+e_{i'}∉H\) and we have a vector \(y∈H\) such that \(∀_{i∈[n]∖\{i'\}}y_i≠0\).
 
-  Let \(s'∈\{0,1\}^{n_1×T}\) with \(C_{s'}≠∅\) and \(C_{s'}=[x^{s'},y^{s'})\). Let further \(q∈ℝ^{n_1}\) be a (finite) vertice of \(C_{s'}\), so \(∀_{i∈[n_1]}q_i∈\{x^{s'}_i,y^{s'}_i\}\). Suppose we have
+  Let us now regard the region \(C_{s_y}\), where we define \(s_y\) such that \(∀_{i∈[n]∖\{i\}}∀_{t∈[T]}(s_y)_i(t)=1⇔y_i≥0⇔y_i>0\), and \(∀_t(s_y)_{i'}(t)=1\) exactly when \(x+e_{i'}\) and \(\operatorname{conv}(P)⊂ℝ∖H\) are on different connected components of \(ℝ^n∖H\), i.e. there does not exist a path \(c:[0,1]→ℝ∖H\) with \(c(0)=x+e_{i'}\) and ending with \(c(1)∈\operatorname{conv}(P)\). Since convex sets are trivially path connected, if such a path exists for any point in \(\operatorname{conv}(P)\), it exists for every point of \(\operatorname{conv}(P)\).
+
+  By definition of \(s_y\) we can apply~\autoref{lem:inf-regions} and obtain that \(C_{s_y}\) has one finite vertex \(z∈P\), that \(C_{s_y}=[x^{s_y},y^{s_y})\) with \(∀_{i∈[n_1]}(x^{s_y})_i<(y^{s_y})_i\) and \(x^{s_y}_i=-∞\) if \(∀_{t∈[T]}(s_y)_i(t)=0\) and \(y^{s_y}_i=∞\) if \(∀_{t∈[T]}(s_y)_i(t)=1\) for all \(i∈[n_1]\). So by definition of \(s_y\) there exists a \(δ>0\) such that \(∀_{i∈[n]∖i'}δy_i∈[x^{s_y}_i,y^{s_y}_i)\). The same holds for \(i=i'\): Suppose \((s_y)_{i'}(t)=1\). Then there does not exist a path between \(x+e_{i'}\) and \(z\) in \(ℝ^{n_1}∖H\).
+
 \end{proof}
 
 % TODO: lexiographic ordering even in general case (with specific def.) and

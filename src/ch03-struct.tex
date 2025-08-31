@@ -127,6 +127,7 @@ We will now provide an alternative version of this theorem which uses an increas
 % TODO: differentiable, but defined on compact subset of euclidean space???
 % TODO: quote formulation?
 % TODO: instead of fixing \(ε^{t}\), get supremum of
+% TODO: why K≠0?
 
 \newcommand{\dsqe}{δ(ξ)}
 \begin{lemma}\label{lem:approx-by-lin}
@@ -203,6 +204,12 @@ We will now provide an alternative version of this theorem which uses an increas
 
   % In the second layer we have \(m+1\)-neurons for each affine linear region \(C_i\). Each of the first \(m\) neurons encodes the linear part of a component of the output vector. The last, additional neuron acts as an activator to the specific region by recursively enabling the other neurons of this region and disabling all regions with smaller base point (that would otherwise be enabled).
 
+  \begin{figure}[h]
+    \centering
+    \input{src/figures/approx-first-layer-timeline}
+    \caption{Timeline of first-layer neuron}
+  \end{figure}
+
   We define the \(i\)-th neuron of the \(n\) neurons of the first layer by parameters
   \[ w=\frac{1}{y^C_i-x^C_i}e_i, \quad b=-\frac{x^C_i}{y^C_i-x^C_i}, \quad v=-e_{n+1},\quad u_0=0, \quad i_0=0. \]
   The last neuron of the first layer, with index \(n+1\), is defined by:
@@ -216,10 +223,12 @@ We will now provide an alternative version of this theorem which uses an increas
   So \(s^{[1]}_{n+1}(t)=1⇔t≥K(ξ)T_r(θ)\).
   We further get for \(i∈[n]\):
   \begin{align*}
-   i^{[1]}_i(t)&≔\frac{1}{y^C_i-x^C_i}s^{[0]}_i(t)-s^{[1]}_{n+1}(t-1)
+   i^{[1]}_i(t)=\frac{1}{y^C_i-x^C_i}s^{[0]}_i(t)-s^{[1]}_{n+1}(t-1)=\frac{1}{y^C_i-x^C_i}s^{[0]}_i(t)-s^{[1]}_{n+1}(t-1)
   \end{align*}
   So we can use~\autoref{lem:sum-spikes-over-time} for \(x^C_i≤s^{[0]}_i(t)<y_i\) and \(t≤K(ξ)T_r(θ)\) to obtain
-  \[ \left\lfloor \frac{1}{y^C_i-x^C_i}\sum_{t=1}^{K(ξ)T_r(θ)}(s^{[0]}_i(t)-x^C_i) \right\rfloor =\left\lfloor u^{[1]}_i(0)+\sum_{t=1}^{K(ξ)T_r(θ)}(i^{[1]}_i(t)+b^{[1]}_i) \right\rfloor = \sum_{t=1}^{K(ξ)T_r(θ)}s^{[1]}_i(t) \]
+  \begin{equation}\label{eq:3}
+  \left\lfloor \frac{K(ξ)T_r(θ)}{y^C_i-x^C_i}(s^{[0]}_i(1)-x^C_i) \right\rfloor =\left\lfloor u^{[1]}_i(0)+\sum_{t=1}^{K(ξ)T_r(θ)}(i^{[1]}_i(t)+b^{[1]}_i) \right\rfloor = \sum_{t=1}^{K(ξ)T_r(θ)}s^{[1]}_i(t)
+  \end{equation}
   The equation clearly also holds for \(s^{[0]}_i(t)=y_i\).
 
   % TODO: check that proof works for x∈\(\overline{C}∖C\)
@@ -229,18 +238,19 @@ We will now provide an alternative version of this theorem which uses an increas
 
   % TODO: proof correct behaviour
 
+  %TODO: add timeline
   Let us know construct the second layer in the following way: For each of the \(K^n(ξ)\) subcubes in \(C\) we define \(n+1\) neurons like so: Let \(C_j=[x^{C_j},y^{C_j})\) be one such subcube with position \(q∈\{0,…,K(ξ)-1\}^{n_1}\) in \(C\). We will write \(ι_j(i)≔j(n+1)+i\) to index the first \(n\) neurons in the layer and \(ω_j≔(j+1)(n+1)\) to index the last neuron of each group.
 
   The \(i\)-th neuron of the first \(n\) neurons, with index \(ι_j(i)\) in the second layer, has the parameters
   \begin{gather*}
     w=e_i, \quad b=0, \\
     v=K(ξ)T_r(θ)\left(-e_{ι_j(i)}+e_{ω_j}-\sum_{\substack{q'∈\{0,…,K(ξ)-1\}^{n_1} \\ q'<q}}e_{ω_j(q)}\right), \\
-    u_0=-q_iT_r(θ), \quad i_0=0.
+    u_0=-q_iT_r(θ)+1, \quad i_0=0.
   \end{gather*}
   where \(j(q)\) is the index of the subcube at position \(q\).
   We get
-  \[ p^{[2]}_{ι_j(i)}(t) = -q_iT_r(θ)+\sum_{k=1}^ts^{[1]}_{ι_j(i)}(k)-(K(ξ)T_r(θ)+1)\sum_{k=1}^{t-1}s^{[2]}_{ι_j(i)}(k). \]
-  for \(t≤K(ξ)T_r(θ)\), since as we will later show, \(s^{[1]}_{ω_j}(t)=0\) for all \(j∈[K^n]\) and \(t≤K(ξ)T_r(θ)\).
+  \[ p^{[2]}_{ι_j(i)}(t) = -q_iT_r(θ)+1+\sum_{k=1}^ts^{[1]}_i(k)-(K(ξ)T_r(θ)+1)\sum_{k=1}^{t-1}s^{[2]}_{ι_j(i)}(k). \]
+  for \(t≤K(ξ)T_r(θ)\), since as we will later show, \(s^{[1]}_{ω_j}(t)=0\) for all \(j∈[K^n]\) and \(t≤K(ξ)T_r(θ)\). We therefore have \(s^{[2]}_{ι_j(i)}(t)=1\) for a \(t≤K(ξ)T_r(θ)\) exactly if \(\sum_{k=1}^{K(ξ)T_r(θ)}s^{[1]}_i(k)≥q_iT_r(θ)\) which is equivalent to \(\) by~\eqref{eq:3}
 
   We further have
 
