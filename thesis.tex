@@ -5,11 +5,14 @@
 \usepackage[english]{babel}
 \usepackage{unicode-math}
 \usepackage{amsmath, amsfonts}
+\setmathfont{Latin Modern Math}
+\setmathfont{New Computer Modern Math}[range={"2986, "27E6}] % ⟦ and ⦆
+
 \usepackage{wasysym}
 \usepackage{amsthm, thmtools}
 \declaretheorem[numberwithin=section]{lemma, proposition, theorem, corollary}
 \declaretheorem[numberwithin=section, style=plain]{example}
-\declaretheorem[style=definition, numberwithin=section]{definition}
+\declaretheorem[style=definition, numberwithin=section]{definition, notation}
 \declaretheorem[style=remark, numberwithin=section]{remark}
 
 \usepackage{epstopdf}
@@ -21,6 +24,9 @@
 \usepackage{physics}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage[capitalize,nameinlink]{cleveref}
+\usepackage{nccmath}
 
 % this for draft water mark
 \setboolean{release}{true}
@@ -63,7 +69,8 @@
 \newcommand{\Dtlifsnn}{d.t. LIF-SNN }
 \newcommand{\rdtlifsnn}{r. d.t. LIF-SNN }
 \newcommand{\Rdtlifsnn}{R. d.t. LIF-SNN }
-\newcommand{\proofofref}[1]{Proof of~\autoref{#1}.}
+\newcommand{\proofofref}[1]{Proof of~\cref{#1}.}
+% \newcommand{\comment}[1]{}
 
 \begin{document}
 

@@ -14,7 +14,7 @@ We can therefore simplify the notation in this section by writing \(W,b,V,β,ϑ,
     u(t) & = p(t)-ϑs(t)
   \end{align}
 
-By using the simplified notation, we obtain the following explicitely formulated definitions from~\autoref{lem:non-recursive-defs} for \(x∈ℝ^{n_0}\) and \(s:\{0,1\}^{n_1×t'}\) for \(t'\) chosen such that the following equations are well-defined:
+By using the simplified notation, we obtain the following explicitely formulated definitions from~\cref{lem:non-recursive-defs} for \(x∈ℝ^{n_0}\) and \(s:\{0,1\}^{n_1×t'}\) for \(t'\) chosen such that the following equations are well-defined:
 \begin{align}
     i(t;x;s_p) &= α^ti(0)+\sum_{k=1}^tα^{t-k}\left(Wx+Vs_p(k-1)\right), \\\label{eq:1}
     u(t;x;s_p) &= β^tu(0)+\sum_{k=1}^tβ^{t-k}\left(i(k;x;s_p)+b-ϑs_p(k)\right), \\\label{eq:2}
@@ -45,8 +45,46 @@ We will examine the graph by investigating the shape and location of the constan
 % TODO: remark about the connection between C_Φ and C_{Φ,1}
 
 \begin{proposition}\label{prop:const-regions-cuboids}
-  The constant regions of the first layer of a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\) are half-open cuboids.
+  The constant regions of the first layer of a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\) are half-open cuboids. In particular, let \(C_{s'}=⟦x^{s'},y^{s'}⦆∈C_{Φ,1}\) be a constant region. Then
+  \[ x^{s'}_i =\sup_{\substack{t∈[T] \\ s'_i(t)=1}}g_i(t;s')\qquad y^{s'}_i =\inf_{\substack{t∈[T] \\ s'_i(t)=0}}g_i(t;s') \]
+  where we use the conventions \(\inf ∅=∞\) and \(\sup ∅=-∞\).
 \end{proposition}
+
+\begin{lemma}\label{lem:invert-p}
+  There is a function \(g(t;s_p)\) such that \(∀_{i∈[n_1]}s_i(t;x;s_p)=1⇔⟨w_i,x⟩≥g_i(t;s_p)\) defined by
+  \[ g(t;s_{p})≔-\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki(0)+b+\sum_{l=1}^kα^{k-l}Vs_p(l-1)\right) +β^tu(0)-ϑ\left(1+\sum_{k=1}^{t-1}β^{t-k}s_p(k)\right)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}} \]
+  Where \(w_i\) denotes the \(i\)-th row vector of \(W\).
+\end{lemma}
+
+\begin{proof}[\proofofref{lem:invert-p}]
+We compute for a \(i∈[n_1]\) using~\cref{lem:non-recursive-defs}:
+\begin{align*}
+ & H(p_i(t;x;s_p)-ϑ) \\
+ &= H\left(\sum_{k=1}^tβ^{t-k}\left(i_i(k;x;s_p)+b_i\right)+\underset{(*)}{\underbrace{β^tu_i(0)-ϑ\left(1+\sum_{k=1}^{t-1}β^{t-k}(s_p)_i(k)\right)}}\right)  \\
+ &= H\left(\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+\sum_{l=1}^kα^{k-l}\left(⟨w_i,x⟩+(Vs_p(l-1))_i\right)+b_i\right) +(*)\right) \\
+ &= H\left(\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}⟨w_i,x⟩+\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+b_i+\sum_{l=1}^kα^{k-l}(Vs_p(l-1))_i\right) +(*)\right) \\
+ &= H\left(⟨w_i,x⟩+\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+b_i+\sum_{l=1}^kα^{k-l}(Vs_p(l-1))_i\right) +(*)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}\right) \\
+ &= H\left(⟨w_i,x⟩+g_i(t;s_p)\right)
+\end{align*}
+\end{proof}
+
+\begin{lemma}\label{lem:const-regions-cuts}
+  Let \(C_{s'}∈C_{Φ,1}\), we then have
+  \[ C_{s'}=\left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=0}}π_i^{-1}([-∞,g_i(t;s')))\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=1}}π_i^{-1}([g_i(t;s'),∞))\right) \]
+\end{lemma}
+
+\begin{proof}[\proofofref{lem:const-regions-cuts}]
+  Let \(C_{s'}∈C_{Φ,1}\) be such a region. We then get
+  \begin{align*}
+    C_{s'}&=\bigcap_{i∈[n_1],t∈[T]}\{x\mid s'_i(t) =s_i(t;x)\} \\
+     &=\bigcap_{i∈[n_1],t∈[T]}\{x\mid s'_i(t) =s_i(t;x;s')\} \\
+     &= \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=0}}\{x\mid s_i(t;x;s')=0\}\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=1}}\{x\mid s_i(t;x;s')=1\}\right) \\
+     &= \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=0}}π_i^{-1}([-∞,g_i(t;s')))\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=1}}π_i^{-1}([g_i(t;s'),∞))\right)
+  \end{align*}
+  by~\cref{lem:invert-p}.
+\end{proof}
+
+
 
 \begin{lemma}\label{lem:intersection-and-product}
   \(\bigcap_{j∈J}\prod_{i∈[n]}M_{i,j}=\prod_{i∈[n]}\bigcap_{j∈J}M_{i,j}\) for an index set \(J\) and sets \((M_{i,j})_{i∈[n],j∈J}\).
@@ -66,51 +104,47 @@ We will examine the graph by investigating the shape and location of the constan
 \end{proof}
 
 \begin{lemma}\label{lem:intersection-cuboid}
-  The intersection \(C_1∩C_2\) of half-open cuboids \(C_1,C_2⊂ℝ^n\) is a half-open cuboid.
+  The intersection \(C_1∩C_2\) of half-open cuboids \(C_1,C_2⊂ℝ^n\) is a half-open cuboid. In particular, if \(C_i≔\prod_{j∈[n]}[c_{i,j},d_{i,j})\), then
+  \[ C_1∩C_2=\prod_{j∈[n]}([\sup(c_{1,j},c_{2,j}),\inf(d_{1,j},d_{2,j}))) \]
+  We use \(\inf/\sup\) instead of \(\min/\max\) to highlight that the components of the vertices might be \(±∞\).
 \end{lemma}
 
 \begin{proof}[\proofofref{lem:intersection-cuboid}]
-  %TODO: explicitely show case n=1?
-  By definition of a half-open cuboid, we have half-open intervals \([c_{i,j},d_{i,j})\) with \(j∈[n]\) such that \(C_i≔\prod_{j∈[n]}[c_{i,j},d_{i,j})\) for \(i∈[2]\). We therefore have
-  \[ C_1∩C_2=\prod_{j∈[n]}([c_{1,j},d_{1,j})∩[c_{2,j},d_{2,j}))=\prod_{j∈[n]}([\max(c_{1,j},c_{2,j}),\min(d_{1,j},d_{2,j}))) \]
-  by~\autoref{lem:intersection-and-product}
+  %DONE: explicitely show case n=1?
+  Let us first regard \(n=1\). For \(c_1,c_2,d_1,d_2∈ℝ∪\{±∞\}\) we get
+  \begin{align*}
+       &x ∈ [c_1,d_1)\cap [c_2,d_2) \\
+   ⇔{} &c_1,c_2≤x<d_1,d_2 \\
+   ⇔{} &x∈[\sup(c_{1,j},c_{2,j}),\inf(d_{1,j},d_{2,j}))
+  \end{align*}
+  for \(x∈ℝ\) and therefore
+  \[ C_1∩C_2=\prod_{j∈[n]}\left([c_{1,j},d_{1,j})∩[c_{2,j},d_{2,j})\right)=\prod_{j∈[n]}[\sup(c_{1,j},c_{2,j}),\inf(d_{1,j},d_{2,j})) \]
+  by~\cref{lem:intersection-and-product}.
 \end{proof}
-%TODO: remark, we do allow empty cuboids?
+%DONE: remark, we do allow empty cuboids?
 
 %TODO: define cuboid/half-open?
 
+\begin{comment}
 \begin{lemma}\label{lem:pre-image-half-open-int}
   Let \([c,d)\) be a half-open interval and \(φ:ℝ→ℝ\) be an affine linear function. Then \(φ^{-1}([c,d))\) is a half-open interval.
 \end{lemma}
-
-%TODO: properly define half-open cuboid
 
 \begin{proof}
   If \(φ\) is constant, then \(φ^{-1}([c,d))\) is either \(ℝ=[-∞,∞)\) or \(∅=[0,0)\).
   If \(φ\) is not constant, then \(φ=ax+b\) with \(a>0\) and \(φ^{-1}([c,d))=[\frac{c-b}{a},\frac{d-b}{a})\), if \(c,d∈ℝ\); if \(c=-∞\) or \(d=∞\) the lower limit or upper limit of \(φ^{-1}([c,d))\) is \(-∞\) or \(∞\) respectively.
 \end{proof}
+\end{comment}
 
 \begin{proof}[\proofofref{prop:const-regions-cuboids}]
-  Let \(C∈C_{Φ,1}\) be such a region and \(s_C\) the corresponding spike train. We then get
+  Let \(C_{s'}∈C_{Φ,1}\) be a constant region. We then get
   \begin{align*}
-    C&=\bigcap_{i∈[n_1],t∈[T]}\{x\mid (s_C)_i(t) =s_i(t;x)\} \\
-     &=\bigcap_{i∈[n_1],t∈[T]}\{x\mid (s_C)_i(t) =s_i(t;x;s_C)\} \\
-     &= \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=0}}\{x\mid p_i(t;x;s_C)<ϑ\}\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ (s_C)_i(t)=1}}\{x\mid p_i(t;x;s_C)≥ϑ\}\right)
+   C_{s'}&=\left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=0}}π_i^{-1}([-∞,g_i(t;s')))\right) \bigcap \left(\bigcap_{\substack{i∈[n_1],t∈[T] \\ s'_i(t)=1}}π_i^{-1}([g_i(t;s'),∞))\right) \\
+         &=\prod_{i∈[n]}[\sup_{t∈[T],\ s'_i(t)=1}g_i(t;s'), \inf_{t∈[T],\ s'_i(t)=0}g_i(t;s'))
   \end{align*}
-  So \(C\) is an intersection of pre-images of half-open intervals regarding functions \(p_i(t;·;s_C)\). Since \(p_i(t;x;s_C)=p_{i;s_C}(t;π_i(x);s_C)\) for all \(x∈ℝ^{n_0}\), and since \(p_{i;s_C}\) is linear and growing monotonically, we can apply~\autoref{lem:pre-image-half-open-int}. A pre-image of a half-open interval regarding \(p_i(t;·;s_C)\) is therefore a pre-image of a half-open interval regarding \(π_i\), so a half-open cuboid.
-
-  We can now apply~\autoref{lem:intersection-cuboid} and obtain that \(C\) is indeed a half-open cuboid.
-
-  % . Let further \(x,y∈C\). We now define the compact cuboid spanned by \(x,y\) as \(D_{x,y}≔[x,y]\).
-  % % Here \([x_i,y_i]\) with \(x_i>y_i\) is to be understood as the interval \([y_i,x_i]\).
-  % The first step of our proof is showing \(D_{x,y}⊂C_{Φ,1}\). W.l.o.g. we can assume that \(x≤y\) (in each component), otherwise we can replace \(x\) by \((\min(x_i,y_i))_i\) and \(y\) by \((\max(x_i,y_i))_i\). We therefore get \(z∈D_{x,y}⇔x≤z≤y\).
-
-  % % TODO: widerspruchsbeweis unnötig? Geht auch per Induktion
-  % Suppose now a \(z∈D_{x,y}∖C_{Φ,1}\) exists. We therefore have a \(t\) such that \(s(t;x)=s(t;y)≠s(t;z)\). Let \(t_0\) be the smallest such \(t\). We therefore have \(∀_{t<t_0}s(t;x)=s(t;y)=s(t;z)\) and therefore get \(i(t;x)≤i(t;z)≤i(t;y)\) by~\eqref{eq:1} due to \(W=I_{n_1}\). From \(i(t;x)≤i(t;z)≤i(t;y)\) we can easily deduce \(p(t;x)≤p(t;z)≤p(t;y)\) and from that yet again we can conclude \(s(t;x)≤s(t;z)≤s(t;y)\), since \(H=χ_{[1,∞]}\) rises monotonically.
-
-  % Let us further consider
-
-  % % We define \(q_C≔(\inf_{x∈C}x_i)_i\), \(p_C≔(\sup_{x∈C}x_i)_i\)
+  by~\cref{lem:const-regions-cuts} and~\cref{lem:intersection-cuboid}, since
+  \[ π_i^{-1}([c,d))=[-∞,∞)×…×[c,d)×…×[-∞,∞). \]
+  So \(C_{s'}\) is a finite intersection of half-open cuboids. We can now apply~\cref{lem:intersection-cuboid} and obtain that \(C_{s'}\) is indeed a half-open cuboid.
 \end{proof}
 
 We will add an ordering to spike trains based on lexicographical ordering. We define \(s'≤_ls''\) for \(s',s''∈\{0,1\}^{n_1×T}\) to mean that either \(s'=s''\) or \(s'(t)<s''(t)\) holds for the minimal time \(t\) such that the spike trains have different values.
@@ -118,21 +152,27 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 \begin{lemma}
   Let us regard a \rdtlifsnn \(Φ\) with \(W=I_{n_1}\).
   Let further \(x,y∈ℝ^{n_0}\). We then have \(x≤y⇒s(·;x)≤s(·;y)\).
+
+  Is on the other hand \(s(·;x)<s(·;y)\) lexicographicaly, so \(x_i<y_i\) with \(i∈[n_1]\), such that \(t\) is the smallest time with \(∃_{i∈[n_1]}s_i(t;x)≠s_i(t;y)\).
 \end{lemma}
 
 % TODO: introduce a<b means a≤b and ∃_i(a_i<b_i)
+% TODO: generalize
+% TODO: proof using Prop 4.1?
 \begin{proof}
-  Let \(x≤y\) and \(s(·;x)≠s(·;y)\). We then have a minimal \(t∈[T]\) such \(s(t;x)≠s(t;y)\). Now due to \(∀_{t'<t}s(t';x)=s(t';y)\) and~\autoref{rem:regions-non-recursive-defs} we have \(s(t;x)≤s(t;y)\) and therefore \(s(t;x)<s(t;y)\).
+  Let \(x≤y\) and \(s(·;x)≠s(·;y)\). We then have a minimal \(t∈[T]\) such \(s(t;x)≠s(t;y)\). Now due to \(∀_{t'<t}s(t';x)=s(t';y)\) and~\cref{rem:regions-non-recursive-defs} we have \(∀_{i∈[n_1]}s_1(t;x_i)≤s_i(t;y_i)\) and therefore \(s(t;x)<s(t;y)\).
+
+  Let now \(s(·;x)<s(·;y)\). Then there is a smallest time \(t\) such that \(∃_{i∈[n_1]}s_i(t;x)≠s_i(t;y)\). By definition of the ordering on spike trains we get \(s_i(t;x)<s_i(t;y)\). Now \(s_{i;s_p}(t;x_i)\) is a monotone function in \(x_i\) with \(s_p(t)≔s(t;x)\) by choice of \(t\) and~\cref{rem:regions-non-recursive-defs}. We therefore have \(x_i<y_i\)
 \end{proof}
 
 \begin{lemma}\label{lem:inf-regions}
-  Let \(s'∈\{0,1\}^{n_1×T}\) such that \(∀_{i∈[n_1]}∀_{t,t'∈[T]}s'_i(t)=s'_i(t')\). Let further \(C_{s'}=[x^{s'},y^{s'})\) be the corresponding region. Then \(C_{s'}\) is non-empty, i.e. \(∀_{i∈[n_1]}x^{s'}_i<y^{s'}_i\), and \(x^{s'}_i=-∞\) exactly if \(∀_{t∈[T]}s'_i(t)=0\) and \(y^{s'}_i=∞\) exactly if \(∀_{t∈[T]}s'_i(t)=1\) for all \(i∈[n_1]\).
+  Let \(s'∈\{0,1\}^{n_1×T}\) such that \(∀_{i∈[n_1]}∀_{t,t'∈[T]}s'_i(t)=s'_i(t')\). Let further \(C_{s'}=⟦x^{s'},y^{s'}⦆\) be the corresponding region. Then \(C_{s'}\) is non-empty, i.e. \(∀_{i∈[n_1]}x^{s'}_i<y^{s'}_i\), and \(x^{s'}_i=-∞\) exactly if \(∀_{t∈[T]}s'_i(t)=0\) and \(y^{s'}_i=∞\) exactly if \(∀_{t∈[T]}s'_i(t)=1\) for all \(i∈[n_1]\).
 
   Furthermore, \(C_{s'}\) has exactly one finite vertex.
 \end{lemma}
 
 \begin{proof}
-  By~\autoref{rem:regions-non-recursive-defs} \(p_{i;s_p}(t;x)\) is a non-constant linear function for \(t≥1\) and fixed \(s_p\). We have therefore \(∃_zs_{i;s_p}(t;(-∞,z_i))=0\) and \(∃_zs_{i;s_p}(t;[z_i,∞))=1\) for any fixed \(t∈[T]\) and \(s_p\). Since there are only finitely many time-steps \(t∈[T]\) and spike trains \(s_p\) and, we get \(s_{i;s_p}(t;(-∞,z_i))=0\) or \(s_{i;s_p}(t;[z_i,∞))=1\) respectively for any \(s_p\) and \(t∈[T]\), as well as any \(z\) with \(z_i\) small or large enough.
+  By~\cref{rem:regions-non-recursive-defs} \(p_{i;s_p}(t;x)\) is a non-constant linear function for \(t≥1\) and fixed \(s_p\). We have therefore \(∃_zs_{i;s_p}(t;(-∞,z_i))=0\) and \(∃_zs_{i;s_p}(t;[z_i,∞))=1\) for any fixed \(t∈[T]\) and \(s_p\). Since there are only finitely many time-steps \(t∈[T]\) and spike trains \(s_p\) and, we get \(s_{i;s_p}(t;(-∞,z_i))=0\) or \(s_{i;s_p}(t;[z_i,∞))=1\) respectively for any \(s_p\) and \(t∈[T]\), as well as any \(z\) with \(z_i\) small or large enough.
 
   By choosing the component \(z_i\) correctly small or large enough we therefore get a \(z∈C_{s'}\). We further get for any \(i∈[n_1]\) that if \(∀_ts'_i(t)=0\), then by construction \(s_i(t;(-∞,z_i))=1\), so \(∀_{δ>0}z-δe_i∈C_{s'}\) and therefore \(x_i=-∞\). If on the other hand \(∀_ts'_i(t)=1\), then \(s_i(t;[z_i,∞))=0\), so \(∀_{δ≥0}z+δe_i∈C_{s'}\) and therefore \(y_i=∞\).
 
@@ -141,7 +181,7 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 
 %TODO: compute rough position
 \begin{lemma}\label{lem:region-vertex}
-  If \(q∈ℝ^{n_1}\) is a (finite) vertex of a region \(C_{s'}=[x^{s'},y^{s'})∈C_{Φ,1}\), \(s'∈\{0,1\}^{n_1×T}\), then \(∀_{i∈[n_1]}∀_{δ>0}s_i(·;q)≠s_i(·;q-δ(∂_q)_ie_i)\).
+  If \(q∈ℝ^{n_1}\) is a (finite) vertex of a region \(C_{s'}=⟦x^{s'},y^{s'}⦆∈C_{Φ,1}\), \(s'∈\{0,1\}^{n_1×T}\), then \(∀_{i∈[n_1]}∀_{δ>0}s_i(·;q)≠s_i(·;q-δ(∂_q)_ie_i)\).
   Here \(∂_q≔2H(x^{s'}+y^{s'}-2q)-1\) points is a vector pointing from \(q\) roughly in the direction of the opposite vertex of the cube \(C_{s'}\) (We allow \(x^{s'},y^{s'}\) to have \(-∞\) or \(∞\) as components here).
 \end{lemma}
 
@@ -149,10 +189,13 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
   Proof by contradiction: If the statement is wrong, than there exists an \(i∈[n_1]\), such that for every \(δ>0\) with \(s_i(·;q)=s_i(·;q-δ(∂_q)_ie_i)\).
   Since the other components of \(p(·;x)\) as well as \(s(·;x)\) are only affected by the value of \(x_i\) through \(s_i(·;x)\) we further get \(s(·;q)=s(·;q-δ(∂_q)_ie_i)\). So \(q-δ(∂_q)_ie_i∈C_{s'}\).
 
-  On the other hand \(x^{s'}_i≤q_i-δ(∂_q)_i<y^{s'}_i\) cannot be true: Assume that it is. Since \(q\) is a (finite) vertex of \([x^{s'},y^{s'})\), we have \(q_i∈\{x^{s'}_i,y^{s'}_i\}\). Case distinction: Suppose \(q_i=x^{s'}_i\). Then \((∂_q)_i=1\) and \(x^{s'}_i≤q_i-δ(∂_q)_i\) is wrong. Suppose on the other hand \(q_i=y^{s'}_i\). Then \((∂_q)_i=-1\) and \(q_i-δ(∂_q)_i<y^{s'}_i\) is wrong.
+  On the other hand \(x^{s'}_i≤q_i-δ(∂_q)_i<y^{s'}_i\) cannot be true: Assume that it is. Since \(q\) is a (finite) vertex of \(⟦x^{s'},y^{s'}⦆\), we have \(q_i∈\{x^{s'}_i,y^{s'}_i\}\). Case distinction: Suppose \(q_i=x^{s'}_i\). Then \((∂_q)_i=1\) and \(x^{s'}_i≤q_i-δ(∂_q)_i\) is wrong. Suppose on the other hand \(q_i=y^{s'}_i\). Then \((∂_q)_i=-1\) and \(q_i-δ(∂_q)_i<y^{s'}_i\) is wrong.
 \end{proof}
 
-%TODO: not essential/not actually needed in proof? still leave it?
+% I'm an idiot. The proposition I tried to proof is wrong and I could've checked it with my website in 5min
+\begin{comment}
+
+  % TODO: not essential/not actually needed in proof? still leave it?
 \begin{lemma}\label{lem:convex-closure}
   Let \(M⊂ℝ^n\) be convex. Then the closure \(\overline{M}\) is convex as well.
 \end{lemma}
@@ -193,7 +236,7 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
   Since we have \(\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}+\frac{⟨z-x,z-y⟩}{\norm{z-y}_2^2}=1\) we get \(0≤\frac{⟨x-y,z-y⟩}{\norm{z-y}_2^2}\).
 
   %TODO: notation [y,z]
-  So \(y'∈[y,z]⊂\overline{\operatorname{conv}(M)}\) by~\autoref{lem:convex-closure}.
+  So \(y'∈[y,z]⊂\overline{\operatorname{conv}(M)}\) by~\cref{lem:convex-closure}.
 
   So there are \(y''∈\operatorname{conv}(M)\) with \(\norm{y''-y'}_2<δ-\norm{x-y'}_2\) and we get \(\norm{x-y''}<δ\). This contradicts the definition of \(δ\).
 \end{proof}
@@ -218,7 +261,7 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
    a &≔ \\
    b &≔\max(-βu(0)-αi(0),)+(-b)+ϑ·𝟙_{n_1}
   \end{align*}
-  % where \(a_0\) is the higher vertex of the region \(C_0≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=0\}\), \(C_0=[a_0,b_0)\), with constant \(0\) spike train and \(b_1\) is the lower vertex of the region \(C_1≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=1\}\), \(C_1=[a_1,b_1)\) with constant \(1\) spike train.
+  % where \(a_0\) is the higher vertex of the region \(C_0≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=0\}\), \(C_0=⟦a_0,b_0⦆\), with constant \(0\) spike train and \(b_1\) is the lower vertex of the region \(C_1≔\{x∈ℝ^{n_0}\mid ∀_{t∈[T]}s(t;x)=1\}\), \(C_1=⟦a_1,b_1⦆\) with constant \(1\) spike train.
 \end{proposition}
 
 %TODO: add image
@@ -227,12 +270,59 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 
 \begin{proof}
   %TODO: put in proposition
-  We will first proof that if \(x∈ℝ^{n_1}\) is a point with \(∃_{i∈[n_1]}∃_{t,t'∈[T]}s'_i(t)≠s'_i(t')\), then \(x∈\operatorname{conv}(P)\). Suppose \(x∉\operatorname{conv}(P)\). Then there is an affine hyperplane \(H⊂ℝ^{n_1}∖\operatorname{conv}(P)\) with \(x∈H\) by~\autoref{lem:sep-conv-set-and-point-by-hypr}. We further have by~\autoref{lem:pov-hyprplane}, that there is a dimension \(i'∈[n]\) such that \(π_{[n]∖\{i'\}}(H)=ℝ^{n-1}\). So \(x+e_{i'}∉H\) and we have a vector \(y∈H\) such that \(∀_{i∈[n]∖\{i'\}}y_i≠0\).
+  We will first proof that if \(x∈ℝ^{n_1}\) is a point with \(∃_{i∈[n_1]}∃_{t,t'∈[T]}s'_i(t)≠s'_i(t')\), then \(x∈\operatorname{conv}(P)\). Suppose \(x∉\operatorname{conv}(P)\). Then there is an affine hyperplane \(H⊂ℝ^{n_1}∖\operatorname{conv}(P)\) with \(x∈H\) by~\cref{lem:sep-conv-set-and-point-by-hypr}. We further have by~\cref{lem:pov-hyprplane}, that there is a dimension \(i'∈[n]\) such that \(π_{[n]∖\{i'\}}(H-x)=ℝ^{n-1}\). So \(x+e_{i'}∉H\) and we have a vector \(x+y∈H\) such that \(∀_{i∈[n]∖\{i'\}}y_i≠0\). If possible we choose \(y\) such that \(y_{i'}≠0\). If, not we get \(π_{i'}(H)=x_i\).
 
-  Let us now regard the region \(C_{s_y}\), where we define \(s_y\) such that \(∀_{i∈[n]∖\{i\}}∀_{t∈[T]}(s_y)_i(t)=1⇔y_i≥0⇔y_i>0\), and \(∀_t(s_y)_{i'}(t)=1\) exactly when \(x+e_{i'}\) and \(\operatorname{conv}(P)⊂ℝ∖H\) are on different connected components of \(ℝ^n∖H\), i.e. there does not exist a path \(c:[0,1]→ℝ∖H\) with \(c(0)=x+e_{i'}\) and ending with \(c(1)∈\operatorname{conv}(P)\). Since convex sets are trivially path connected, if such a path exists for any point in \(\operatorname{conv}(P)\), it exists for every point of \(\operatorname{conv}(P)\).
+  Let us now regard the region \(C_{s_y}\), where we define \(s_y\) such that \(∀_{i∈[n]∖\{i\}}∀_{t∈[T]}(s_y)_i(t)=1⇔y_i≥0⇔y_i>0\), and \(∀_t(s_y)_{i'}(t)=1\) exactly when \(y_i>0\) if \(y_i≠0\) and else if \(∃_{q∈\operatorname{conv}(P)}(q+[0,∞)e_{i'})∩H≠∅\) is true.
 
-  By definition of \(s_y\) we can apply~\autoref{lem:inf-regions} and obtain that \(C_{s_y}\) has one finite vertex \(z∈P\), that \(C_{s_y}=[x^{s_y},y^{s_y})\) with \(∀_{i∈[n_1]}(x^{s_y})_i<(y^{s_y})_i\) and \(x^{s_y}_i=-∞\) if \(∀_{t∈[T]}(s_y)_i(t)=0\) and \(y^{s_y}_i=∞\) if \(∀_{t∈[T]}(s_y)_i(t)=1\) for all \(i∈[n_1]\). So by definition of \(s_y\) there exists a \(δ>0\) such that \(∀_{i∈[n]∖i'}δy_i∈[x^{s_y}_i,y^{s_y}_i)\). The same holds for \(i=i'\): Suppose \((s_y)_{i'}(t)=1\). Then there does not exist a path between \(x+e_{i'}\) and \(z\) in \(ℝ^{n_1}∖H\).
+  By definition of \(s_y\) we can apply~\cref{lem:inf-regions} and obtain that \(C_{s_y}\) has one finite vertex \(z∈P\), that \(C_{s_y}=⟦x^{s_y},y^{s_y}⦆\) with \(∀_{i∈[n_1]}(x^{s_y})_i<(y^{s_y})_i\) and \(x^{s_y}_i=-∞\) if \(∀_{t∈[T]}(s_y)_i(t)=0\) as well as \(y^{s_y}_i=∞\) if \(∀_{t∈[T]}(s_y)_i(t)=1\) for all \(i∈[n_1]\). So by definition of \(s_y\) there exists a \(δ>0\) such that \(∀_{i∈[n]∖i'}(x+δy)_i∈[x^{s_y}_i,y^{s_y}_i)\). If \(y_i≠0\), there even exists \(δ>0\) with \(∀_{i∈[n]∖i'}(x+δy)_i∈[x^{s_y}_i,y^{s_y}_i)\), so \(x+δy∈C_{s_y}\) and similarly \(x-δy∈C_{s_{-y}}\).
 
+  We will now proof \(x+δy∈C_{s_y}\) and \(x-δy∈C_{s_{-y}}\) for \(y_i=0\): First note that if \(∃_{q∈\operatorname{conv}(P)}(q+[0,∞)e_{i'})∩H≠∅\) is false, we instead get \((q-[0,∞)e_{i'})∩H≠∅\), since there exists a \(z∈H\) with \(π_{[n]∖\{i'\}}(z)=π_{[n]∖\{i'\}}(q)\).
+  Furthermore if \((q+[0,∞)e_{i'})∩H≠∅\) is true for any \(q∈\operatorname{conv}(H)\), it is true for all points in \(\operatorname{conv}(P)\): Let \(z∈(q+[0,∞)e_{i'})∩H\) and \(q'∈\operatorname{conv}(P)\) be another such point. We then have \(z'∈H\) such that \(π_{[n]∖\{i'\}}(z')=π_{[n]∖\{i'\}}(q')\). Suppose \(z'∈q'-[0,∞)e_{i'}\), we have \([q,q']⊂\operatorname{conv}(P)\) and \([z,z']⊂H\) with \([q,q']∩[z,z']≠∅\)\comment{TODO: explain this?}, but \(\operatorname{conv}(P)∩H=∅\).
+
+  Case distinction: Let \(∀_{t∈[T]}(s_y)_{i'}(t)=0\). We then have \((z-[0,∞)e_{i'})∩H≠∅\). By choice of \(y\), we have \(π_{i'}(H)=x_{i'}\) and therefore \(x_{i'}≤z_{i'}\). Since \(∀_{t∈[T]}(s_y)_{i'}(t)=0\), we have \(x_{i'}^{s_y}=-∞\) and therefore \((x+δy)_{i'}=x_{i'}∈[x_{i'}^{s_y}, z_{i'})=[x_{i'}^{s_y},y_{i'}^{s_y})\).
+  %TODO: note on the meaning of [-∞,x)
+
+  Let now \(∀_{t∈[T]}(s_y)_{i'}(t)=1\). We then have \((z+[0,∞)e_{i'})∩H≠∅\). By choice of \(y\), we have \(π_{i'}(H)=x_{i'}\) and therefore \(z_{i'}≤x_{i'}\). Since \(∀_{t∈[T]}(s_y)_{i'}(t)=1\), we have \(y_{i'}^{s_y}=∞\) and therefore \((x+δy)_{i'}=x_{i'}∈[z_{i'},y_{i'}^{s_y})=[x_{i'}^{s_y},y_{i'}^{s_y})\).
+
+  So we get in both cases \(x+δy∈C_{s_y}\) and in the same way \(x-δy∈C_{s_{-y}}\).
+\end{proof}
+\end{comment}
+
+%DONE: use ⟦⦆ notation
+
+\begin{lemma}
+  Points \(x∈ℝ^{n_1}\) with only non-constant spiketrains, i.e. \(∀_{i∈[n_1]}∃_{t,t'∈[T]}s_i(t;x)≠s_i(t';x)\) are contained in regions \(C_{s'}\) with only finite vertices.
+\end{lemma}
+
+%TODO: define finite vertice, define vertice
+
+\begin{proof}
+  %TODO: use prop 4.1
+\end{proof}
+
+\begin{proposition}
+  Let \(P\) be the set of all finite vertices of regions \(C_{s'}\), \(s'∈\{0,1\}^{n_1×T}\), with constant spiketrains, i.e. \(∀_{t,t'∈[T]}s'(t)=s'(t')\).
+  % TODO: Then all (finite) vertices of the constant regions \(C_{s'}∈C_{Φ,1}\)
+  Then all points \(x∈ℝ^{n_1}\) with only non-constant spiketrains, i.e. \(∀_{i∈[n_1]}∃_{t,t'∈[T]}s_i(t;x)≠s_i(t';x)\), are contained in \(⟦x^C,y^C⦆\), where
+
+  \begin{align*}
+   x^C_i &≔ \min_{\substack{t∈[T],\ s_p∈\{0,1\}^{n_1×T}\\ ∀_{t∈[T]}(s_p)_i(t)=0}}g(t;s_p) \\
+   y^C_i &≔ \max_{\substack{t∈[T],\ s_p∈\{0,1\}^{n_1×T} \\ ∀_{t∈[T]}(s_p)_i(t)=1}}g(t;s_p)
+  \end{align*}
+  We get in particular
+  %TODO: geometric series
+  \begin{align*}
+    x^C &= \min_{t∈[T]}\left(-\frac{\sum_{k=1}^tβ^{t-k}(α^ki(0)+b-ϑ𝟙) +β^tu(0)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}-1_{t≠1}\max(V,0)𝟙_{n_1}\right) \\
+    y^C &= \max_{t∈[T]}\left(-\frac{\sum_{k=1}^tβ^{t-k}(α^ki(0)+b-ϑ𝟙) +β^tu(0)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}-1_{t≠1}\min(V,0)𝟙_{n_1}\right)
+  \end{align*}
+  Here \(\max(V,0)\) is component-wise application of \(\max(·,0)\) on \(V\). The expression \(\min(V,0)\) is defined analogously.
+\end{proposition}
+
+\begin{proof}
+  Let \(i∈[n_1]\) and \(x∈ℝ^{n_1}\) be given with \(s^x≔s(·;x)\) and \(∀_{t,t'∈[T]}s^x_i(t)=s^x_i(t')\). If \(s_i^x=0\), then \(x_i<\inf_{\substack{t∈[T]}}g_i(t;s^x)≤x^C_i\).
+  We similarly get \(x^C_i≤\sup_{\substack{t∈[T]}}g_i(t;s^x)≤x_i\) for \(s_i^x=1\).
+  So \(x∉⟦x^C,y^C⦆\) if \(x\) has a constant spiketrain in one component.
+  %TODO: …
 \end{proof}
 
 % TODO: lexiographic ordering even in general case (with specific def.) and
@@ -247,6 +337,7 @@ We will add an ordering to spike trains based on lexicographical ordering. We de
 %   For \(y∈ℝ^{n_0}\) the mapping \(f_y:ℝ→\{0,1\}^T\) defined by \(x↦s_i\) with \(s^{[0]}(t)=y+xe_i\) is monotone regarding lexical ordering.
 % \end{lemma}
 
+\begin{comment}
 % TODO: motivation for theorem
 While in theory we would expect the number of constant regions to grow exponentially with time, it grows only quadratically.
 
@@ -277,3 +368,6 @@ A \rdtlifsnn with \(W=I_{n_1}\), … has at a maximum \((\frac{T^2+T}{2}+1)^n\) 
 \end{proof}
 
 %TODO: β<1 is essential
+\end{comment}
+
+%TODO: add depth-search to website

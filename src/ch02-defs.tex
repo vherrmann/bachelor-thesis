@@ -1,17 +1,52 @@
-\section{Definitions}
+\section{Motivation and definition of \rdtlifsnn}
 \label{ch:defs}
 
+\subsection{Motivation}
+Like~\cite{nguyen2025timespikeunderstandingrepresentational} we want to model the brain more closely. To this aim we will use a slightly more complex model than~\cite{nguyen2025timespikeunderstandingrepresentational} did.
+
+% TODO: link paper for equations
+We have equations
+\begin{align*}
+ I'(t) &≔-τ_αI(t)+\sum_{j=1}^nw_js_j(t-Δt) \\
+ U'(t) &≔-τ_βU(t)+I(t)+b-ϑs(t)
+\end{align*}
+
+Assuming that \(U\) and \(I\) describe smoothly differentiable functions, we can now use the first-order exponential integrator method to obtain a discretization of \(I\) and \(U\) from the differential equations:
+\begin{align*}
+  &e^{-τ_{α}t_n}\left(I(t_{n+1})-e^{-τ_{α}h}I(t_n)\right) \\
+  &=\int_{t_n}^{t_{n+1}}\frac{d}{dt}\left(e^{-τ_{α}t}I(t)\right)dt \\
+  &=\int_{t_n}^{t_{n+1}}e^{-τ_{α}t}(I'(t)-τ_αI(t))dt \\
+  &=\int_{t_n}^{t_{n+1}}e^{-τ_{α}t}\sum_{j=1}^nw_js_j(t-Δt)dt
+\end{align*}
+If we assume the input from the spikes of other neurons to be constant during \([t_n,t_{n+1}]\), we get
+\begin{align*}
+ &=-\frac{1}{τ_{α}}(e^{-τ_{α}t_{n+1}}-e^{-τ_{α}t_n})\sum_{j=1}^nw_js_j(t-Δt) \\
+ &=\frac{1}{τ_{α}}e^{-τ_{α}t_n}(1-e^{-τ_{α}h})\sum_{j=1}^nw_js_j(t-Δt)
+\end{align*}
+So we get
+\[ I(t_{n+1})=e^{-τ_{α}h}I(t_n)+\frac{1}{τ_{α}}(1-e^{-τ_{α}h})\sum_{j=1}^nw_js_j(t-Δt) \]
+Let us define \(h≔1\) and \(α≔e^{-τ_{α}}\). We get
+\[ I(t_{n+1})=αI(t_n)+\sum_{j=1}^nw_js_j(t-Δt) \]
+By absorbing \(\frac{1-α}{τ_{α}}\) into the weights \((w_j)_{j∈[n]}\). We obtain similarly
+\[ U(t_{n+1})=βU(t_n)+I(t)+b-ϑs(t) \]
+by using the first-order exponential integrator method, defining \(β≔e^{-τ_{β}}\) and absorbing \(\frac{1-β}{τ_{β}}\) into \(I(0)\), \((w_j)_{j∈[n]}\), \(b\) and \(ϑ\).
+
+% TODO: why direct encoding, membrane potential output
+
+\subsection{Definitions}
 % TODO: graphic for whole layer
 Our type of SNN should be thought of as a composition of an initial input layer, a number of hidden spiking layers with internal state and an affine-linear layer mapping spikes activations over time, so called spike trains, to the value of the output layer.
+
 Like motivated we are adding additional structure to the definitions~\cite{nguyen2025timespikeunderstandingrepresentational}.
 We shall first define the input \(i^{[l]}(t)\), the membrane potential before spike \(p^{[l]}(t)\), the membrane potential after spike \(u^{[l]}(t)\) and the spike activations \(s^{[l]}(t)\) of the hidden layers:
+
 
 % TODO: graphic for single neuron/single layer
 %TODO: herleitung: ~/Downloads/1901.09948v2.pdf
 \begin{definition}
   The \textbf{input vector} \(i^{[l]}(t)∈\{0,1\}^{n_l}\), the \textbf{spike vector} \(s^{[l]}(t)∈\{0,1\}^{n_l}\) and the \textbf{membrane potential vector} \(u^{[l]}(t)\) of a hidden layer \(λ=(W^{[l]},b^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\), \(l∈[L]\), are recursively defined as
   \begin{align}
-    i^{[l]}(t) & ≔ α^{[l]}i^{[l]}(t-1)+W^{[l]}s^{{(l)}-1}(t)+V^{[l]}s^{[l]}(t-1) \\
+    i^{[l]}(t) & ≔ α^{[l]}i^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1) \\
     p^{[l]}(t) & ≔ β^{[l]}u^{[l]}(t-1)+i^{[l]}(t)+b^{[l]} \\
     s^{[l]}(t) & ≔ H(p^{[l]}(t)-ϑ1_{n_l}) \\
     u^{[l]}(t) & ≔ p^{[l]}(t)-ϑs^{[l]}(t)
@@ -60,6 +95,10 @@ For clearer construction of our networks we will additionally define neurons:
   The \(i\)-th neuron of a hidden layer \(λ=(W^{[l]},b^{[l]},V^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\) of a \rdtlifsnn is a tuple \((w,b,v,u_0,i_0)\) with \(w∈ℝ^{n_{l-1}}\), \(v∈ℝ^{n_l}\) and \(b,u_0,i_0∈ℝ\), such that \(b\), \(u_0\), \(i_0\) are the \(i\)-th component of \(b^{[l]}\), \(u^{[l]}(0)\), \(i^{[l]}(0)\) respectively and \(w\), \(v\) are the \(i\)-th row vector of \(W^{[l]}\), \(V^{[l]}\) respectively.
 \end{definition}
 
+\begin{notation}
+  We will use \(⟦x,y⟧\), \(⟦x,y⦆\) with \(x,y∈ℝ^n\) to write half-open cuboids \(\prod_{i=1}^n[x_i,y_i)\), and closed cuboids \(\prod_{i=1}^n[x_i,y_i]\) respectively. We further take \([x,y)\) to be empty for \(x,y∈ℝ\) with \(x≥y\), and \([-∞,x)]\) to mean \((-∞,x)\).
+\end{notation}
+
 The following lemmas will be very helpful for the proofs in the following sections:
 \begin{lemma}\label{lem:non-recursive-defs}
   We define the following non-recursive formulas with explicit reference to the previous spikes. Let \(1≤t≤T\) and \((s_p^{[l]})_{l∈\{0…L'\}}\) such that \(s_p^{[l]}:\{0,1\}^{n_l×t'_l}\) for \(l∈\{0…L'\}\). \(L'\) and \(∀_lt'_l\) have to be chosen such that the following terms are well-defined, e.g. \(L'=L\) and \(∀_lt'_l=T\)
@@ -106,17 +145,18 @@ The following lemmas will be very helpful for the proofs in the following sectio
   Let us further assume \(β=1\) and \(u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j)≥0\).
   We now get
   \[ u^{[l]}(t_{ω}) = u^{[l]}(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}(k)+b^{[l]}-ϑs^{[l]}(k)\right),  \]
-  due to~\autoref{lem:non-recursive-defs}. From which we immediately obtain
+  due to~\cref{lem:non-recursive-defs}. From which we immediately obtain
   \[ \left( u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j) \right) - ϑ\sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t) <ϑ \]
   by the first part of the proof. Let us further proof the left part of the inequality: Let \(t'\) be the latest time that \(s^{[l]}_j(t')=1\) has held for \(t'∈\{t_0…t_{ω}\}\). We may assume that \(t'\) exists since we are otherwise immediately finished. We then get \(ϑ≤p^{[l]}_j(t')\) and therefore
   \[ 0≤u^{[l]}_j(t')=u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t'}\left(i^{[l]}_j(k)+b^{[l]}_j-ϑs^{[l]}_j(k)\right) \]
-  by~\autoref{lem:non-recursive-defs}. By assumption and choice of \(t'\) we can conclude
+  by~\cref{lem:non-recursive-defs}. By assumption and choice of \(t'\) we can conclude
   \[ ≤u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}_j(k)+b^{[l]}_j-ϑs^{[l]}_j(k)\right) \]
 \end{proof}
 
 Let us now take a look at some simple examples:
 
-%TODO: examples überarbeiten
+% TODO: examples überarbeiten
+\begin{comment}
 \begin{example}
   Let \(T,L∈ℕ\). Then there exists a d.t. LIF-SNN with \(∀_{t∈[T]}s^{[L]}(t)=s^{[0]}(t)\) for any \(s^{[0]}∈\{0,1\}^{n_0×T}\).
 
@@ -147,3 +187,4 @@ Let us now take a look at some simple examples:
   Since \(\sum_{i=1}^{t-1}s^{[l]}(i)+1_{n_l}≤T\), once there is any \(t_0∈[T]\) with \(s^{[l-1]}_i(t_0)=1\) for an \(i\), we get \(∀_{t≥t_0}s^{[l]}_i(t)=1\).
   By induction over the layers we clearly get the required property.
 \end{example}
+\end{comment}

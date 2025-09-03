@@ -74,10 +74,10 @@ In~\cite{nguyen2025timespikeunderstandingrepresentational} the following theorem
   \end{subfigure}
 \end{figure}
 
-The proof of~\autoref{thm:approx-snn-constant} works by first showing that a continuous function can be arbitrarily approximated by step functions, in particular by step functions constant on hypercubes in \(Ω\).
+The proof of~\cref{thm:approx-snn-constant} works by first showing that a continuous function can be arbitrarily approximated by step functions, in particular by step functions constant on hypercubes in \(Ω\).
 Then the \dtlifsnn is constructed by using the first layer to cut the input space by hyperplanes along the cubes and using the second layer to represent the hypercubes.
 
-While quite simple, this construction does not use the unique feature of (r.) \dtlifsnn, the ability of neurons to accumulate state over time. It therefore needs quite a lot more neurons than actually needed for many functions with (almost) linear segments, e.g. a sinus wave, see also~\autoref{fig:sin-approx-by-dtlifsnn}.
+While quite simple, this construction does not use the unique feature of (r.) \dtlifsnn, the ability of neurons to accumulate state over time. It therefore needs quite a lot more neurons than actually needed for many functions with (almost) linear segments, e.g. a sinus wave, see also~\cref{fig:sin-approx-by-dtlifsnn}.
 
 We will now show a more efficient construction for \rdtlifsnn that uses the fact that \rdtlifsnn can quite efficiently approximate linear segments. The general intuition behind is to use piece-wise linear functions to approximate continuously differentiable functions and then approximate those piece-wise linear functions by \rdtlifsnn. In the end, we will see that we can in fact approximate any continuous function like this, by using mollification to extract an continuously differentiable approximation of the function.
 
@@ -92,27 +92,28 @@ We will now show a more efficient construction for \rdtlifsnn that uses the fact
 %TODO: demand differentiability only for Ω°
 We will now provide an alternative version of this theorem which uses an increased latency to reduce the number of neurons:
 \begin{theorem}\label{thm:approx-snn}
-  Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set. For all \(ε,ξ,θ>0\), \(ε=ξ+θ\), there exists a \rdtlifsnn \(Φ\) with \(L=3\) and
+  Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set. For all \(ε,μ,ν>0\), \(ε=μ+ν\), there exists a \rdtlifsnn \(Φ\) with \(L=3\) and
   \begin{align*}
-   T   &= (K(ξ)+1)T_r(θ) \\
+   T   &= (K(μ)+1)T_r(ν)+1 \\
    n_1 &= n+1 \\
-   n_2 &= K^n(ξ)·(n+1)
+   n_2 &= K^n(μ)·(n+1)+3
   \end{align*}
   such that
   \[ \norm{(R(Φ)-f)|_{Ω}}_{∞,2}≤ε.\]
-  Here \(T_r(θ)≔\frac{\operatorname{diam}(Ω)}{K}\frac{\norm{f'}_{∞,2}}{2θ}\).
-  The definition of \(K(ξ)\) is given in~\autoref{lem:approx-by-lin}.
+  Here \(T_r≔T_r(ν)≔\frac{\operatorname{diam}(Ω)}{K}\frac{\norm{f'}_{∞,2}}{2ν}\).
+  The definition of \(K(μ)\) is given in~\cref{lem:approx-by-lin}.
 \end{theorem}
 
 \begin{lemma}\label{lem:smallest-cube}
   Let \(Ω⊂ℝ^n\) be compact. Then there exists a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) such that \(Ω⊂\overline{C}\).
 \end{lemma}
 
-%TODO: we later use [y,z) instead of [a,b); unify notation
+%TODO: we later use ⟦y,z⦆ instead of ⟦a,b⦆; unify notation
 \begin{proof}[\proofofref{lem:smallest-cube}.]
-  We can first define \(x≔(\min_{x∈Ω} x_i)_i\) since \(Ω\) is compact We further have \(y≔x+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔[x,y)\). Suppose now a point \(z∈Ω∖\overline{C}\) exists. By definition of \(x\), we have \(x≤z\). By definition of \(C\) we further get \(z\nleq y\), and therefore \(∃_iy_i<z_i\) by definition of \(C\). But this means \(\norm{x-z}_∞>\operatorname{diam}_∞(Ω)\).
+  We can first define \(x≔(\min_{x∈Ω} x_i)_i\) since \(Ω\) is compact We further have \(y≔x+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔⟦x,y⦆\). Suppose now a point \(z∈Ω∖\overline{C}\) exists. By definition of \(x\), we have \(x≤z\). By definition of \(C\) we further get \(z\nleq y\), and therefore \(∃_iy_i<z_i\) by definition of \(C\). But this means \(\norm{x-z}_∞>\operatorname{diam}_∞(Ω)\).
 \end{proof}
 
+\begin{comment}
 \begin{lemma}\label{lem:uniform-cont-≤}
   Let \(M\) be a normed vector space and \(N\) be a metric space. Let \(f:M→N\) be uniformly continuous with modulus \(δ\). We then have for every \(ε>0\):
   \[ ∀_{x,y∈M}(\norm{x-y}_M≤δ(ε)⇒d_N(x,y)≤ε). \]
@@ -123,40 +124,74 @@ We will now provide an alternative version of this theorem which uses an increas
   \[ f(\overline{B}_{δ}(x))=f(\overline{B_{δ}(x)})⊂\overline{f(B_{δ}(x))}⊂\overline{B}_{ε}(f(x)) \]
   We need to use the fact that \(M\) is a normed vector space in the first equality to get \(\overline{B}_{δ}(x)=\overline{B_{δ}(x)}\).
 \end{proof}
+\end{comment}
+
+\begin{lemma}\label{lem:inverse-cont-mod}
+  Let \(ω:[0,∞]→[0,∞]\) be a modulus of uniform continuity of a uniformly continuous function \(f:M→N\), where \(M,N\) are metric spaces. We then define the generalized inverse of \(ω:[0,∞]→[0,∞]\) by \(ω^{†}(s)≔\inf\{t∈[0,∞]\mid ω(t)>s\}\).
+
+  We have the following properties
+  \begin{enumerate}
+  \item \(∀_{x,y∈M,s∈[0,∞]}d_M(x,y)≤ω^{†}(s)⇒d_N(f(x),f(y))≤s\).
+  \item \(∀_{s∈[0,∞]}s=0⇔w^{†}(s)=0\).
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}\phantom{}
+
+  \begin{enumerate}
+  \item Let \(x,y∈M\) and \(s∈[0,∞]\) be given such that \(d_M(x,y)≤ω^{†}(s)\). By definition of \(ω^{†}\), this means \(ω(d_M(x,y))≤s\). Since \(ω\) is a modulus of uniform continuity of \(f\), we have \(d_N(f(x),f(y))≤ω(d_M(x,y))\) and therefore overall \(d_N(f(x),f(y))≤s\).
+  \item Since \(ω\) is a modulus of uniform continuity, it is by definition continuous at \(0\). Let us choose an arbitrary sequence \((t_n)_{n∈ℕ}\) with \(t_n→0\). Then \(ω(t_n)→0\) and therefore \(ω^{†}(0)≤\inf_{n∈ℕ}t_n=0\).
+
+  Is on the other hand \(ω^{†}(s)=0\), then there is a sequence \((t_n)_{n∈ℕ}\) with \(t_n→0\) and therefore \(ω(t_n)→0\). By definition of \(ω^{†}(s)\), we have \(ω(t_n)>s\), so we get \(s=0\).
+  \end{enumerate}
+\end{proof}
 
 % TODO: differentiable, but defined on compact subset of euclidean space???
 % TODO: quote formulation?
 % TODO: instead of fixing \(ε^{t}\), get supremum of
 % TODO: why K≠0?
+% TODO: only demand differentiability on C°
 
-\newcommand{\dsqe}{δ(ξ)}
 \begin{lemma}\label{lem:approx-by-lin}
-  Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set.
+  Let \(f∈𝒞^1(U,ℝ^m)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set, such that there is a half-open cube \(C\) with \(Ω⊂\overline{C}⊂U\).
 
-  For very \(ε>0\) there exists a half-open cube \(C\) with \(Ω⊂\overline{C}\) that can be composed in
-  \[ K^n≔K(ε)^n≔\min_{\substack{ξ,θ>0\\ξθ=ε}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(\dsqe ,θ)} \right\rceil\right\}^n \]
-  half-open subcubes \((C_i)_{i=1..K^n}\) such that affine linear functions \(g_i:C_i→ℝ^m\) exist with \(\norm{f-g}_{∞,2}<ε\), where \(g\) is the continuous extension of \((\sum_{i=1}^mg_i𝟙_{C_i})|_C\) on \(\overline{C}\).
-  Here \(δ(ε)\) is the modulus of uniform continuity of the total derivative \(dF|_{Ω}\) (with regard to \(\norm{·}_2\)).
+  For every \(μ>0\) we can compose \(C\) into
+  \[ K^n≔K(μ)^n≔\min_{\substack{ξ,θ>0\\ξθ=μ}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(ω^{†}(ξ) ,θ)} \right\rceil\right\}^n \]
+  half-open subcubes \((C_i)_{i=1..K^n}\) such that affine linear functions \(g_i:C_i→ℝ^m\) exist with \(\norm{f-g}_{∞,2}<μ\), where \(g\) is the continuous extension of \((\sum_{i=1}^mg_i𝟙_{C_i})|_C\) on \(\overline{C}\).
+  Here \(ω^{†}\) is the generalized inverse of a modulus of uniform continuity (with regard to \(\norm{·}_2\)) of the total derivative \(dF|_{\overline{C}}\). Since \(ξ>0\), we also have \(ω^{†}(ξ)>0\) by~\cref{lem:inverse-cont-mod}.
 \end{lemma}
+
+\begin{remark}{}\\
+\begin{enumerate}
+\item If \(f∈𝒞^1(U,ℝ^m)\) is given with \(∅≠U⊂ℝ^n\) and a compact \(Ω⊂ℝ^n\), but with no half-open cube \(C\) such that \(Ω⊂\overline{C}⊂U\), we can extend \(f|_{Ω}\) to a function \(f'∈𝒞^1(ℝ^n,ℝ^m)\): There is a partition of one \(φ_1,φ_2∈𝒞^{∞}(ℝ^n)\) subordinate to \(U\) and \(ℝ^n∖Ω\). We get \(φ_1|_{Ω}=1\) and therefore \((φ_1f)|_{Ω}=f|_{Ω}\). \(f'≔φ_1f\) is further clearly \(𝒞^1(U,ℝ^m)\).
+% \item We would like to only demand differentiability on \(Ω°\), … %TODO
+\end{enumerate}
+
+%TODO ↓
+  % We would like to only demand differentiability on \(Ω°\), but the theorem would not be true anymore. Imagine the function \(f(x)=χ_{[0,1]}\) with \(Ω=[0,1]∪[2,3]\). Clearly, \(f|_{[0,1]∪[2,3]}\) is continuous and \(f|_{(0,1)∪(2,3)}∈𝒞^1(ℝ)\). But on the other hand a half-open cube around \(Ω\) at least needs to include \((1,2)\) and would need to have
+\end{remark}
 
 % TODO: remark about why we are using 2-norm
 
-% TODO: fix issue with C_i s not completely fitting in open \sqrt{2}δ(ε) balls due to closed part of C_i
+% TODO: fix issue with C_i s not completely fitting in open \sqrt{2}δ(μ) balls due to closed part of C_i
 % TODO: F might not be defined at c_i, since \(Ω≠\overline{C}\)
 \begin{proof}[\proofofref{lem:approx-by-lin}.]
-  By~\autoref{lem:smallest-cube} we have a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) and \(Ω⊂\overline{C}\).
-  Let further \(ε>0\) be given. Since \(Ω\) is compact and \(f∈𝒞^1(Ω,ℝ^m)\), \(dF\) is uniformly continuous on \(Ω\). Let \(δ(ε)\) be \(dF\)s modulus of uniform continuity.
-  We will now partition \(C\) in
-  \[K^n≔\min_{\substack{ξ,θ>0\\ξθ=ε}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(\dsqe ,θ)} \right\rceil\right\}^n\]
-  smaller half-open cubes. There are \(ξ,θ\) such that the minimum in the definition of \(K^n\) is obtained, since we take it over the set of natural numbers.
-  The subcubes have width \(w≔\frac{\operatorname{diam}_∞(Ω)}{K}≤\frac{2}{\sqrt{n}}\min(\dsqe,θ)\). % TODO: should be < instead of ≤ in def of w???
+  By~\cref{lem:smallest-cube} we have a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) and \(Ω⊂\overline{C}\). We can assume w.l.o.g. we can assume \(\overline{C}⊂U\), since we can extend \(f\) to a function \(f'∈𝒞^1(ℝ^n,ℝ^m)\):
 
-  %TODO: why do we not have to proof <ε on the boundary of C, on the extension
+  Let further \(μ>0\) be given. Since \(Ω\) is compact and \(f∈𝒞^1(Ω,ℝ^m)\), \(dF\) is uniformly continuous on \(Ω\). Let \(ω\) be a modulus of uniform continuity of \(dF\mid_{Ω}\).
+  We will now partition \(C\) in
+  \[K^n≔\min_{\substack{ξ,θ>0\\ξθ=μ}}\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{\frac{2}{\sqrt{n}}\min(ω^{†}(ξ) ,θ)} \right\rceil\right\}^n\]
+  smaller half-open cubes. There are \(ξ,θ\) such that the minimum in the definition of \(K^n\) is obtained, since we take it over the set of natural numbers. \(K\) is further well-defined, since \(∀_{s>0}ω^{†}(s)>0\),
+  The subcubes have width \(w≔\frac{\operatorname{diam}_∞(Ω)}{K}≤\frac{2}{\sqrt{n}}\min(ω^{†}(ξ),θ)\). % TODO: should be < instead of ≤ in def of w???
+
+  %TODO: why do we not have to proof <μ on the boundary of C, on the extension
 
   Let us further define \(g_i:C_i→ℝ^m\) by \(g_i(x)≔f(c_i)+df_{c_i}(x-c_i)\) where \(c_i\) is the center of \(C_i\), so in particular
-  \[\norm{x-c_i}_2^2=\sum_{j=1}^n\norm{(x-c_i)_je_j}_2^2≤\frac{w^2}{4}n≤\min(δ(ξ),θ)^2.\]
+  \begin{equation}\label{eq:4}
+  \norm{x-c_i}_2=\sqrt{\sum_{j=1}^n\norm{(x-c_i)_je_j}_2^2}≤\frac{w}{2}\sqrt{n}≤\min(ω^{†}(ξ),θ).
+  \end{equation}
 
-  It suffices now to show \(\norm{f|_{C_i}-g_i}_∞<ε\). Let \(x∈C_i\) and \(h(t)≔f(t(x-c_i)+c_i)\) with
+  It suffices now to show \(\norm{f|_{C_i}-g_i}_∞<μ\). Let \(x∈C_i\) and \(h(t)≔f(t(x-c_i)+c_i)\) with
   \[h'(t)=(df_{(x-c_i)t+c_i}∘d(t↦t(x-c_i)+c_i)_t)(1)=df_{(x-c_i)t+c_i}(x-c_i).\]
   We obtain by the Fundamental theorem of calculus:
   \begin{align*}
@@ -169,38 +204,31 @@ We will now provide an alternative version of this theorem which uses an increas
    \norm{\int_0^1df_{(x-c_i)t+c_i}(x-c_i)dt-df_{c_i}(x-c_i)}_2 &≤ \int_0^1\norm{df_{(x-c_i)t+c_i}(x-c_i)-df_{c_i}(x-c_i)}_2dt \\
                                     &= \int_0^1\norm{(df_{(x-c_i)t+c_i}-df_{c_i})(x-c_i)}_2dt \\
                                     &≤ \int_0^1\norm{df_{(x-c_i)t+c_i}-df_{c_i}}\norm{x-c_i}_2dt \\
-                                    &≤ \int_0^1ξ\norm{x-c_i}_2dt \\ % w≤2\sqrt{n}^{-1}\dsqe %TODO: should be <???
+                                    &≤ \int_0^1ξ\norm{x-c_i}_2dt \\ % w≤2\sqrt{n}^{-1}ω^{†}(ξ) %TODO: should be <???
                                     &= ξ\norm{x-c_i}_2 \\
                                     &≤ ξθ \\
-                                    &= ε
+                                    &= μ
   \end{align*}
-  In the fourth step we use \(\norm{df_{(x-c_i)t+c_i}-df_{c_i}}≤ξ\), which holds due to \(∀_{t∈[0,1]}(x-c_i)t+c_i∈C_i\) and \autoref{lem:uniform-cont-≤}.
+  In the fourth step we use \(\norm{df_{(x-c_i)t+c_i}-df_{c_i}}≤ξ\), which holds due to \(∀_{t∈[0,1]}(x-c_i)t+c_i∈C_i\), \eqref{eq:4} and \cref{lem:inverse-cont-mod}.
 \end{proof}
 %TODO: change notation of c_i to sth clearly not meant component
 
 \begin{proof}[\proofofref{thm:approx-snn}.]
-  Let a continuously differentiable function \(f∈𝒞^1(Ω,ℝ^m)\) on a compact set \(Ω⊂ℝ^n\) be given. Let there further be \(ε,ξ,θ>0\) with \(ε=ξ+θ\).
-  %TODO: clarify notation [y,z) (line or proper subspace)
-  By~\autoref{lem:approx-by-lin} we have a half-open cube \(C=[x^C,y^C)\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<ξ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
+  Let a continuously differentiable function \(f∈𝒞^1(Ω,ℝ^m)\) on a compact set \(Ω⊂ℝ^n\) be given. Let there further be \(ε,μ,ν>0\) with \(ε=μ+ν\).
+  %TODO: clarify notation ⟦y,z⦆ (line or proper subspace)
+  By~\cref{lem:approx-by-lin} we have a half-open cube \(C=⟦x^C,y^C⦆\) with \(Ω⊂C\) with composition \(K^n\) half-open subcubes \((C_i)_{i=1..K^n}\) and linear functions \(g_i:C_i→ℝ^m\), such that \(\norm{f-g|_Ω}_∞<μ\) for a \(g≔\sum_{i=1}^mg_i𝟙_{C_i}\).
 
-  We will now define a \rdtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<θ\).
+  We will now define a \rdtlifsnn \(Φ\) with direct input encoding and membrane-potential outputs such that \(\norm{R(Φ)|_Ω-g}_∞<ν\).
 
-  Before anything else we shall set the following basic parameters \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\) for all layers. We obtain the simplified equations:
-  \begin{align*}
-    p^{[l]}(t) & = u^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)+b^{[l]} \\
-    s^{[l]}(t) & = H(p^{[l]}(t)-1_{n_l}) \\
-    u^{[l]}(t) & = p^{[l]}(t)-s^{[l]}(t)
-  \end{align*}
-  and in particular by~\autoref{lem:non-recursive-defs}
-  \begin{align*}
-   i^{[l]}(t)&≔W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)  \\
-   p^{[l]}(t) &= u^{[l]}(0)+\sum_{k=1}^t\left(W^{[l]}s^{[l-1]}(k)+V^{[l]}s^{[l]}(k-1)+b^{[l]}\right)-\sum_{k=1}^{t-1}s^{[l]}(k).
-  \end{align*}
+  Before anything else we shall set the following basic parameters \(i^{[l]}(0)=0\), \(α^{[l]}=0\) and \(β^{[l]}=ϑ^{[l]}=1\) for all layers.
+
   % TODO: graphic
 
-  The intuitive idea for the construction of the network is the following: In the first layer we have \(n\) neurons which capture the position of the input vector regarding \(C\) in their respective dimension and one last neuron that acts as an “alarm clock” that shuts down the other neurons of the layer after …
+  The intuitive idea for the construction of the network is the following: In the first layer we have \(n\) neurons which capture the position of the input vector regarding \(C\) in their respective dimension and one last neuron that acts as an “alarm clock” that shuts down the other neurons of the layer after the first \(KT_r\) time steps.
 
-  In the second layer we have \(n+1\)-neurons for each affine linear region \(C_i\). Each of the first \(n\) neurons encodes the linear part of a component of the input vector. They are connected to the corresponding neuron of the first layer and the last neuron of their group. That last, additional neuron acts as an activator to the region. It get's enabled by getting a spike of all other neurons of the group and by getting a spike from the clock neuron from the first layer. The other \(n\) neurons of the group disable themselves after their first spike.
+  The general idea of the second layer is that it just listens for the first \(KT_r\) time steps to the first layer and then in time-step \(KT_r+1\) it is decided which region \(C_i\) the input is located in. The last \(T_r\) time-steps are used to encode the location of \(x\) inside of \(C_i\).
+
+  For each region \(C_i\) we have \(n+1\)-neurons. Each of the first \(n\) neurons encodes a commponent of the linear part of \(g_i\). They are also used to inform the \(n+1\)-th neuron of the group if the \(x\) has at least as big as the base point of \(C_i\). The \(n+1\)-th deactivates all other neurons of regions with smaller base point and encodes the constant part of \(g_i\). The last \(3\) neurons act as “clock neurons” enabling and disabling the other ones.
 
   % In the second layer we have \(m+1\)-neurons for each affine linear region \(C_i\). Each of the first \(m\) neurons encodes the linear part of a component of the output vector. The last, additional neuron acts as an activator to the specific region by recursively enabling the other neurons of this region and disabling all regions with smaller base point (that would otherwise be enabled).
 
@@ -210,61 +238,122 @@ We will now provide an alternative version of this theorem which uses an increas
     \caption{Timeline of first-layer neuron}
   \end{figure}
 
+  \begin{enumerate}
+  \item First layer:
   We define the \(i\)-th neuron of the \(n\) neurons of the first layer by parameters
   \[ w=\frac{1}{y^C_i-x^C_i}e_i, \quad b=-\frac{x^C_i}{y^C_i-x^C_i}, \quad v=-e_{n+1},\quad u_0=0, \quad i_0=0. \]
-  The last neuron of the first layer, with index \(n+1\), is defined by:
+  The “clock neuron” of the first layer, with index \(c_1≔n+1\), is defined by:
   \begin{equation*}
-    w=0, \quad b=\frac{1}{K(ξ)T_r(θ)}, \quad v=e_{n+1}, \quad u_0=0, \quad i_0=0.
+    w=0, \quad b=\frac{1}{KT_r}, \quad v=e_{c_1}, \quad u_0=0, \quad i_0=0.
   \end{equation*}
-  We therefore get:
-  \begin{equation*}
-   p^{[1]}_{n+1}(t) = \frac{t}{K(ξ)T_r(θ)}+\sum_{k=1}^ts^{[1]}_{n+1}(k-1)-\sum_{k=1}^{t-1}s^{[1]}_{n+1}(k) = \frac{t}{K(ξ)T_r(θ)}
-  \end{equation*}
-  So \(s^{[1]}_{n+1}(t)=1⇔t≥K(ξ)T_r(θ)\).
-  We further get for \(i∈[n]\):
-  \begin{align*}
-   i^{[1]}_i(t)=\frac{1}{y^C_i-x^C_i}s^{[0]}_i(t)-s^{[1]}_{n+1}(t-1)=\frac{1}{y^C_i-x^C_i}s^{[0]}_i(t)-s^{[1]}_{n+1}(t-1)
-  \end{align*}
-  So we can use~\autoref{lem:sum-spikes-over-time} for \(x^C_i≤s^{[0]}_i(t)<y_i\) and \(t≤K(ξ)T_r(θ)\) to obtain
-  \begin{equation}\label{eq:3}
-  \left\lfloor \frac{K(ξ)T_r(θ)}{y^C_i-x^C_i}(s^{[0]}_i(1)-x^C_i) \right\rfloor =\left\lfloor u^{[1]}_i(0)+\sum_{t=1}^{K(ξ)T_r(θ)}(i^{[1]}_i(t)+b^{[1]}_i) \right\rfloor = \sum_{t=1}^{K(ξ)T_r(θ)}s^{[1]}_i(t)
-  \end{equation}
-  The equation clearly also holds for \(s^{[0]}_i(t)=y_i\).
 
   % TODO: check that proof works for x∈\(\overline{C}∖C\)
 
   % We further define the \(n+1\)-th neuron of the first layer by \(w=0\), \(b=\frac{1}{K-1}\), \(v=\)
-  % By~\autoref{lem:non-recursive-defs} we get
+  % By~\cref{lem:non-recursive-defs} we get
 
   % TODO: proof correct behaviour
 
   %TODO: add timeline
-  Let us know construct the second layer in the following way: For each of the \(K^n(ξ)\) subcubes in \(C\) we define \(n+1\) neurons like so: Let \(C_j=[x^{C_j},y^{C_j})\) be one such subcube with position \(q∈\{0,…,K(ξ)-1\}^{n_1}\) in \(C\). We will write \(ι_j(i)≔j(n+1)+i\) to index the first \(n\) neurons in the layer and \(ω_j≔(j+1)(n+1)\) to index the last neuron of each group.
+  \item Second layer:
+  Let us now construct the second layer in the following way: For each of the \(K^n(μ)\) subcubes in \(C\) we define \(n+1\) neurons like so: Let \(C_j=⟦x^{C_j},y^{C_j}⦆\) be one such subcube with position \(q∈\{0,…,K(μ)-1\}^{n_1}\) in \(C\). We will write \(ι_j(i)≔j(n+1)+i\) to index the first \(n\) neurons in the layer and \(ω_j≔(j+1)(n+1)\) to index the last neuron of each group.
 
   The \(i\)-th neuron of the first \(n\) neurons, with index \(ι_j(i)\) in the second layer, has the parameters
   \begin{gather*}
-    w=e_i, \quad b=0, \\
-    v=K(ξ)T_r(θ)\left(-e_{ι_j(i)}+e_{ω_j}-\sum_{\substack{q'∈\{0,…,K(ξ)-1\}^{n_1} \\ q'<q}}e_{ω_j(q)}\right), \\
-    u_0=-q_iT_r(θ)+1, \quad i_0=0.
+    w=e_i, \quad b=0, \quad v=T(e_{c_2}-2e_{c_3}+e_{ω_j}-r(q)), \\
+    u_0=-q_iT_r-T+1, \quad i_0=0.
   \end{gather*}
-  where \(j(q)\) is the index of the subcube at position \(q\).
-  We get
-  \[ p^{[2]}_{ι_j(i)}(t) = -q_iT_r(θ)+1+\sum_{k=1}^ts^{[1]}_i(k)-(K(ξ)T_r(θ)+1)\sum_{k=1}^{t-1}s^{[2]}_{ι_j(i)}(k). \]
-  for \(t≤K(ξ)T_r(θ)\), since as we will later show, \(s^{[1]}_{ω_j}(t)=0\) for all \(j∈[K^n]\) and \(t≤K(ξ)T_r(θ)\). We therefore have \(s^{[2]}_{ι_j(i)}(t)=1\) for a \(t≤K(ξ)T_r(θ)\) exactly if \(\sum_{k=1}^{K(ξ)T_r(θ)}s^{[1]}_i(k)≥q_iT_r(θ)\) which is equivalent to \(\) by~\eqref{eq:3}
-
-  We further have
-
+  where \(j(q)\) is the index of the subcube at position \(q\) and “the switch” is
+  \[ r(q)≔e_{ω_j}-\sum_{\substack{q'∈\{0,…,K(μ)-1\}^{n_1} \\ q'<q}}e_{ω_j(q)}. \]
   The final neuron of the group, with index \(ω_j\) in its layer, has the parameters
   \begin{gather*}
-    w=\frac{1}{n+1}e_{n+1}, \quad b=0, \quad v=e_{ω_j}+\frac{1}{n+1}\sum_{i=1}^ne_{ι_j(i)}, \\
-    u_0=0, \quad i_0=0.
+    w=0, \quad b=0, \quad v=\frac{1}{n}\sum_{i=1}^ne_{ι_j(i)}+e_{ω_j}-e_{c_4}-r(q), \quad u_0=0, \quad i_0=0.
   \end{gather*}
+  We also define the three “clock neurons”, with index \(c_2≔(j+1)K^n(μ)+1\), \(c_3≔(j+1)K^n(μ)+2\) and \(c_4≔(j+1)K^n(μ)+3\) with very parameters:
+  %TODO: KT_r=1?
+  \begin{equation*}
+    w=0, \quad b=b_{c_i}, \quad v=-2e_{c_i}, \quad u_0=0, \quad i_0=0.
+  \end{equation*}
+  where \(b_{c_1}=\frac{1}{KT_r-1}\), \(b_{c_2}=\frac{1}{KT_r}\) and \(b_{c_3}=\frac{1}{KT_r}\).
+  %TODO: use c_{-1}, c_0 and c_{1} and a (for alarm) for the first layer neuron.
+  \item Output decoder:
+  We further define the parameters of the output decoder by \(a_t=0\), for \(t≤KT_r+1\) and otherwise \(a_t=1\). We further set \(b^{[L+1]}=0\) and \((W^{[L+1]})_{l,ι_j(i)}=g(x^{C_j}+\frac{1}{T_r}e_i)-g(x^{C_j})\) for \(l∈[m]\), \(j∈K^n\) and \(i∈[n]\), as well as \((W^{[L+1]})_{l,ω_j}=g(x^{C_j})\) for \(l∈[m]\) and \(j∈K^n\).
+  \end{enumerate}
+
+  We will now proof that this construction indeed approximates \(g\) well enough. It will be helpful to consider the following, by choice of \(i^{[l]},α^{[l]},β^{[l]},ϑ^{[l]}\), simplified equations:
+  \begin{align*}
+    p^{[l]}(t) & = u^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)+b^{[l]} \\
+    s^{[l]}(t) & = H(p^{[l]}(t)-1_{n_l}) \\
+    u^{[l]}(t) & = p^{[l]}(t)-s^{[l]}(t)
+  \end{align*}
+  and in particular by~\cref{lem:non-recursive-defs}
+  \begin{align*}
+   i^{[l]}(t) &= W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1)  \\
+   p^{[l]}(t) &= u^{[l]}(0)+\sum_{k=1}^t\left(W^{[l]}s^{[l-1]}(k)+V^{[l]}s^{[l]}(k-1)+b^{[l]}\right)-\sum_{k=1}^{t-1}s^{[l]}(k).
+  \end{align*}
+
+  Let now \(s^{[0]}(t)=x∈C\). We will proof \(\norm{R(Φ)(x)-g(x)}_{∞,2}≤ν\) in steps, by first proofing some simple properties of the previously defined neurons:
+
+  \begin{enumerate}
+  \item Characterization of the “clock neuron” of the first layer:\\
+  Let us first regard the neuron in the first layer: By choice of parameters we get:
+  \begin{equation*}
+   p^{[1]}_{c_1}(t) = \frac{t}{KT_r}+\sum_{k=1}^ts^{[1]}_{c_1}(k-1)-\sum_{k=1}^{t-1}s^{[1]}_{c_1}(k) = \frac{t}{KT_r}
+  \end{equation*}
+  So \(s^{[1]}_{c_1}(t)=1⇔t≥KT_r\).
+  \item Characterization of \(i\)-th neuron of the first layer, “capturing” the \(i\)-th dimension:\\
+  We have:
+  \begin{align*}
+   i^{[1]}_i(t)+b^{[1]}_i=\frac{x_i-x^C_i}{y^C_i-x^C_i}-s^{[1]}_{c_1}(t-1)
+  \end{align*}
+  So we can use~\cref{lem:sum-spikes-over-time} for \(x^C_i≤x_i<y_i^C\) and \(t≤KT_r\) to obtain
+  \begin{equation*}
+  \left\lfloor KT_r\frac{x_i-x^C_i}{y^C_i-x^C_i} \right\rfloor =\left\lfloor u^{[1]}_i(0)+\sum_{t=1}^{KT_r}(i^{[1]}_i(t)+b^{[1]}_i) \right\rfloor = \sum_{t=1}^{KT_r}s^{[1]}_i(t)
+  \end{equation*}
+  and \(u_i^{[1]}(KT_r)<1\). We further clearly have \(i^{[1]}_i(t)+b^{[1]}_i<0\) for \(x^C_i≤x_i<y_i^C\) and therefore
+  \[p_i^{[1]}(t)=u_i^{[1]}(KT_r)+\sum_{k=KT_r+1}^t\left(i^{[1]}_i(t)+b^{[1]}_i\right)-\sum_{k=KT_r+1}^{t-1}s^{[1]}(k) <1\]
+  for \(t>KT_r\). So in particular
+  \begin{equation}\label{eq:3}
+  \left\lfloor KT_r\frac{x_i-x^C_i}{y^C_i-x^C_i} \right\rfloor = \sum_{t=1}^{KT_r}s^{[1]}_i(t) = \sum_{t=1}^Ts^{[1]}_i(t)
+  \end{equation}
+  % The equation clearly also holds for \(x_i=y_i\).
+  \item Characterization of the “clock neurons” of the second layer:\\
+  In contrast to the clock neuron of the first layer, these neurons only fire once:
+  \begin{equation*}
+   p^{[2]}_{c_i}(t) = tb_{c_i}-2\sum_{k=1}^ts^{[2]}_{c_i}(k-1)-\sum_{k=1}^{t-1}s^{[2]}_{c_i}(k)=tb_{c_i}-3\sum_{k=1}^{t-1}s^{[2]}_{c_i}(k)
+  \end{equation*}
+  %TODO: proof t<3(KT_r-1)
+  Let us first consider \(c_2\): We clearly have \(p^{[2]}_{c_2}(t)<1\) for \(t<KT_r-1\), but \(p^{[2]}_{c_2}(KT_r-1)=1\). Further \(t<3(KT_r-1)\) for all \(t≤T\), so \(p^{[2]}_{c_2}(t)<1\) for \(t>KT_r-1\). So \(∀_{t∈[T]}s^{[2]}_{c_2}(t)=1_{\{KT_r-1\}}(t)\).
+
+  Similarly we obtain \(∀_{t∈[T]}s^{[2]}_{c_3}(t)=χ_{\{KT_r\}}(t)\) and \(∀_{t∈[T]}s^{[2]}_{c_4}(t)=χ_{\{KT_r+1\}}(t)\).
+  \item “Non-activator neurons” of the groups in the second layer don't fire before \(t=KT_r\). \\
+  \begin{align*}
+    p^{[2]}_{ι_j(i)}(t) &= -q_iT_r-T+1+\sum_{k=1}^t\left(s^{[1]}_i(k)+⟨v_i,s^{[2]}(k-1)⟩\right)-\sum_{k=1}^{t-1}s^{[2]}(k). \\
+    ⟨v_i,s^{[2]}(k-1)⟩&=T(s^{[2]}_{c_2}(k-1)-2s^{[2]}_{c_3}(k-1)+s^{[2]}_{ω_j}(k-1)-⟨r(q),s^{[2]}(k-1)⟩)
+  \end{align*}
+  with \(\).
+  \item “Activator neurons” of the second layer at most once for \(t≤K(μ)T_r(ν)\)/“Activator neurons“ activate at earliest at \(t=K(μ)T_r(ν)+1\):\\
   We get
-  \[ p^{[2]}_{ω_j}(t) = u^{[2]}_{ω_j}(t-1)+s^{[2]}_{ω_j}(t-1)+\frac{1}{n+1}\left(s^{[1]}_{n+1}(t)+\sum_{i=1}^ns^{[2]}_{ι_j(i)}(t-1)\right) \]
+  \item “Activator neurons” of the second layer don't fire before \(t=KT_r+1\). \\
+  \item “Activator neurons” of the second layer fire at most once at \(t=KT_r+1\) and \(t=KT_r+2\). \\
+  \item “Activator neurons” of the second layer fire once if \(x\) is bigger than the base point of their group  and twice if \(x\) is in the region. \\
+  \item “Non-activator neurons” of the groups in the second layer fire only fire after \(KT_r+1\), if \(x\) is the corresponding region. \\
 
-  We further define the parameters of the output decoder by \(a_t=0\), for \(t≤K(ξ)T_r(θ)\) and otherwise \(a_t=1\). We further set \(b^{[L+1]}=0\) and \((W^{[L+1]})_{l,ι_j(i)}=g(x^{C_j}+\frac{1}{T_{θ}(θ)}e_i)-g(x^{C_j})\) for \(l∈[m]\), \(j∈K^n(ξ)\) and \(i∈[n]\), as well as \((W^{[L+1]})_{l,ω_j}=\frac{1}{T_{θ}(θ)}g(x^{C_j})\) for \(l∈[m]\) and \(j∈K^n(ξ)\).
+  %TODO: replace K(μ) by K and T_r(ν) by T_r where appropriate
+  \begin{align*}
+   p^{[2]}_{ι_j(i)}(t) &= 1-q_iT_r+\sum_{k=1}^t\left(s^{[1]}_i(k)+T⟨r(q),s^{[2]}(k-1)⟩\right)-(T+1)\sum_{k=1}^{t-1}s^{[2]}_{ι_j(i)}(k) \\
+   p^{[2]}_{ω_j}(t) &= \sum_{k=1}^t\left(\frac{1}{n+1}\left(s^{[1]}_{c_1}(t)+\sum_{i=1}^ns^{[2]}_{ι_j(i)}(t-1)\right)+KT_r⟨r(q),s^{[2]}(k-1)⟩\right)
+  \end{align*}
+  Notice first, that
 
-  Let now \(s^{[0]}(t)=x∈C\). We will proof \(\norm{R(Φ)(x)-g(x)}_{∞,2}≤θ\).
+  for \(t≤K(μ)T_r(ν)\), since as we will later show, \(s^{[1]}_{ω_j}(t)=0\) for all \(j∈[K^n]\) and \(t≤K(μ)T_r(ν)\). We therefore have \(s^{[2]}_{ι_j(i)}(t)=1\) for a \(t≤K(μ)T_r(ν)\) exactly if \(\sum_{k=1}^{K(μ)T_r(ν)}s^{[1]}_i(k)≥q_iT_r(ν)\) which is equivalent to \(\) by~\eqref{eq:3}
+
+  \item “Activator neuron” activates exactly if \(x\) is as large as the lower vertex:\\
+  \item The neurons of a subcube \(C_j\) fire after \(K(μ)T_r(ν)+1\), exactly if \(x∈C_j\)\\
+  \item If \(x∈C_j\), then \(\norm{R(Φ)(x)-g(x)}_2≤ν\)\\
+  \item Characterization of the \(ω_j\)-th neuron of the second layer, the “activator neuron” of group~\(j\):\\
+  We get
+  \end{enumerate}
 
   Let now \(s^{[0]}(t)=x∈\overline{C}∖C\).
 
@@ -278,13 +367,14 @@ We will now provide an alternative version of this theorem which uses an increas
 
 %TODO (maybe): mollification
 
+%TODO: cleanup
 %TODO: remark about SNN construction. By adding more neurons to first layer ((K-1)n to be exact) you can half the required time steps.
 % TODO: steelman comparison by arguing that L can be replaced by sth like 1/δ(ε)
-Sadly the size of the network in this construction is not always smaller than the one from~\autoref{thm:approx-snn-constant}. A concrete counter example is a sinus wave with high frequency and small ampitude, like \(f(x)≔\frac{\sin(nx)}{n}\) with \(n∈ℕ\) on \(Ω=[0,2π]\). Since \(f'(x)=\cos(nx)\) and \(\norm{f'|_{Ω}}_{∞}=1\), we can choose \(L=1\) as a Lipschitz constant for \(f\). At the same time, since \(f''(x)=n\sin(nx)\) and \(\norm{f''|_{Ω}}_{∞}=n\), the biggest possible modulus of uniform continuity on \(Ω\) we can give for \(f'\) is \(δ(ε)≔\frac{ε}{n}\). So we get
+Sadly the size of the network in this construction is not always smaller than the one from~\cref{thm:approx-snn-constant}. A concrete counter example is a sinus wave with high frequency and small ampitude, like \(f(x)≔\frac{\sin(nx)}{n}\) with \(n∈ℕ\) on \(Ω=[0,2π]\). Since \(f'(x)=\cos(nx)\) and \(\norm{f'|_{Ω}}_{∞}=1\), we can choose \(L=1\) as a Lipschitz constant for \(f\). At the same time, since \(f''(x)=n\sin(nx)\) and \(\norm{f''|_{Ω}}_{∞}=n\), the biggest possible modulus of uniform continuity on \(Ω\) we can give for \(f'\) is \(δ(ε)≔\frac{ε}{n}\). So we get
 \[ \max_{\substack{ξ,θ>0\\ξθ=ε}}\min(δ(ξ),θ)=\max_{\substack{ξ>0}}\min(\frac{ξ}{n},\frac{ε}{ξ})=\sqrt{\frac{ε}{n}} \]
 So we get that \(K(ε)\) has a value of \(\lfloor \frac{π\sqrt{n}}{\sqrt{ε}} \rfloor\) by definition. We therefore get for the layer sizes:
 \begin{alignat*}{2}
-   & \autoref{thm:approx-snn-constant} \qquad &\qquad  &\autoref{thm:approx-snn} \\
+   & \cref{thm:approx-snn-constant} \qquad &\qquad  &\cref{thm:approx-snn} \\
   &n_1 =\left\lceil \tfrac{2π}{ε} \right\rceil+1 \qquad &\qquad &n_1 = 2 \\
   &n_2 =\left\lceil \tfrac{2π}{ε} \right\rceil \qquad &\qquad &n_2 = 2\lfloor \tfrac{π\sqrt{n}}{\sqrt{ε}} \rfloor
 \end{alignat*}
@@ -295,18 +385,22 @@ But there is one big difference. Since the size of last layer grows only proport
 
 We will generalize this observation with the following theorem:
 \begin{theorem}
-  Let \(f∈𝒞^1(U,ℝ)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function. Let further \(Ω⊂U\) be a compact set.
+  Let \(f∈𝒞^1(U,ℝ)\), with \(∅≠U⊂ℝ^n\) open, be a continuously differentiable function, such that \(dF|_{Ω}\) is \(L\)-Lipschitz. Let further \(Ω⊂U\) be a compact set.
 
-  Let \((ξ_{ε})_{ε>0}\) be given with \(∀_{ε>0}ξ_{ε}<ε\), such that
-  \[ \lim_{ε→0}\left(\frac{K(ξ_{ε})}{\left\lceil\frac{\operatorname{diam}_∞(Ω)}{ε}Γ\right\rceil}\right)=0 \]
-  where \(Γ\) is the Lipschitz-constant of \(f\).
+  We can choose parameters \((μ_{ε})_{ε>0}\), \(μ_{ε}≔\sqrt{ε}\), and a modulus of continuity \(ω(x)≔Lx\) of \(dF|_{Ω}\), such that
+  \[ \lim_{ε→0}\left(\frac{K(μ_{ε})}{ε^{-1}}\right)=0 \]
+  where \(K\) as defined in~\cref{lem:approx-by-lin} for \(Ω\).
 \end{theorem}
 
+%TODO: proof modulus of continuity stuff?
+%TODO: fix statement, ω
 \begin{proof}
-  %TODO: why it suffices
-  %TODO: what is δ
-  It suffices to show there exist \((ξ_{ξ})_{ξ>0}\) and \((θ_{ξ})_{ξ>0}\) with \(∀_{ξ>0}ξ_{ξ}θ_{ξ}=1\) and
-  \[ \lim_{ε→0}\frac{ε}{\min(δ(ξ_{ξ}),θ_{ξ})}=0 \]
+  First \(ω(x)≔L(x)\) is obviously indeed a modulus of continuity of \(dF|_{Ω}\), since by definition of \(L\), we have \(∀_{x,y∈Ω}\norm{dF_x-dF_y}≤L\norm{x-y}_2=ω(\norm{x-y}_2)\) and \(ω\) is clearly continuous at \(0\). We further get \(ω^{†}(s)=\inf\{t∈[0,∞]\mid Lt>s\}=\frac{s}{L}\).
+
+  It further suffices to show there exist \((ξ_{μ_{ε}})_{ε>0}\) and \((θ_{μ_{ε}})_{ε>0}\) with \(∀_{ε>0}ξ_{μ_{ε}}θ_{μ_{ε}}=μ_{ε}\) and
+  \[ \lim_{ε→0}\frac{ε}{\min(ω^{†}(ξ_{μ_{ε}}),θ_{μ_{ε}})}=0 \]
+   But this is obvious, if we choose \(ε_{μ_{ε}}≔\sqrt{μ_{ε}}\) and \(θ_{μ_{ε}}≔\sqrt{μ_{ε}}\), since
+   \[ \frac{ε}{\min(ω^{†}(ξ_{μ_{ε}}),θ_{μ_{ε}})}=\frac{ε}{\min(\frac{1}{L},1)\sqrt{μ_{ε}}}=\max(L,1)ε^{\frac{3}{4}}. \]
 \end{proof}
 
 %TODO: betrachtung durch kombinatorik/wahrscheinlichkeit?
