@@ -1,12 +1,12 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{theme/lmuthesis}
 
-\usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{unicode-math}
+\usepackage{xparse}
 \usepackage{amsmath, amsfonts}
 \setmathfont{Latin Modern Math}
-\setmathfont{New Computer Modern Math}[range={"2986, "27E6}] % ⟦ and ⦆
+\setmathfont{New Computer Modern Math}[range={"2985, "2986, "27E6}] % ⟦ and ⦆
 
 \usepackage{wasysym}
 \usepackage{amsthm, thmtools}
@@ -17,9 +17,10 @@
 
 \usepackage{epstopdf}
 \usepackage{tikz}
-\usetikzlibrary{positioning, chains, shapes.geometric, fit, shapes, arrows.meta, calc, backgrounds, intersections, patterns, shapes.misc, fadings, through,decorations.pathreplacing}
+\usetikzlibrary{positioning, chains, shapes.geometric, fit, shapes, arrows.meta, calc, backgrounds, intersections, patterns, patterns.meta, shapes.misc, fadings, through,decorations.pathreplacing}
 
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 \usepackage{physics}
 \usepackage{algorithm}
@@ -27,6 +28,10 @@
 \usepackage{comment}
 \usepackage[capitalize,nameinlink]{cleveref}
 \usepackage{nccmath}
+\usepackage{xspace}
+
+\usepackage{geometry}
+
 
 % this for draft water mark
 \setboolean{release}{true}
@@ -39,36 +44,25 @@
 }
 
 % meta informations
-\department{Institut für TODO}
-\lfe{Lehr- und Forschungseinheit TODO}
-\professor{Prof.\ Dr.\ PROFESSORS NAME}
+\department{Institut für Mathematik}
+\lfe{Lehr- und Forschungseinheit Mathematische Grundlagen der künstlichen Intelligenz}
+\professor{Prof. Dr. Gitta Kutyniok}
 \type{Bachelor's Thesis}
-\title{THESIS TITLE}
+\title{Understanding the Representational Power of Recurrent Spiking Neural Networks in Discrete Time}
 \author{Valentin Herrmann}
-\email{EMAIL}
-\bearbeitungszeitraum{START bis END}
-\supervisor{SUPERVISOR}
-\taskdescription{
-    \begin{description}
-        \item[THESIS TITLE]
-        \item[Problem Statement] TO BE ADDED
-        \item[Scope of the Thesis] TO BE ADDED
-        \item[Tasks] TO BE ADDED
-        \item[Requirements] TO BE ADDED
-        \item[Keywords] TO BE ADDED
-    \end{description}
-}
-\acknoledgement{
-    I would like to appreciate ...
-}
-\abstract{
-    This thesis proposes ...
-}
+\email{plus+official@valentin-herrmann.de}
+\bearbeitungszeitraum{15.8.2025 bis 31.10.2025}
+\supervisor{Adalbert Fono}
+\abstract{}
 
-\newcommand{\dtlifsnn}{d.t. LIF-SNN }
-\newcommand{\Dtlifsnn}{d.t. LIF-SNN }
-\newcommand{\rdtlifsnn}{r. d.t. LIF-SNN }
-\newcommand{\Rdtlifsnn}{R. d.t. LIF-SNN }
+\newcommand{\dtlifsnn}{d.t.~LIF-SNN\xspace}
+\newcommand{\Dtlifsnn}{d.t.~LIF-SNN\xspace}
+\newcommand{\dtlifsnns}{d.t.~LIF-SNNs\xspace}
+\newcommand{\Dtlifsnns}{d.t.~LIF-SNNs\xspace}
+\newcommand{\rdtlifsnn}{r.~LIF-SNN\xspace}
+\newcommand{\Rdtlifsnn}{R.~LIF-SNN\xspace}
+\newcommand{\rdtlifsnns}{r.~LIF-SNNs\xspace}
+\newcommand{\Rdtlifsnns}{R.~LIF-SNNs\xspace}
 \newcommand{\proofofref}[1]{Proof of~\cref{#1}.}
 % \newcommand{\comment}[1]{}
 
@@ -77,20 +71,34 @@
 \makecover
 %\maketaskdescription
 %\makededication
-\makeabstract
+% \makeabstract
 \maketoc
 % optional:
 % \listoffigures
 % \listoftables
+
 \cleardoublepage
 
-\input{src/ch01-intro} \cleardoublepage
+\newgeometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  left=2cm,
+  right=3cm,
+}
+
+\input{src/ch01-intro}
+
+\cleardoublepage
 \input{src/ch02-defs} \cleardoublepage
 \input{src/ch03-struct} \cleardoublepage
 \input{src/ch04-partitions} \cleardoublepage
 \input{src/ch05-experimental-results} \cleardoublepage
-\input{literatures/bib.tex}
+\input{src/ch06-conclusion} \cleardoublepage
+\input{literatures/bib.tex} \cleardoublepage
+\input{src/ch07-appendix}
+\cleardoublepage
 
-%TODO: eigenständigkeitserklärung
+%DONE: acknowledge lmu-thesis-latex creator
+%CANCELLED: quotes cite definitionen etc.?
 
 \end{document}

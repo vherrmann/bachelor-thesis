@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+  \begin{axis}[
+    axis lines=middle,
+    xmin=0, xmax=pi,
+    ymin=0, ymax=1.3,
+    xtick={0, pi/2, pi},
+    xticklabels={$0$, $\frac{\pi}{2}$, $\pi$},
+    ytick={0, 1},
+    domain=0:pi,
+    samples=200,
+    thick,
+    legend pos=north west,
+    width=\textwidth,
+    height=6cm,
+    legend style={legend cell align=left},
+    declare function={
+      myapproxSin(\len) = sin(deg(floor(x/\len)*\len+\len/2))+
+                                       (x-(floor(x/\len)*\len+\len/2))*cos(deg(floor(x/\len)*\len+\len/2));
+    },
+    ]
+    \addplot[blue, forget plot]{sin(deg(x))};
+    \addplot[thick, red, dashed]{myapproxSin(0.62)}; % 0.62 ≈ π/5
+    \addlegendentry{$ε=0.25$} % n_2(0.25) = ceil(sqrt(2)·π)=5; 0.6≈3.14/5
+
+    \addplot[thick, purple, dashdotdotted]{myapproxSin(1.571)}; % 1.571 ≈ π/2
+    \addlegendentry{$ε=1$} %n_2(1) = ceil(π/sqrt(2))=2
+  \end{axis}
+\end{tikzpicture}

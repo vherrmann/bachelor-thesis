@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+  \begin{axis}[title=,
+    unbounded coords=jump,
+    colormap/viridis,
+    view={45}{45},
+    ]
+    \addplot3 [surf,domain=-1:1, samples=70] {(abs(atan2(y,x)) < deg(pi-0.2) && x^2+y^2 >= 0.25 && x^2+y^2 <= 1) ? atan2(y,x)/200 : nan};
+  \end{axis}
+\end{tikzpicture} 

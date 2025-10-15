@@ -1,42 +1,248 @@
 \section{Experimental results} \label{ch:experiments}
 
-To try to better understand the landscape of the input of a \rdtlifsnn to proof~\cref{thm:bound-regions}, we have created a few programs.
+To better understand the landscape of the input of a \rdtlifsnn with the goal of prooving~\cref{thm:regions-upper-bound} in mind, we have created the following programs.
 
 \subsection{Computing the number of regions}
 
-We assume \(W=I_n\) yet again, since we the algorithms become much simpler and more efficient. Also once we understand the situation for \(W=I_n\), we are hopeful to proof it for arbitrary \(W\).
+We use \(W=I_n\) yet again in the following section, since it simplifies the following algorithm considerably and we hope to quite easily proof the situation for arbitrary \(W\), once we have done it for \(W=I_n\).
 
-Let further \(g\) in~\cref{alg:compute_regions} be defined as in~\cref{lem:invert-p}.
-
-%TODO: add explanation
+\newcommand{\listconcat}{\mathbin{+\!\!+}}
 \begin{algorithm}[H]
-\caption{Recursive Region Computation}
+\caption{Compute regions similar to~\cref{prop:const-regions-cuboids}}
 \label{alg:compute_regions}
-\begin{algorithmic}
-\Function{ComputeRegionsStartingWithST}{$t, st, x^C, y^C$}
-    \If{$t > T$}
+\begin{algorithmic}[1]
+\Function{SubRegions}{$Φ, t, st, x^C, y^C$}
+    \State $c \gets g_{Φ}(t+1;st) $
+    \State $ subRegions \gets \{\} $
+    \For{$ sp∈\{0,1\}^{n_1}$}
+        \State $ x' \gets \left(\operatorname{if\ }sp_i =0\operatorname{\ then\ }x_i^C \operatorname{\ else\ }\max(x^C_i,c_i)\right)_{i∈[(n_{Φ})_1]} $
+        \State $ y' \gets \left(\operatorname{if\ }sp_i =1\operatorname{\ then\ }y^C_i \operatorname{\ else\ }\min(y^C_i,c_i)\right)_{i∈[(n_{Φ})_1]} $
+        \If{$x'<y'$}
+            \State $ subRegions \gets subRegions \cup \{(x',y', st\listconcat [sp])\} $
+        \EndIf
+    \EndFor
+    \State \Return $ subRegions $
+\EndFunction
+\Function{RegionsWithST}{$Φ, t, st, x^C, y^C$}
+    \If{$t ≥ T_{Φ}$}\label{alg:break-cond}
         \State \Return $\{(st, x^C, y^C)\} $
     \EndIf
-    \State $x \gets g(t;st) $
-    \State $ subRegions \gets \{ [x',y') \mid x'<y',\ ∀_ix'_i∈\{x^C_i,x_i\},\ ∀_iy'_i∈\{y^C_i,x_i\} \} $
-    \For{$ C ∈ subRegions $}
-      \State $ newST \gets \operatorname{append}(st,[(\mathbf{1}_{\{x_i≤x'_i\}})_{i∈[n_1]}]) $
-      \State \Call{ComputeRegionsStartingWithST}{$t+1,newST,x',y'$}
+    \State $regions \gets \{\} $
+    \For{ $ (x',y', st) ∈ $ \Call{SubRegions}{$Φ, t, st, x^C, y^C$}}
+      \State $ newRegions \gets $ \Call{RegionsWithST}{$Φ, t+1, st, x', y'$}
+      \State $ regions \gets regions \cup newRegions $
     \EndFor
+    \State \Return $regions$
 \EndFunction
 
-%TODO: implement α stuff
+%DONE: implement α stuff in code
 
-\Function{ComputeRegions}{$ $}
-
-    \State \Call{ComputeRegionsStartingWithST}{$1,[(0,…,0)],(-∞,…,-∞),(∞,…,∞)$}
+\Function{CompRegions}{$ Φ $}
+    \State \Return \Call{RegionsWithST}{$Φ, 0,[(0,…,0)],(-∞,…,-∞),(∞,…,∞)$}
 \EndFunction
 
 \end{algorithmic}
 \end{algorithm}
 
-%TODO: analysis
+\cref{alg:compute_regions} is motivated by~\cref{prop:const-regions-cuboids}, but instead of iterating over all spike trains \(s'∈\{0,1\}^{n_1×T}\) and checking whether \(C_{s'}≠∅\) by evaluating \(x_i^{s'}<y_i^{s'}\), we use a more efficient algorithm.
 
-% TODO: abstract algorithms
-% TODO: images
-% TODO: numerical considerations
+A few words on notation and representation in~\cref{alg:compute_regions}:
+We represent spike trains as lists, including the initial and trivial spike \(s^{[l]}(0)=\zeroV{n_l}\). So e.g. \(s'∈\{0,1\}^{n_1×T}\) with \(∀_{t∈[T]}s'_1(t)=1\) and \(∀_{t∈[T]}s'_i(t)=1\) for all \(i≠1\) is represented by \(st=[(0,…,0),(1,0,…,0),…,(1,0,…,0)]\).
+Further a region \(C_{s'}=⟦x^{s'},y^{s'}⦆\) is represented as a tuple \((st,x^{s'},y^{s'})\), where \(st\) is the list corresponding to \(s'\).
+We also use \(g_{Φ}\) for \(g\) as defined in~\cref{lem:invert-p}, used parameters from \(Φ\). Similarly \(T_{Φ}\) is \(T\) from \(Φ\).
+
+%DONE: explain T_Φ, g_Φ
+
+\begin{lemma}
+  %DONE: introduce notation I_
+  Let \(Φ\) be a \rdtlifsnn. With \(W^{[1]}=I_{n_1}\). The algorithm \(\mathtt{CompRegions}(Φ)\) from~\cref{alg:compute_regions} computes \(C_{Φ,1}\).
+\end{lemma}
+
+\begin{proof}
+  Let us write \(st[t]\) for the \(t\)-th element of \(st\), where \(st\) is indexed starting with \(0\).
+  %DONE: explain differences in notation of spike trains, regions, etc.
+
+  % \(\hat{g}_i(t, s')≔\inf_{\substack{t'∈[t] \\ s'_i(t')=0}}g_i(t';s'))\) and \(\check{g}_i(t, s')≔\sup_{\substack{t'∈[t] \\ s'_i(t')=1}}g_i(t';s'))\)
+  
+  In the following we will use \(Φ_τ\) to mean the \rdtlifsnn that only differ from \(Φ\) by having \(T_{Φ_τ}=τ\).
+
+  Let us now show that given \(C_{s'}=⟦x^{s'},y^{s'}⦆∈C_{Φ_{t-1},1}\), the algorithm \(\mathtt{SubRegions}(Φ, t, s', x^{C_{s'}}, y^{C_{s'}})\) computes all regions \(C_{s''}=⟦x^{s''},y^{s''}⦆∈C_{Φ_t,1}\), where \(s''\) is an extension of \(s'\) with non-empty region \(C_{s''}\), i.e. \(∀_{t'∈[t-1]}s'(t')=s''(t')\) and \(x^{C_{s''}}<y^{C_{s''}}\).
+
+  Notice first, that by~\cref{prop:const-regions-cuboids}, we have \(x^{s''}_i=\sup(x^{s'}_i,g_i(t;s''))\) and \(y^{s''}_i=y^{s'}_i\) if \(s''_i(t)=1\) as well as \(x^{s''}_i=x^{s'}_i\) and \(y^{s''}_i=\inf(y^{s'}_i,g_i(t;s''))\) otherwise. 
+
+  So we have
+  \begin{align*}
+   C_{s''} &= \prod_{i∈[n_{1}]}[x^{s''}_i, y^{s''}_i)  \\
+           &= \prod_{i∈[n_{1}]}\begin{cases}
+             [x^{s'}_i,\ \inf(y^{s'}_i,g_i(t;s''))) & s''(t)=0 \\
+             [\sup(x^{s'}_i,g_i(t;s''))_i,\ y^{s'}_i) & s''(t)=1 \\
+           \end{cases}.
+  \end{align*}
+  Comparing with the code of \(\mathtt{SubRegions}\), it is clear that given a region \(C_{s'}∈C_{Φ_{t-1},1}\), the algorithm computes the set of all extensions \(s''\) of \(s'\) such that \(C_{s''}\) is non-empty.
+
+  We similar get that \(\mathtt{SubRegions}(Φ, 0,[(0,…,0)],(-∞,…,-∞),(∞,…,∞))\) computes all regions \(C_{s''}∈C_{Φ_1,1}\) with spikes \(s''∈\{0,1\}^{n_1×1}\). First note that again by~\cref{prop:const-regions-cuboids}, \(x^{s''}_i=g_i(t;s'')\) and \(y^{s''}_i=∞\) if \(s''_i(t)=1\) as well as \(x^{s''}_i=-∞\) and \(y^{s''}_i=g_i(t;s'')\) otherwise. So we have
+  \begin{align*}
+   C_{s''} &= \prod_{i∈[n_{1}]}\begin{cases}
+             [-∞,\ g_i(t;s'')) & s''(t)=0 \\
+             [g_i(t;s'')_i,\ ∞) & s''(t)=1 \\
+           \end{cases}.
+  \end{align*}
+  %TODO: min/max im code, hier inf/sup
+  Which is clearly what \(\mathtt{SubRegions}(Φ, 0,[(0,…,0)],(-∞,…,-∞),(∞,…,∞))\) will compute.
+
+  Since \(\mathtt{RegionsWithST}\) just repeatedly maps \(\mathtt{SubRegions}\) over an initial value of \(\{(Φ, 0,[(0,…,0)],(-∞,…,-∞),(∞,…,∞))\}\), and since \(\mathtt{SubRegions}\) computes the regions of \(C_{Φ_{τ},1}\) from \(C_{Φ_{τ-1},1}\); as well as \(C_{Φ_1,1}\) from the initial value, \(\mathtt{RegionsWithST}\) computes \(C_{Φ,1}\).
+\end{proof}
+%TODO: remark about difference in indexing of 
+
+%TODO: remark about using notation from section 4.
+%TODO: instability of algorithm
+
+\cref{alg:compute_regions} has been implemented in Python for reference; we have also implemented a more efficient version in C++. Due to the usage of floating point numbers, the results are only accurate up to a certain degree. In particular the C++ and Python implementations sometimes differ slightly, even for a low iteration number. The problem lies in the numerical instability of the algorithm. The landscape quite often includes empty regions \(C_{s'}=⟦x^{s'},y^{s'}⦆\), i.e. \(∃_ix^{s'}_i=y^{s'}_i\), such that an implementation of \(g\) might just coincidentally return a slightly lower value for \(x^{s'}_i\) than for \(y^{s'}_i\).
+
+Just skipping very slim regions does not seem correct either, since proper regions might just as well be very slim. Which brings us to the second issue of the implementations: Undercounting of regions. In Theorem B.15 of~\cite{nguyen2025timespikeunderstandingrepresentational} it was proven, that the bound in~\cref{thm:regions-upper-bound} is tight, i.e. for every \(T∈ℕ\) and \(n_0=n_1∈ℕ\) there exists a \dtlifsnn \(Φ_{\max,T,n_0}\) such that the bound \((\frac{T^2+T+2}{2})^{n_1}\) is reached. Suppose we compute the number of regions for this \dtlifsnn. In our algorithm we used \(64\)-bit doubles for each vector component, so we can represent at most \(2^{64}\) values. So at the very latest at \(T≈2^{32}\sqrt{2}\) the algorithm will start to undercount the regions, though we have reason to think that the problem might appear far earlier.
+
+Now \(Φ_{\max,T,n_0}\) is essentially just a \dtlifsnn with canonical parameters in the first layer, so \(β=ϑ=1\), \(W=\idM{n_1}\) and \(b=i(0)=\zeroV{n_1}\), but with a small positive number for every component \(u_i(0)>0\) of \(u(0)\).
+
+Let us consider such a \dtlifsnn and take a look at the maximum number of regions in~\cref{fig:ch05-change_T-comparison}, computed by~\cref{alg:compute_regions}.
+
+%DONE: analysis
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-change_T}
+    \caption{\(\abs{C_{Φ_{\max,T,n_0},1}}\) for different values of \(T\)}
+    \label{fig:ch05-change_T}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-change_T_limit}
+    \caption{Theoretical limit for \dtlifsnn}
+    \label{fig:ch05-change_T_limit}
+  \end{subfigure}
+  \caption{Optimal \(Φ\) vs. theoretical limit}
+\label{fig:ch05-change_T-comparison}
+\end{figure}
+
+Clearly the plot in~\cref{fig:ch05-change_T} of the number of regions of \(Φ_{\max,T,n_0}\) corresponds to the theoretical limit in~\cref{fig:ch05-change_T_limit}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-change_V3D.png}
+    \caption{3D Plot}
+    \label{fig:ch05-change_V3D}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-change_V3D_flat.png}
+    \caption{Color Plot}
+    \label{fig:ch05-change_V3D_flat}
+  \end{subfigure}
+  \caption{\(\abs{C_{Φ,1}}\) for \(T=20\) and different values of \(V_{1,2}\) and \(V_{2,1}\)}
+\label{fig:ch05-change_V3D_figure}
+\end{figure}
+
+Let us now consider a \rdtlifsnn \(Φ\) that only differs in \(α\) or \(V\) to \(Φ_{\max,T,n_0}\). Changing \(V_{1,2}\) or \(V_{2,1}\) only decreases \(\abs{C_{Φ_{0,V},1}}\) as can be seen in~\cref{fig:ch05-change_V3D_figure}. If we instead just change \(α\) or even \(β\), we also only find a decrease in the number of regions, as one can see in~\cref{fig:ch05-change_alpha_or_beta}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-change_alpha.png}
+    \caption{Changing \(α\) decreases the number of regions}
+    \label{fig:ch05-change_alpha}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-change_beta.png}
+    \caption{Changing \(β\) decreases the number of regions}
+    \label{fig:ch05-change_beta}
+  \end{subfigure}
+  \caption{No parameter seems to be able to push the number of regions beyond the upper bound for \(T=20\)}
+  \label{fig:ch05-change_alpha_or_beta}
+\end{figure}
+%TODO: comment on behavior (makes sense, etc.)
+
+We have furthermore found, that in our experience even changes in multiple parameters do not increase the number of regions past the threshold.
+
+Still, our hypothesis might be wrong, since our algorithms are insufficient and unable to compute the number of regions for high enough iterations efficiently; or the usage of floating point numbers might lead to too much undercounting of regions.
+
+The only change that consistently pushes the number of regions above the upper bound is increasing \(β\) past its limit of \(1\), see~\cref{fig:ch05-change_beta_past_limit} in contrast to~\cref{fig:ch05-change_beta}.
+This is also consistent with the proof of~\cref{thm:regions-upper-bound} in~\cite{nguyen2025timespikeunderstandingrepresentational}, since \(β∈[0,1]\) is a critical assumption it has to make. Of course this bothers us not too much, since exponential growth instead of decay would not make a good model of the neurological realities.
+%TODO: motivate in def. why α,β∈[0,1]
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{src/figures/ch05-change_beta_past_limit.png}
+  \caption{Changing \(β\) past the limit pushes the number of regions above the threshold for \(T=20\)}
+  \label{fig:ch05-change_beta_past_limit}
+\end{figure}
+
+%TODO: ref appendix code/github repo?
+%TODO: we know that just changing α won't work
+
+% DONE: numerical considerations
+
+\subsection{Visualization of landscape}
+While we can use the previous algorithm to compute all regions for a \(2\)-neuron network and draw them on the screen, the algorithm is quite slow for higher iterations due to its exponential nature. A previous iteration of our algorithms does not have that limitation:
+
+We just compute \(s^{[1]}\) on a grid in the input space and then compute the set of unique spike trains. Executed on the CPU this algorithm would be quite slow, however it is natural to implement it on the gpu instead.
+
+But this has following disadvantages: Since there are no dynamically-sized lists in GLSL, the GPU programming language that we implemented the algorithm in, we used integers as fixed-sized lists of bits to represent the spike trains. Furthermore since there are no arbitrary precision integers on the gpu, we have choosen to use two \(32\)-bit integers to represent spike trains with a length up to \(64\) time-steps.
+
+Moreover, since we just evaluate \(s^{[1]}\) on a grid, we might miss very slim regions located between nodes. Finally GLSL is also not flexible enough to allow arbitrary sized matrizes/vectors. We have therefore fixed ourselves to the simple and easily visualizable case of \(2\) neurons in the first layer.
+
+Another limitation is the storage requirement of the algorithm: If we want to make sure not to miss regions with width of smaller than \(\operatorname{diam}_{Ω}(C)·0.00025≈\operatorname{diam}_{Ω}(C)·2^{-12}\) in a direction, the grid needs to have at least a width of \(2^{12}\), so in total it needs \(2^{24}\) nodes. For each of those we compute \(8\) bytes (64 bits), so we need \(2^{27}=128\)MiB of storage. Further, since we are using \(2\) neurons in layer one, the storage requirement grows quadratically in the width of the grid, so we quite quickly reach the limits of consumer hardware in storage.
+
+On the other hand, this approach has the big advantage of allowing us to easily create visualizations of the landscape of a \rdtlifsnn by represent the pixels of an image with the grid. It is furthermore quite simple to port the program into the web browser using WebGL (TODO: see here). This allowed us to create a simple user interface for changing the parameters of the \rdtlifsnn, the coloring algorithm, etc. without too much fuss, which allows users to obtain a much better intuition for the problem at hand through its interactive visualization.
+
+We also implemented region counting for this type of algorithm, but sadly due to the limited architecture of WebGL, we were not able to implement it on the web. The concrete problem is that we are not able to read out data from gpu buffers. This will change with the new WebGPU API, but sadly that API is not yet completely supported in most browsers at the time of writing.
+
+We have instead implemented the region counting in python. The obvious way to implement it, to just read out the buffer of spike-trains from the gpu and use a standard-algorithm to determine the unique elements has proved to be a major bottleneck. As before, we probably want to be able to quickly compute our result for a width of \(2^{12}\) for the grid, so for \(2^{24}\) nodes in total. It is further well-known, that algorithms filtering out the unique elements of a list are \(Θ(n\log(n))\), compare e.g.~\cite{10.1145/800061.808735}.
+
+We have therefore implemented a different algorithm for finding the unique elements in this particular case, that is just \(Θ(n)\). We will assume \(W=I_n\), though it should be possible to generalize it. Since we know due to~\cref{prop:const-regions-cuboids} that all regions in \(C_{Φ,1}\) are half-open rectangles, it suffices to count all lower-left corners. So we just count all pixels such that the lower and left neighboring pixels are different (or don't exist since the pixel is located at the left/lower border of the grid).
+
+% DONE: graphic
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-doubling/output_size0002_0002_iteration10.png}
+    \caption{2x2}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-doubling/output_size0004_0004_iteration10.png}
+    \caption{4x4}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-doubling/output_size0008_0008_iteration10.png}
+    \caption{8x8}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-doubling/output_size0016_0016_iteration10.png}
+    \caption{16x16}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-doubling/output_size0032_0032_iteration10.png}
+    \caption{32x32}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{src/figures/ch05-doubling/output_size0064_0064_iteration10.png}
+    \caption{64x64}
+  \end{subfigure}
+  \caption{Doubling the grid repeatedly to improve the accuracy}
+\end{figure}
+%TODO: execute with production quality
+
+We further utilize the regions having rectangular shapes by first executing the algorithm on a narrow grid and then doubling the size of the grid repeatedly. During the next iteration we can then just use the previous result if it is the same on the surrounding four nodes from the previous iteration. A nice side-effect is that we are additionally getting results for smaller grid sizes, such that we can get some feel for how much our algorithm is undercounting the regions due to too narrow grids.
+
+% DONE: compute at lower resolution, size up
+% DONE: can easily be generalized vor W≠I_n
+

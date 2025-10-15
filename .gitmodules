@@ -1,0 +1,12 @@
+[submodule "dt-lif-snn-compute-regions-depthsearch"]
+	path = dt-lif-snn-compute-regions-depthsearch
+	url = https://github.com/vherrmann/dt-lif-snn-compute-regions-depthsearch.git
+[submodule "code/dt-lif-snn-compute-regions-depthsearch"]
+	path = code/dt-lif-snn-compute-regions-depthsearch
+	url = https://github.com/vherrmann/dt-lif-snn-compute-regions-depthsearch.git
+[submodule "code/dt-lif-snn-visualizer"]
+	path = code/dt-lif-snn-visualizer
+	url = https://github.com/vherrmann/dt-lif-snn-visualizer.git
+[submodule "code/dt-lif-snn-compute-regions"]
+	path = code/dt-lif-snn-compute-regions
+	url = https://github.com/vherrmann/dt-lif-snn-compute-regions.git

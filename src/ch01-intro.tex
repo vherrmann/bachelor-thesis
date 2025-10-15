@@ -1,11 +1,20 @@
 \section{Introduction}
 \label{ch:intro}
 
-While the hype on AI is still ongoing there are still people wondering if current AI models are fundamentally able of reasoning. Many other possible models could be better fitted to the task of reasoning. Among others Spiking neural networks present a model closer to the workings of the brain. In fact, they have been called the 3rd generation of AI models, after the 2nd generation that currently drives most successful models.
+%TODO: Zitat
+In recent years, the capabilities of AI have improved significantly. Especially large language models have found their ways into most people's lives. But even though LLMs (see~\cite{jones2025largelanguagemodelspass}) already pass a simple Turing Test, it is still unclear whether they are fundamentally able of reasoning. While they are able to solve many problems with lots of compute, the process of finding a solution quite often involves far more try and error than it does for a human (see~TODO). Human intuition on the other hand does not require as many attempts and quite often leads to a better solution (see~TODO). Another limitation seem to be hallucinations, that appear to be an intrinsic property of LLMs (see~TODO).
 
-While the idea behind SNNs is quite old, they have not been as much researched, since it is much more inefficient and harder to train them. Therefore there still remain a lot of open questions about them.
+A further problem with current models is their incredible energy inefficiency compared to a human brain. Of course one single human is not an expert in every field, but still, even if we account for this
+%TODO: zahlen für energieineffizienz
+
+We conclude therefore that other models might be better fitted to the task of reasoning. Since many human technological advances have been inspired by the longest ongoing optimization progress in history — \href{https://xkcd.com/1605/}{the evolution of life} — like airplanes or sonars, we propose that neural networks with more similar inner workings to human brains might be smarter and more efficient. In particular we will investigate a kind of spiking neural network.
+
+% the 3rd generation of AI models, after the 2nd generation that currently drives most successful models.
+
+% TODO: hard to train since recursive established methods backpropagation through time
+% TODO: 
+While the idea behind SNNs is quite old, they have not been researched as much , since it is comparatively hard to train them. Therefore there still remain a lot of open questions about them.
 In this paper we shall extend on the work done in~\cite{nguyen2025timespikeunderstandingrepresentational}. We will add a decaying factor to the input of the neurons and allow recursive connections between neurons in a layer.
 
-We will roughly follow the structure of~\cite{nguyen2025timespikeunderstandingrepresentational}. In the second chapter we will formally introduce discrete time leaky-integrate-and-fire SNN, d.t. LIF-SNNs. In section 3 we will give theorems about approximation of continuous functions on compact domains by d.t. LIF-SNNs.
-The main part will be the following section in which we will see that the number of distinct values a d.t. LIF-SNN can take on only depends on the first hidden layer and grows in particular only quadratically in time. We will further support our findings with experimental data in the last section.
-% approximation of differentiable ones?
+We will roughly follow the structure of~\cite{nguyen2025timespikeunderstandingrepresentational}: In~\cref{ch:defs} we will motivate and formally introduce recurrent discrete time leaky-integrate-and-fire SNN, in short \rdtlifsnns. In~\cref{ch:struct} we will show that some continuously differentiable functions can be approximated arbitrarily well by \rdtlifsnns. While this has already been show in~\cite{nguyen2025timespikeunderstandingrepresentational} more generally for continuous functions, we present a construction using far less neurons, using the internal linear structure of \rdtlifsnns.
+In the following, in~\cref{ch:partitions}, we analyze the landscape of a \rdtlifsnn regarding the shape of constant output regions. While we were not able to generalize the upper bound on the number of constant regions of \dtlifsnn that~\cite{nguyen2025timespikeunderstandingrepresentational} established to \rdtlifsnn, we show some promising experimental results in~\cref{ch:experiments}. We additionally explain how we implemented the algorithms 

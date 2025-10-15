@@ -1,0 +1,42 @@
+\newcommand{\selfRef}[1]{
+    \draw[->]
+    ($(#1.east)+(0,-0.1)$)
+    -| ++(0.25,-1.25)
+    -| ++(-1.25,1.25)
+    -- ($(#1.west)+(0,-0.1)$);
+}
+
+\begin{tikzpicture}[
+    >=LaTeX, % Use default LaTeX arrows
+    % Styles 
+    layerRect/.style={
+      rectangle, rounded corners=1mm,
+      minimum height=2cm,
+      minimum width=0.75cm, 
+      inner sep=1pt
+    }
+]
+   \small
+    
+    % Input
+    \node[draw] at (-1,0) (first_1) {$x$};
+    \node[draw, layerRect] at (1.5,0) (second_1) {$0$};
+    \node[draw, layerRect] at (4,0) (third_1) {$1$};
+    \node[draw, layerRect] at (8,0) (fourth_1) {$L$};
+    \node[draw, layerRect] at (10.5,0) (fifth_1) {$L+1$};
+
+    \draw[->] (first_1) -- (second_1) node[midway, above] {$E$};
+    \draw[->] (second_1) -- (third_1);
+    \draw[->, dashed] (third_1) -- (fourth_1);
+
+    \selfRef{third_1}
+    \selfRef{fourth_1}
+
+    \draw[->] (fourth_1) -- (fifth_1) node[midway, above] {$D$};
+
+    \node[above=0.25cm of first_1]  {Input};
+    \node[above=0.25cm of second_1]  {Initial layer};
+    \node[above=0.25cm of third_1]  {First hidden layer};
+    \node[above=0.25cm of fourth_1]  {Last hidden layer};
+    \node[above=0.25cm of fifth_1]  {Output};
+\end{tikzpicture}

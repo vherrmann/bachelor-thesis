@@ -1,0 +1,23 @@
+
+\begin{tikzpicture}
+  \begin{axis}[
+    axis lines=middle,
+    xmin=0, xmax=5,
+    ymin=0, ymax=5,
+    xtick={0, 1, 2, 3, 4},
+    ytick={0, 1, 2, 3, 4},
+    domain=0:5,
+    samples=200,
+    thick,
+    legend pos=north west,
+    width=\textwidth,
+    height=6cm,
+    legend style={legend cell align=left},
+    ]
+    \addplot[thick, red, dashdotdotted]{floor(x)+0.5};
+    \addlegendentry{$ε=0.5$}
+    \addplot[thick, purple, dashed]{floor(x*2)/2+0.25};
+    \addlegendentry{$ε=0.25$}
+    \addplot[blue]{x};
+  \end{axis}
+\end{tikzpicture}

@@ -1,0 +1,120 @@
+\usetikzlibrary{positioning, chains, shapes.geometric, fit, shapes, arrows.meta, calc, backgrounds}
+
+\begin{tikzpicture}[
+    >=LaTeX, % Use default LaTeX arrows
+    % Styles 
+    node/.style={ % Input or output node
+        circle,
+        minimum width=2.25em,
+        inner sep=0.5pt,
+        draw,
+        fill=gray!10,
+        thick,
+        font=\scriptsize
+    },
+    group/.style={
+        rectangle,
+        rounded corners=1mm,
+        draw,
+        thick
+    }, 
+    innerNode/.style={
+        circle,
+        minimum width=0.3em,
+        inner sep=0pt,
+        draw,
+        fill=gray!10,
+        thick
+    },
+    arrow/.style={
+        -latex,
+        thick
+    },
+    backprop/.style={ % Backpropagation arrows
+        arrow,
+        dashed,
+        gray
+    }
+]
+    
+    % Input
+    \foreach \x in {1,...,1}
+        \draw node at (0, -\x*1.25 - 1.25) [node] (first_\x) {$x_\x$};
+    \draw node at (0, -3*1.25 -1.25) [node] (first_n) {$x_n$};
+    \path (first_1) -- (first_n) node[pos=0.5, scale=2] {$\vdots$};
+    
+    % Hidden 1
+    \foreach \x in {1,...,1}
+        \node at (2.5, -0.625-\x*1.25) [node] (second_\x){$\x$};
+    \draw node at (2.5, -0.625-3*1.25) [node] (second_n) {$n$};
+    \path (second_1) -- (second_n) node[pos=0.5, scale=2] {$\vdots$};
+    \draw node at (2.5, -0.625-4*1.25) [node] (second_a1) {$a_1$};
+
+    % Hidden 2
+    \node at (5, 0.25-1.1) [node] (third_1_1){$ι_j(1)$};
+    \node at (5, 0.25-2*1.1-0.75) [node] (third_1_n){$ι_j(n)$};
+    \path (third_1_1) -- (third_1_n) node[pos=0.5, scale=2] {$\vdots$};
+    \node at (5, 0.25-3*1.1-0.75) [node] (third_1_om){$ω_j$};
+    \node[group, dashed, fit=(third_1_1) (third_1_om)] (third_1) {};
+
+    \draw node at (5, -6) [node] (third_a2) {$a_2$};
+    \draw node at (5, -6-1*1.1) [node] (third_c1) {$c_1$};
+    \draw node at (5, -6-2*1.1) [node] (third_c2) {$c_2$};
+
+    \path (third_1) -- (third_a2) node[pos=0.5, scale=2] (third_vdots) {$\vdots$};
+    
+    % Output
+    \foreach \x in {1,...,2}
+        \node at (7.5, -\x*1.25 - 0.625) [node] (fourth_\x){$y_\x$};
+    \draw node at (7.5, -5*1.25 + 0.625) [node] (fourth_m) {$y_m$};
+    \path (fourth_2) -- (fourth_m) node[pos=0.5, scale=2] {$\vdots$};
+
+    % Input -> hidden 1
+    \foreach \i in {1,n}
+        \draw [arrow] (first_\i) to (second_\i);
+
+    % A1 -> hidden 1
+    \foreach \i in {1,n}
+        \draw [arrow, bend left=40, color=gray] (second_a1) to (second_\i);
+
+    % C1/C2/A2 -> hidden 2
+    \foreach \i in {c1,c2}
+        \foreach \j in {1,n}
+            \draw [arrow, bend left=40, color=gray] (third_\i) to (third_1_\j);
+    \draw [arrow, bend left=40, color=gray] (third_a2) to (third_1_om);
+
+    % connect group to itself
+    \foreach \i in {1,n}
+    \foreach \j in {om} {
+      \draw [arrow, bend left=60] (third_1_\j) to (third_1_\i);
+      \draw [arrow, bend right=30] (third_1_\i) to (third_1_\j);
+    }
+
+    % group to other groups
+    \draw [arrow, bend left=30] (4.9, -4.9) to (third_1_om);
+    \draw [arrow, bend right=20] (third_1_om) to (4.95, -4.7);
+    
+    % hidden 1 -> hidden 2
+    \foreach \i in {1,n}
+        \draw [arrow] (second_\i) to (third_1_\i);
+
+    % hidden 2 -> Output
+    \foreach \i in {1}
+        \foreach \j in {1,2,m}
+        \draw [arrow] (third_\i) to (fourth_\j);
+
+    % loops
+    \path[arrow, color=gray] (second_a1) edge[loop left] ();
+    \path[arrow, color=gray] (third_a2) edge[loop left] ();
+    \path[arrow, color=gray] (third_c1) edge[loop left] ();
+    \path[arrow, color=gray] (third_c2) edge[loop left] ();
+    \path[arrow] (third_1_om) edge[loop left] ();
+
+    % Layer Labels
+    \node[above=0.25cm of first_1] (xlabel) {Input};
+    \node[above=0.25cm of second_1] (h1label) {First hidden layer};
+    \node[above=0.25cm of third_1] (h2label) {Second hidden layer};
+    \node[above=0.25cm of fourth_1] (ylabel) {Output};
+\end{tikzpicture}
+
+% adapted from https://github.com/fraserlove/nntikz/tree/main

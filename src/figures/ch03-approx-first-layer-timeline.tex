@@ -1,0 +1,123 @@
+\tikzstyle{descript} = [text = black,align=center, minimum height=1.8cm, align=center, outer sep=0pt,font = \footnotesize]
+\tikzstyle{activity} =[align=center,outer sep=1pt]
+\definecolor{ColorOne}{named}{MidnightBlue}
+
+% #1 = color
+% #2 = left coordinate
+% #3 = right coordinate
+\newcommand{\FillRegion}[3]{%
+  \fill[#1] (#2) -- (#3) -- ($(#3)+(0,1)$) -- ($(#2)+(0,1)$);
+}
+
+\newenvironment{timeline}{
+\begin{tikzpicture}[very thick, black]
+  \small
+  
+  \coordinate (O) at (0,0);
+  \coordinate (T2-1) at (3,0);
+  \coordinate (T2) at (5,0);
+  \coordinate (T3) at (7,0);
+  \coordinate (T4) at (9,0);
+  \coordinate (T4+1) at (11,0);
+  \coordinate (T) at (14,0);
+  
+  \FillRegion{ColorOne!10!white}{O}{T2-1}
+
+  \fill[
+    pattern={Lines[angle=45,distance=6pt,line width=3pt, xshift=4.5pt]},
+    pattern color=ColorOne!20!white
+  ] (T2-1) rectangle ($(T2)+(0,1)$);
+  \fill[
+    pattern={Lines[angle=45,distance=6pt,line width=3pt]},
+    pattern color=ColorOne!10!white
+  ] (T2-1) rectangle ($(T2)+(0,1)$);
+
+  \FillRegion{ColorOne!30!white}{T2}{T3}
+  \FillRegion{ColorOne!40!white}{T3}{T4}
+  \FillRegion{ColorOne!50!white}{T4}{T}
+  % \FillRegion{ColorOne!60!white}{T4+1}{T}
+  
+  \draw ($(O)!0.5!(T2-1)+(0,0.5)$) node[activity] {$T_1$};
+  \draw ($(T2-1)!0.5!(T2)+(0,0.5)$) node[activity] {$T_2$};
+  \draw ($(T2)!0.5!(T3)+(0,0.5)$) node[activity] {$T_3$};
+  \draw ($(T3)!0.5!(T4)+(0,0.5)$) node[activity] {$T_4$};
+  \draw ($(T4)!0.5!(T)+(0,0.5)$) node[activity] {$T_5$};
+
+  %% Timeline
+  \draw[dotted] (O) -- (T2-1);
+  \draw (T2-1) -- (T4+1);
+  \draw[dotted] (T4+1) -- (T);
+  \draw[->] (T) -- ($(T)+(0.5,0)$);
+
+  %% Ticks
+  \foreach \pos/\labeltext in {
+    O/$0$,
+    T2-1/$T_2-1$,
+    T2/$T_2$,
+    T3/$T_3$,
+    T4/$T_4$,
+    T4+1/$T_4+1$,
+    T/$T$
+  }{
+    % Draw tick
+    \draw (\pos) ++(0,3pt) -- ++(0,-6pt);
+    % Add label below
+    \node[below=4pt, anchor=north] at (\pos) {\labeltext};
+  }
+}{\end{tikzpicture}}
+
+% adapted from https://www.overleaf.com/project/68b326ec3dceb466ee45cc28
+
+% #1 = coordinate
+% #2 = label
+\NewDocumentCommand{\SpikeOut}{O{} O{} O{} m}{%
+        \draw[->,thick,color=black,#1] ($(#4)+(0,0)$) -- ($(#4)+(0,1.5)$) node [above=0pt,align=center,black] {#2} node[midway, sloped, yshift=7pt] {\color{gray} #3};
+}
+\NewDocumentCommand{\SpikeIn}{O{} O{} O{} m}{%
+        \draw[<-,thick,color=black,#1] ($(#4)+(0,0)$) -- ($(#4)+(0,1.5)$) node [above=0pt,align=center,black]  {#2} node[pos=0,anchor=north] {\rotatebox{90}{#3}};
+}
+
+% #1 = number of holes/number of points-1
+% #2 = size of circles
+% #3 = coordinate 1
+% #4 = coordinate 2
+\newcommand{\dotsT}[4]{
+  \foreach \i in {0,...,#1} {
+    \coordinate (P\i) at ($ (#3)!{\i/#1}!(#4) $);
+    \fill (P\i) circle (#2); % draw point
+  }
+}
+
+% https://tex.stackexchange.com/questions/604337/comparing-node-coordinates-in-tikz
+\makeatletter
+\newcommand{\gettikzxy}[3]{%
+  \tikz@scan@one@point\pgfutil@firstofone#1\relax
+  \edef#2{\the\pgf@x}%
+  \edef#3{\the\pgf@y}%
+}
+\makeatother
+
+% #1 = coordinate 1
+% #2 = coordinate 2
+\newcommand{\dotsBtSp}[3][15]{
+  \dotsT{#1}{0.5pt}{$(#2)+(0,1.3)$}{$(#3)+(0,1.3)$};
+  \dotsT{#1}{0.5pt}{$(#2)+(0,0.2)$}{$(#3)+(0,0.2)$};
+}
+
+\newcommand{\drawSpikeOutFrom}[1]{
+  \gettikzxy{(#1)}{\px}{\py}
+  \foreach \name in {T2,T3,T4,T4+1} {
+    \gettikzxy{(\name)}{\qx}{\qy}
+
+    \ifdimcomp{\qx}{>=}{\px}{
+        \SpikeOut{$(\name)-(0.3,0)$}{};
+    }{}
+  }
+  \dotsBtSp{$(T4+1)-(0.1,0)$}{$(T)+(-0.5,0)$};
+  \SpikeOut{$(T)+(-0.3,0)$}{};
+}
+
+\NewDocumentCommand{\SpikeOutAt}{O{} O{} O{} m}{%
+  \SpikeOut[#1][#2][#3]{$(#4)-(0.3,0)$};
+}
+

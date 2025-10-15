@@ -1,0 +1,18 @@
+\definecolor{tskeyword}{RGB}{0,0,180}
+\definecolor{tsstring}{RGB}{200,0,0}
+\definecolor{tscomment}{RGB}{0,128,0}
+
+\lstdefinelanguage{TypeScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, switch, var, if, in, while, do, else, case, break, const, let, of, async, await, export, import, class, extends, interface, implements, enum, public, private, protected, static, readonly},
+  keywordstyle=\color{tskeyword}\bfseries,
+  ndkeywords={string, number, boolean, any, void, Promise},
+  ndkeywordstyle=\color{tskeyword}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{tscomment}\ttfamily,
+  stringstyle=\color{tsstring}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}

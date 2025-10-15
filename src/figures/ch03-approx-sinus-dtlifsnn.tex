@@ -1,0 +1,24 @@
+
+\begin{tikzpicture}
+  \begin{axis}[
+    axis lines=middle,
+    xmin=0, xmax=pi,
+    ymin=0, ymax=1.2,
+    xtick={0, pi/2, pi},
+    xticklabels={$0$, $\frac{\pi}{2}$, $\pi$},
+    ytick={0, 1},
+    domain=0:pi,
+    samples=200,
+    thick,
+    legend pos=north west,
+    width=\textwidth,
+    height=6cm,
+    legend style={legend cell align=left},
+    ]
+    \addplot[thick, red, dashdotdotted]{(-cos(deg(floor(x*2+1)/2))+cos(deg(floor(x*2)/2)))*2};
+    \addlegendentry{$ε=0.25$} % ε≈0.5*(1/2) (since sin(x)≈x for x≪1)
+    \addplot[thick, purple, dashed]{(-cos(deg(floor(x*5+1)/5))+cos(deg(floor(x*5)/5)))*5};
+    \addlegendentry{$ε=0.1$} % ε≈0.5*(1/5) (since sin(x)≈x for x≪1)
+    \addplot[blue]{sin(deg(x))};
+  \end{axis}
+\end{tikzpicture}
