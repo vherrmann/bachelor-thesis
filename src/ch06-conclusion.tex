@@ -1,4 +1,20 @@
 \section{Conclusion}
 
-\Rdtlifsnn are a natural extension of \dtlifsnn that allows more compact and efficient approximation of functions. On the other hand it still remains to be seen if they are indeed a better suited model for fitting data and in particular reasoning. Especially our analysis in~\cref{ch:partitions} and~\cref{ch:experiments} might show that they are actually not so much stronger than \dtlifsnn.
-%TODO
+To summarize, we have examined the properties of~\Rdtlifsnn, in particular in comparison to~\dtlifsnn:
+In~\cref{ch:defs} we motivated our definitions, introduced lots of helpful notation and basic, technical lemmas. In~\cref{ch:struct} we showed that~\rdtlifsnn allow more compact and efficient approximation of some class of well-behaved functions than~\dtlifsnn. 
+
+Later in~\cref{ch:partitions} we showed that the graph of~\Rdtlifsnn consists of a finite number of constant regions, which are half-open cuboids for trivial \(W^{[1]}\). We also showed that~\rdtlifsnn with trivial \(W^{[1]}\) can only really fit data inside of a square.
+While we were not able to proof it in~\cref{ch:partitions}, we were are hopeful to proof in the future that the number of different values a~\Rdtlifsnn with trivial \(W^{[1]}\), given \(T\) and \(n_1\) can obtain is bound by \((\frac{T^2+T+2}{2})^{n_1}\).
+
+For that purpose we continued our analysis in~\cref{ch:experiments}, where we explained a few programs which we wrote to generate empirical data as well as visualizations to obtain a better intuitive understanding of the problem at hand. While the data supports the hypothesis of the upper bound being correct, the data might be too specific, since we were not able to simulate many neurons or many time-steps.
+
+To conclude: We were only able to scratch the surface of the theory of~\rdtlifsnn. Much more research is needed to answer the question if~\rdtlifsnn are indeed better suited for machine learning and in particular reasoning than current approaches. The next step would be to analyze more of the practicality of this model, since we focused mostly on theoretical aspects; for example how well~\rdtlifsnn are able to fit basic data and how the output landscape changes during training.
+
+%TODO: how do they act under training?
+
+%TODO: problem might be not enough neurons/not enough time-steps/floating point numbers too imprecise/unclear if the question is even relevant
+
+%TODO: border of actually fitted regions → good to know
+
+%TODO: ergebnisse zusammenfassen/offene fragen/kurze einschätzung der ergebnisse
+% (nicht zu technisch)

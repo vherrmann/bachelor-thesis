@@ -6,7 +6,7 @@ When working with neural networks a fundamental question is how well they are ab
 \begin{theorem}\label{thm:approx-snn-constant}
   Let \(f\) be a continuous function on a compact set \(Ω⊂ℝ^{n_0}\). For all \(ε>0\), there exists a d.t. LIF-SNN \(Φ\) with direct encoding, membrane potential output, \(L=2\) and \(T=1\) such that
   \[ \norm{(R(Φ)-f)|_{Ω}}_{∞}≤ε\]
-  Moreover, if \(f\) is \(Γ\)-Lipschitz, then \(Φ\) can be chosen with width parameter \(n=(n_1,n_2)\) given by
+  Moreover, if \(f\) is \(Γ\)-Lipschitz, then \(Φ\) can be chosen with width parameters \((n_1,n_2)\) given by
   \begin{align*}
    n_1 &=\left(\max\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{ε}Γ \right\rceil,1\right\}+1\right)n_0, \\
    n_2 &=\max\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{ε}Γ \right\rceil^{n_0},1\right\}.
@@ -38,7 +38,7 @@ We will now show a more efficient construction for \rdtlifsnn using the fact tha
 
 To state our theorem we first need to define the notions of “modulus of uniform continuity” and “generalized inverse of a modulus of uniform continuity” and proof some simple properties:
 
-%TODO: quote def?
+%MAYBE: quote def?
 \begin{definition}
   Let \(M,N\) be metric spaces. A modulus of uniform continuity of a uniformly continuous function \(f:M→N\) is a function \(ω:[0,∞]→[0,∞]\), such that it vanishes at \(0\), i.e. \(\lim_{x→0}ω(x)=0\), and
   \[ ∀_{x,y∈M}d_N(f(x),f(y))≤ω(d_M(x,y)). \]
@@ -62,7 +62,7 @@ To state our theorem we first need to define the notions of “modulus of unifor
   \item Let \(x,y∈M\) and \(s∈[0,∞]\) be given such that \(d_M(x,y)≤ω^{†}(s)\). By definition of \(ω^{†}\), this means \(ω(d_M(x,y))≤s\). Since \(ω\) is a modulus of uniform continuity of \(f\), we have \(d_N(f(x),f(y))≤ω(d_M(x,y))\) and therefore overall \(d_N(f(x),f(y))≤s\).
   \item Since \(ω\) is a modulus of uniform continuity, it is by definition continuous at \(0\). Let us choose an arbitrary sequence \((t_n)_{n∈ℕ}\) with \(t_n→0\). Then \(ω(t_n)→0\) and therefore \(ω^{†}(0)≤\inf_{n∈ℕ}t_n=0\).
 
-  Is on the other hand \(ω^{†}(s)=0\), then there is a sequence \((t_n)_{n∈ℕ}\) with \(t_n→0\) and therefore \(ω(t_n)→0\). By definition of \(ω^{†}(s)\), we have \(ω(t_n)>s\), so we get \(s=0\).
+  Is on the other hand \(ω^{†}(s)=0\), then there is a sequence \((t_n)_{n∈ℕ}\) with \(t_n→0\), such that \(ω(t_n)>s\) by definition of \(ω^{†}\). But since \(ω(t_n)→0\) by definition of \(ω\), we get \(s=0\).
   \end{enumerate}
 \end{proof}
 
@@ -76,32 +76,53 @@ To state our theorem we first need to define the notions of “modulus of unifor
 %
 % DONE: use generalized inverse of the modulus of continuity
 
+\begin{figure}[!ht]
+  \centering
+  \input{src/figures/ch03-approx-sets}
+  \caption{A possible configuration of the sets in~\cref{thm:approx-snn}}
+  \label{fig:ch03-approx-sets}
+\end{figure}
+
 Let us now state our theorem:
 
 % CANCELLED: demand differentiability only for Ω°
 \begin{theorem}\label{thm:approx-snn}
-  Let \(f∈𝒞^0(C,ℝ^m)\) be defined on a half-open cube \(C≠∅\), such that \(f\mid_{C°}∈𝒞^1(C°,ℝ^m)\) is continuously differentiable with bounded differential, i.e. \(\norm{d(f|_{C°})}_{∞,2}<∞\). For all \(ε,μ,ν>0\), \(ε=μ+ν\), there exists a \rdtlifsnn \(Φ\) with \(L=2\) and
+  Let a \(f∈𝒞^0(U,ℝ^n)\) be a continuous function, such that \(f\mid_{U°}∈𝒞^1(U°,ℝ^m)\) is continuously differentiable with bounded differential, i.e. \(\norm{d(f|_{U°})}_{∞,2}<∞\). Let further \(∅≠Ω⊂U\) be an arbitrary non-empty subset and \(C⊂ℝ^n\) an half-open cube such that \(Ω⊂C\) and \((Ω+B_{ρ,2}(0))∩C°⊂U°\) for a \(ρ>0\). %DONE: graphic of Ω, U, C, N_ρ(Ω)
+
+  For all \(ε,μ,ν>0\), \(ε=μ+ν\), there exists a \rdtlifsnn \(Φ\) with \(L=2\) and
   \begin{align*}
    T   &= (K(μ)+1)T_r(ν)+2 \\
    n_1 &= n+1 \\
    n_2 &= K(μ)^n(n+1)+3
   \end{align*}
   such that
-  \[ \norm{R(Φ)|_C-f}_{∞,2}≤ε.\]
+  \[ \norm{R(Φ)|_Ω-f}_{∞,2}≤ε.\]
   Where we use 
-  \begin{align*}
-   T_r&≔T_r(ν)≔\max\left(2,\left\lceil \sqrt{n}\frac{\operatorname{diam}_{∞}(C)}{K}\frac{\norm{d(f|_{C°})}_{∞,2}}{ν} \right\rceil\right), \\
-   K&≔K(μ)≔ \min_{\substack{ξ,θ>0\\ξθ=μ}}\left\{\left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(ω^{†}(ξ) ,θ)} \right\rceil\right\}.
-  \end{align*} %TODO: if ω^{†}=∞, then K=0?
-  Here \(ω^{†}\) is the generalized inverse of a modulus of uniform continuity with regard to \(\norm{·}_2\) of the total derivative \(d(f|_{C°})\). \(d(f|_{C°})\) is uniformly continuous since it is bounded.
-  Since \(ξ≠0\), we have \(ω^{†}(ξ)>0\) by~\cref{lem:inverse-cont-mod}. Further there are \(ξ,θ\) such that the minimum in the definition of \(K^n\) is obtained, since we the minimum is taken over the set of natural numbers, so \(K\) is well-defined. Moreover \(T_r\) is well-defined, since \(C≠0\) and therefore \(\operatorname{diam}_{∞}(C)≠0\) and \(K≠0\).
+  \begin{align*} %DONE: add ρ to later statements, replace d(f|_{C°}) by d(f|_{U°})
+   T_r&≔T_r(ν)≔\max\left(2,\left\lceil \sqrt{n}\frac{\operatorname{diam}_{∞}(C)}{K}\frac{\norm{d(f|_{U°})}_{∞,2}}{ν} \right\rceil\right), \\ %DONE: fix T_{r} later
+   K&≔K(μ)≔ \min_{\substack{ξ,θ>0\\ξθ=μ}}\left\{\left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(ω^{†}(ξ) ,θ,\frac{ρ}{2})} \right\rceil\right\}.
+  \end{align*} %DONE: if ω^{†}=∞, then still K≠0?
+  Here \(ω^{†}\) is the generalized inverse of a modulus of uniform continuity with regard to \(\norm{·}_2\) of the total derivative \(d(f|_{U°})\). \(d(f|_{U°})\) is uniformly continuous since it is bounded.
+  Since \(ξ≠0\), we have \(ω^{†}(ξ)>0\) by~\cref{lem:inverse-cont-mod}. Further there are \(ξ,θ\) such that the minimum in the definition of \(K^n\) is obtained, since we the minimum is taken over the set of natural numbers, so \(K\) is well-defined. Further \(\min(ω^{†}(ξ),θ)<∞\) as well as \(\operatorname{diam}_{∞}(C)≠0\), since \(Ω⊂C\) and \(Ω≠∅\). We therefore have \(K≠0\), such that \(T_r\) is well-defined.
 \end{theorem}
 
-\begin{remark}
-  In our construction \(μ\) and \(ν\) determine whether to optimize the number of neurons or the number of time-steps. As we see later, \(K^n\) corresponds to the number of subcubes we will split \(C\) into such that \(f\) is almost linear on each of them. From the definition it is clear that \(K\) and therefore the number of neurons only depend on \(f\) through \(ω^{†}(ξ)\), which is essentially a measure of how strongly the slope of \(f\) is changing and therefore into how many subcubes we need to split \(C\) to get sufficiently almost affine linear regions of \(f\).
-
-  We will further see that \(T_r\) corresponds to the number of constant intervals with which we approximate \(f\) on the almost affine linear regions. It is therefore to be expected that \(T_r\) depends on the width \(\frac{\operatorname{diam}_{∞}(C)}{K}\) of the subcubes and the maximal slope \(\norm{d(f|_{C°})}_{∞,2}\).
+\begin{remark}\label{rem:ch03-use-cube}
+  Let \(f:C→ℝ^n\) be defined on a half-open cube \(C\) and \(Ω=C\). We can then choose an arbitrarily big \(ρ\), so we can drop \(\frac{ρ}{2}\) from the definition of \(K\),
+  \[ K= \min_{\substack{ξ,θ>0\\ξθ=μ}}\left\{\left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(ω^{†}(ξ) ,θ)} \right\rceil\right\}. \]
 \end{remark}
+
+\begin{remark}\label{rem:ch03-differential-lipschitz}
+  If the differential \(d(f|_{U°})\) is \(L\)-Lipschitz in addition to the conditions in~\cref{thm:approx-snn}, we can simplify the definition of \(K\). Let us choose the canonical modulus of uniform continuity \(ω(x)≔Lx\), such that \(ω^{†}(x)=\frac{1}{L}x\) (with \(\frac{1}{L}=∞\) for \(L=0\)).
+  Now for \(L>0\) we have
+  \[ \max_{\substack{ξ,θ>0\\ξθ=μ}}\min(ω^{†}(ξ) ,θ)=\max_{\substack{ξ,θ>0\\ξθ=μ}}\min(\frac{1}{L}ξ ,\frac{μ}{ξ})=\sqrt{\frac{μ}{L}} \]
+  since \(\frac{1}{L}ξ\) is montonically increasing in \(ξ\), \(\frac{μ}{ξ}\) monotonically decreasing in \(ξ\) and \(\frac{1}{L}ξ=\frac{μ}{ξ}\) equivalent to \(ξ=\sqrt{μL}\) for \(ξ>0\).
+  So we have
+  \[ K= \left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(\sqrt{\frac{μ}{L}},\frac{ρ}{2})} \right\rceil. \]
+  For \(L=0\) we have \(\min(ω^{†}(ξ) ,θ)=θ\), so \(K=1\). We therefore get
+  \[ K= 1∨\left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(\sqrt{\frac{μ}{L}},\frac{ρ}{2})} \right\rceil \]
+  for \(L≥0\) arbitrary.
+\end{remark}
+
 \begin{figure}[!ht]
   \centering
   \input{src/figures/ch03-spiral-staircase.tex}
@@ -110,43 +131,58 @@ Let us now state our theorem:
 \end{figure}
 
 \begin{remark}
+  The conditions of the theorem regarding \(U,Ω,C\) might seem unnecessarily complex at first, but they are indeed necessary to approximate some functions efficiently.
+  For our construction of the \rdtlifsnn we need piece-wise affine-linear approximations of \(f\), defined on subcubes of a cube \(C⊂ℝ^n\). Suppose, the theorem just required \(f\) to be defined on that cube \(C\) instead and further \(Ω=C\).
+
+  Now picture a function \(f\) like the one shown in~\cref{fig:ch03-spiral-staircase}. If we want to approximate the whole complete input space \(Ω\) of \(f\), we need to put a half-open square \(C\) around the arc due to our construction. To further use the theorem with \(U=Ω=C\) we would need to have differentiability on the whole of \(C°\), but \(f\) is only defined on an arc inside of \(C\).
+  This problem can be handled by replacing \(f\) with an extension of \(f\), defined on all of \(ℝ^n\), but now we have the problem that we might get a very steep graph around \((-0.5,0.0)\), such that \(\norm{d(f|_{C°})}_{∞,2}\) is unnecessarily large and changes unnecessarily quick. So \(T_r\) and \(K\) would get excessively large.
+
+  On the other hand,~\cref{thm:approx-snn} only uses the values of \(df\) on a thin region around \(Ω\) to determine how large \(K\) and \(T_r\) need to be.
+\end{remark}
+
+\begin{comment}
+\begin{remark}
   \cref{thm:approx-snn} cannot be generalized to arbitrary input spaces like compact sets: Consider a spiral staircase function like shown in~\cref{fig:ch03-spiral-staircase} defined on a compact set \(Ω≔\{(r\cos(φ),r\sin(φ))\mid 0.5≤r≤1,\ \abs{φ-π}≥0.2\}\). Such a function is clearly continuous and continuously differentiable on its interior \(Ω°\), such that in particular the differential is bounded, \(\norm{d(f|_{Ω°})}_{∞,2}<∞\).
 
-  For our construction of the SNN we now need an encompassing half-open rectangle of \(Ω\), let e.g. \(C=[0,2)^2\). Now in~\cref{lem:approx-by-lin} we will partition \(C\) into sub-cubes, such that \(f\) is almost linear on those  w%TODO
+  For our construction of the SNN we now need an encompassing half-open rectangle of \(Ω\), let e.g. \(C=[0,2)^2\). Now in~\cref{lem:approx-by-lin} we will partition \(C\) into sub-cubes, such that \(f\) is almost linear on those  w%CANCELLED
   
   We need the half-open cube \(C\) with \(Ω⊂C⊂U\) to correctly choose \(T_r\) and \(K\): Suppose we regard the function \(f:((0,1) ∪ (2,3))→ℝ\), \(x↦χ_{[0,1]}(x)\). This function is certainly continuously differentiable, in particular, all derivatives are zero. In our construction of the \rdtlifsnn we use a cube in the input space as our canvas,
-  %TODO
+  %CANCELLED
   Suppose, \(K\) would depend on the modulus of uniform continuity of \(df\) on \(U\) and \(T_r\) on \(\norm{df|_U}_{∞,2}\), without the a half-open cube \(C\) with \(Ω⊂C⊂U\)
 \end{remark}
+\end{comment}
+
+%DONE: remark about usage with \(Ω=U=C\).
 
 \begin{remark}
-If \(f∈𝒞^1(U,ℝ^m)\) is given with \(∅≠U⊂ℝ^n\) and a compact subset \(Ω⊂ℝ^n\), we can extend \(f|_{Ω}\) to a function \(df∈𝒞^1(ℝ^n,ℝ^m)\): There is a partition of one \(φ_1,φ_2∈𝒞^{∞}(ℝ^n)\) subordinate to \(U\) and \(ℝ^n∖Ω\). We get \(φ_1|_{Ω}=1\) and therefore \((φ_1f)|_{Ω}=f|_{Ω}\). \(f'≔φ_1f\) is further clearly \(𝒞^1(U,ℝ^m)\).
-% \item We would like to only demand differentiability on \(Ω°\), … %TODO
+  In our construction \(μ\) and \(ν\) determine whether to optimize the number of neurons or the number of time-steps. As we see later, \(K^n\) corresponds to the number of subcubes we will split \(C\) into such that \(f\) is almost linear on each of them. From the definition it is clear that \(K\) and therefore the number of neurons only depend on \(f\) through \(ω^{†}(ξ)\), which is essentially a measure of how strongly the slope of \(f\) is changing and therefore into how many subcubes we need to split \(C\) to get sufficiently almost affine linear regions of \(f\).
 
-%TODO ↓
-  % We would like to only demand differentiability on \(Ω°\), but the theorem would not be true anymore. Imagine the function \(f(x)=χ_{[0,1]}\) with \(Ω=[0,1]∪[2,3]\). Clearly, \(f|_{[0,1]∪[2,3]}\) is continuous and \(f|_{(0,1)∪(2,3)}∈𝒞^1(ℝ)\). But on the other hand a half-open cube around \(Ω\) at least needs to include \((1,2)\) and would need to have
+  We will further see that \(T_r\) corresponds to the number of constant intervals with which we approximate \(f\) on the almost affine linear regions. It is therefore to be expected that \(T_r\) depends on the width \(\frac{\operatorname{diam}_{∞}(C)}{K}\) of the subcubes and the maximal slope \(\norm{d(f|_{U°})}_{∞,2}\).
 \end{remark}
 
-
-\begin{remark}%TODO
-If \(f∈𝒞^1(U,ℝ^m)\) is given with \(∅≠U⊂ℝ^n\) and a compact \(Ω⊂ℝ^n\), but with no half-open cube \(C\) such that \(Ω⊂\overline{C}⊂U\), we can extend \(f|_{Ω}\) to a function \(df∈𝒞^1(ℝ^n,ℝ^m)\): There is a partition of one \(φ_1,φ_2∈𝒞^{∞}(ℝ^n)\) subordinate to \(U\) and \(ℝ^n∖Ω\). We get \(φ_1|_{Ω}=1\) and therefore \((φ_1f)|_{Ω}=f|_{Ω}\). \(f'≔φ_1f\) is further clearly \(𝒞^1(U,ℝ^m)\).
-% \item We would like to only demand differentiability on \(Ω°\), … %TODO
-
-%TODO ↓
-  % We would like to only demand differentiability on \(Ω°\), but the theorem would not be true anymore. Imagine the function \(f(x)=χ_{[0,1]}\) with \(Ω=[0,1]∪[2,3]\). Clearly, \(f|_{[0,1]∪[2,3]}\) is continuous and \(f|_{(0,1)∪(2,3)}∈𝒞^1(ℝ)\). But on the other hand a half-open cube around \(Ω\) at least needs to include \((1,2)\) and would need to have
-\end{remark}
-
-
-%TODO: what about \dtlifsnn?
-
-%TODO: remove?, minimal
 \begin{comment}
-%TODO
+\begin{remark}
+If \(f∈𝒞^1(U,ℝ^m)\) is given with \(∅≠U⊂ℝ^n\) and a compact subset \(Ω⊂ℝ^n\), we can extend \(f|_{Ω}\) to a function \(df∈𝒞^1(ℝ^n,ℝ^m)\): There is a partition of one \(φ_1,φ_2∈𝒞^{∞}(ℝ^n)\) subordinate to \(U\) and \(ℝ^n∖Ω\). We get \(φ_1|_{Ω}=1\) and therefore \((φ_1f)|_{Ω}=f|_{Ω}\). \(f'≔φ_1f\) is further clearly \(𝒞^1(U,ℝ^m)\).
+\end{remark}
+\end{comment}
+
+\begin{comment}
+\begin{remark}
+If \(f∈𝒞^1(U,ℝ^m)\) is given with \(∅≠U⊂ℝ^n\) and a compact \(Ω⊂ℝ^n\), but with no half-open cube \(C\) such that \(Ω⊂\overline{C}⊂U\), we can extend \(f|_{Ω}\) to a function \(df∈𝒞^1(ℝ^n,ℝ^m)\): There is a partition of one \(φ_1,φ_2∈𝒞^{∞}(ℝ^n)\) subordinate to \(U\) and \(ℝ^n∖Ω\). We get \(φ_1|_{Ω}=1\) and therefore \((φ_1f)|_{Ω}=f|_{Ω}\). \(f'≔φ_1f\) is further clearly \(𝒞^1(U,ℝ^m)\).
+% \item We would like to only demand differentiability on \(Ω°\), … %CANCELLED
+
+%CANCELLED ↓
+  % We would like to only demand differentiability on \(Ω°\), but the theorem would not be true anymore. Imagine the function \(f(x)=χ_{[0,1]}\) with \(Ω=[0,1]∪[2,3]\). Clearly, \(f|_{[0,1]∪[2,3]}\) is continuous and \(f|_{(0,1)∪(2,3)}∈𝒞^1(ℝ)\). But on the other hand a half-open cube around \(Ω\) at least needs to include \((1,2)\) and would need to have
+\end{remark}
+\end{comment}
+
+
+%MAYBE: include?
+\begin{comment}
 \begin{lemma}\label{lem:smallest-cube}
   Let \(Ω⊂ℝ^n\) be compact. Then there exists a half-open cube \(C\) with width \(\operatorname{diam}_∞(Ω)\) such that \(Ω⊂\overline{C}\).
 \end{lemma}
 
-%TODO: we later use ⟦y,z⦆ instead of ⟦a,b⦆; unify notation
 \begin{proof}[\proofofref{lem:smallest-cube}]
   We can first define \(x≔(\inf_{x∈Ω} x_i)_{i∈[n]}∈ℝ^n\) since \(Ω\) is compact. We further define \(y≔x+\operatorname{diam}_∞(Ω)·𝟙_n\). We now have \(C≔⟦x,y⦆\). Suppose now a point \(z∈Ω∖\overline{C}\) exists. By definition of \(x\), we have \(x≤z\). By definition of \(C\) we further get \(z\nleq y\), and therefore \(y_i<z_i\) for an \(i∈[n]\) by definition of \(C\). But this means \(\norm{x-z}_∞>\operatorname{diam}_∞(Ω)\).
 \end{proof}
@@ -159,16 +195,15 @@ If \(f∈𝒞^1(U,ℝ^m)\) is given with \(∅≠U⊂ℝ^n\) and a compact \(Ω�
 \end{lemma}
 
 \begin{proof}
-  Let \(ε>0\) with modulus \(δ(ε)\), as well as \(x∈M\) be given. Since \(f\) is uniformly continuous with modulus \(δ(ε)\), we have \(f(B_{δ}(x))⊂B_{ε}(f(x))\). Since \(f\) is in particular continuous, we get
-  \[ f(\overline{B}_{δ}(x))=f(\overline{B_{δ}(x)})⊂\overline{f(B_{δ}(x))}⊂\overline{B}_{ε}(f(x)) \]
-  We need to use the fact that \(M\) is a normed vector space in the first equality to get \(\overline{B}_{δ}(x)=\overline{B_{δ}(x)}\).
+  Let \(ε>0\) with modulus \(δ(ε)\), as well as \(x∈M\) be given. Since \(f\) is uniformly continuous with modulus \(δ(ε)\), we have \(f(B_{δ,2}(x))⊂B_{ε,2}(f(x))\). Since \(f\) is in particular continuous, we get
+  \[ f(\overline{B}_{δ}(x))=f(\overline{B_{δ,2}(x)})⊂\overline{f(B_{δ,2}(x))}⊂\overline{B}_{ε}(f(x)) \]
+  We need to use the fact that \(M\) is a normed vector space in the first equality to get \(\overline{B}_{δ}(x)=\overline{B_{δ,2}(x)}\).
 \end{proof}
 \end{comment}
 
 % DONE: differentiable, but defined on compact subset of euclidean space???
-% TODO: quote formulation?
 % DONE: instead of fixing \(ε^{t}\), get supremum of
-% TODO: why K≠0?
+% DONE: why K≠0?
 % CANCELLED: only demand differentiability on C°
 
 We first proof that continuous differentiable functions with uniform continuous differential can be efficiently approximated by piece-wise linear function. Compare e.g.~\cref{fig:sin-approx-sinus-linear} to~\cref{fig:sin-approx-by-dtlifsnn}
@@ -178,43 +213,49 @@ We first proof that continuous differentiable functions with uniform continuous 
   \begin{minipage}{0.55\textwidth}
     \centering
     \input{src/figures/ch03-approx-sinus-linear.tex}
-    \caption{Piece-wise affine linear functions approximating the sinus}
   \end{minipage}
+  \caption{Piece-wise affine linear functions approximating the sinus}
   \label{fig:sin-approx-sinus-linear}
 \end{figure}
 
 
 \begin{lemma}\label{lem:approx-by-lin}
-  Let \(f∈𝒞^0(C,ℝ^m)\) be a continuous function defined on half-open cube \(C\), such that \(f\mid_{C°}∈𝒞^1(C°,ℝ^m)\) is continuously differentiable and \(d(f|_{C°})\) is uniformly continuous. Let further \(K(μ)\) be defined as in~\cref{thm:approx-snn}.
+  Let a \(f∈𝒞^0(U,ℝ^n)\) be a continuous function, such that \(f\mid_{U°}∈𝒞^1(U°,ℝ^m)\) is continuously differentiable with a uniform continuous differential \(d(f|_{U°})\). Let further \(∅≠Ω⊂U\) be an arbitrary non-empty subset and \(C⊂ℝ^n\) an half-open cube such that \(Ω⊂C\) and \((Ω+B_{ρ,2}(0))∩C°⊂U°\) for a \(ρ>0\).
+  Let further \(K\) be defined as in~\cref{thm:approx-snn}.
 
-  For every \(μ>0\) we can compose \(C\) into \(K^n≔K(μ)^n\) half-open subcubes \((C^{(j)})_{j∈[K^n]}\) such that affine linear functions \(g^{(j)}:C^{(j)}→ℝ^m\) exist with  \(\norm{d(g^{(j)})}_{∞,2}≤\norm{df}_{∞,2}\) and \(\norm{f-g}_{∞,2}<μ\), where \(g≔\sum_{i=1}^mg^{(j)}χ_{C^{(j)}}\).
+  For every \(μ>0\) we can compose \(C\) into \(K^n\) half-open subcubes \((C^{(j)})_{j∈[K^n]}\) such that affine linear functions \(g^{(j)}:C^{(j)}→ℝ^m\) exist with  \(\norm{d(g^{(j)})}_{∞,2}≤\norm{d(f|_{U°})}_{∞,2}\) and \(\norm{(f-g)|_Ω}_{∞,2}<μ\), where \(g≔\sum_{i=1}^mg^{(j)}χ_{C^{(j)}}\).
 \end{lemma}
 
-% TODO: remark about why we are using 2-norm
+% MAYBE: remark about why we are using 2-norm
 
 % DONE: fix issue with C^(j) s not completely fitting in open \sqrt{2}δ(μ) balls due to closed part of C^(j)
 % CANCELLED: F might not be defined at c^(j), since \(Ω≠\overline{C}\)
 
 \begin{proof}[\proofofref{lem:approx-by-lin}]
-  Let \(μ>0\) be given. Let \(ω\) be a modulus of uniform continuity of \(df\mid_{C°}\).
+  Let \(μ>0\) be given. Let \(ω\) be a modulus of uniform continuity of \(df\mid_{U°}\).
   We will now partition \(C\) in \(K^n\) half-open subcubes with \(K\) defined as in~\cref{thm:approx-snn}.
-  Let \(ξ,Θ\) be given, such that the minium is attained. Then the subcubes have width \(w≔\frac{\operatorname{diam}_∞(C)}{K}≤\frac{2}{\sqrt{n}}\min(ω^{†}(ξ),θ)\).
+  Let \(ξ,Θ\) be given, such that the minium in the definition of \(K\) is attained. Then the subcubes have width
+  \[ w≔\frac{\operatorname{diam}_∞(C)}{K}≤\frac{2}{\sqrt{n}}\min(ω^{†}(ξ),θ,\frac{ρ}{2}). \]
 
-  Let us further define \(g^{(j)}:C^{(j)}→ℝ^m\) by \(g^{(j)}(x)≔f(c^{(j)})+df_{c^{(j)}}(x-c^{(j)})\) where \(c^{(j)}\) is the center of \(C^{(j)}\), so in particular for all  \(x∈C^{(j)}\)
+  Let now \(c^{(j)}\) be the center of \(C^{(j)}\), such that in particular for all \(x∈C^{(j)}\)
   \begin{equation}\label{eq:4}
-  \norm{x-c^{(j)}}_2=\sqrt{\sum_{i=1}^n\abs{(x-c^{(j)})_i}^2}≤\frac{w}{2}\sqrt{n}≤\min(ω^{†}(ξ),θ).
+  \norm{x-c^{(j)}}_2=\sqrt{\sum_{i=1}^n\abs{(x-c^{(j)})_i}^2}≤\frac{w}{2}\sqrt{n}≤\min(ω^{†}(ξ),θ,\frac{ρ}{2}).
   \end{equation}
-  Now by definition of \(g^{(j)}\) we already have \(\norm{d(g^{(j)})}_{∞,2}=\norm{df_{c^{(j)}}}≤\norm{df}_{∞,2}\).
 
-  It suffices now to show \(\norm{f|_{C^{(j)}}-g^{(j)}}_∞<μ\). Let \(x∈C^{(j)}\) and \(h(t)≔f(t(x-c^{(j)})+c^{(j)})\). We then have
-  \[h'(t)=(df_{(x-c^{(j)})t+c^{(j)}}∘d(t↦t(x-c^{(j)})+c^{(j)})_t)(1)=df_{(x-c^{(j)})t+c^{(j)}}(x-c^{(j)}).\]
-  We obtain by the fundamental theorem of calculus:
+  Let us further define \(g^{(j)}:C^{(j)}→ℝ^m\) by
+  \[ g^{(j)}≔\begin{cases} x↦f(c^{(j)})+df_{c^{(j)}}(x-c^{(j)}), & C^{(j)}∩Ω≠∅ \\ x↦0, & C^{(j)}∩Ω=∅ \\ \end{cases}. \]
+  The first case is well-defined, since \(C^{(j)}∩Ω≠∅\) implies that there exists a \(x∈ℝ^n\) with \(x∈Ω\) and \(∀_{y∈C^{(j)}}\norm{x-y}_2≤ρ\) by~\eqref{eq:4}, so \(C^{(j)}⊂(Ω+\overline{B}_{ρ,2}(0))∩C\) and therefore \((C^{(j)})°⊂(Ω+\overline{B}_{ρ,2}(0))∩C°⊂U°\).
+  Now by definition of \(g^{(j)}\) we already have \(\norm{d(g^{(j)})}_{∞,2}=\norm{df_{c^{(j)}}}≤\norm{d(f|_{U°})}_{∞,2}\) for \(C^{(j)}∩Ω≠∅\) and otherwise \(0=\norm{d(g^{(j)})}_{∞,2}≤\norm{d(f|_{U°})}_{∞,2}\).
+
+  It only remains to show \(\norm{(f-g^{(j)})|_{Ω∩C^{(j)}}}_∞<μ\). This is clearly trivial for \(C^{(j)}∩Ω=∅\), so suppose \(C^{(j)}∩Ω≠∅\). Let \(x∈C^{(j)}\) and \(h(t)≔f(t(x-c^{(j)})+c^{(j)})\). We then have
+  \[ h'(t)=(df_{(x-c^{(j)})t+c^{(j)}}∘d(t↦t(x-c^{(j)})+c^{(j)})_t)(1)=df_{(x-c^{(j)})t+c^{(j)}}(x-c^{(j)}). \]
+  Since \((C^{(j)})°⊂U°\), we obtain by the fundamental theorem of calculus
   \begin{align*}
     \norm{f(x)-g^{(j)}(x)}_2 &= \norm{f(x)-f(c^{(j)})-df_{c^{(j)}}(x-c^{(j)})}_2 \\
           &= \norm{h(1)-h(0)-df_{c^{(j)}}(x-c^{(j)})}_2 \\
-          &= \norm{\int_0^1df_{(x-c^{(j)})t+c^{(j)}}(x-c^{(j)})dt-df_{c^{(j)}}(x-c^{(j)})}_2
+          &= \norm{\int_0^1df_{(x-c^{(j)})t+c^{(j)}}(x-c^{(j)})dt-df_{c^{(j)}}(x-c^{(j)})}_2.
   \end{align*}
-  Due to the generalized Minkowski-Inequality we can move the norm inside the integral:
+  Now, due to the generalized Minkowski-Inequality we can move the norm inside the integral:
   %MAYBE: ref for gen. Minkowski-Ineq?
   \begin{align*}
     &≤ \int_0^1\norm{df_{(x-c^{(j)})t+c^{(j)}}(x-c^{(j)})-df_{c^{(j)}}(x-c^{(j)})}_2dt \\
@@ -253,22 +294,27 @@ We first proof that continuous differentiable functions with uniform continuous 
     \label{fig:ch03-group-network}
   \end{figure}
 
-  The intuitive idea for the construction of the network is the following: We have five phases. We define
+  For our construction and proof we use the following five phases. We define
   \begin{gather*}
     T_1≔\rangeI{1}{KT_r},\qquad T_2≔\{KT_r\}, \qquad T_3≔\{KT_r+1\},\\
     T_4≔\{KT_r+2\},\qquad T_5≔\rangeI{KT_r+3}{T}.
   \end{gather*}
-  For ease of notation, will also use \(T_2,T_3,T_4\) as if they were numbers.
+  Note that \(T_2\) overlaps with \(T_1\). For ease of notation, will also use \(T_2,T_3,T_4\) as if they were numbers.
 
-  The first layer is only active during the first phase, \(T_1\). It is composed of \(n+1\) neurons, where the first \(n\) neuron convert the input vector regarding its position in \(C\) into spike trains. The last neuron, the “alarm clock”, shuts down the first layer after \(T_1\) ends.
+  During the following proof it will be helpful to look at~\cref{fig:ch03-whole-network} and~\cref{fig:ch03-group-network} to get a visual feeling for the constructed network. For understanding the procedure of the network it will be useful to compare the results with the timelines in~\cref{fig:timeline-first-layer} and~\cref{fig:timeline-second-layer}.
+
+  The higher level idea is that we accumulate the state during \(T_1\), compute the subregion \(C^{(j)}\) of the input during \(T_2,…,T_4\) and flush out the position of the input inside of \(C^{(j)}\) during \(T_5\).
+  %DONE:: replace j by 1 in 3.5
+
+  The constructed first layer is only active during the first phase, \(T_1\). It is composed of \(n+1\) neurons, where the first \(n\) neuron convert the input vector regarding its position in \(C\) into spike trains. The last neuron, the “alarm clock”, shuts down the first layer after \(T_1\) ends.
 
   The second layer only accumulates state without spike during \(T_1∖T_2\). Then during \(T_2∪T_3∪T_4\) it is decided in which region \(C^{(j)}\) the input \(x\) is located. Further during \(T_4∪T_5\) the location in \(C^{(j)}\) is encoded through spikes.
 
-  For each region \(C^{(j)}\) we have \(n+1\)-neurons in the second layer. Each of the first \(n\) neurons encodes a commponent of the linear part of \(g^{(j)}\). They are also used to inform the \(n+1\)-th neuron of the group if the \(x\) has at least as big as the base point of \(C^{(j)}\). The \(n+1\)-th deactivates all other neurons of regions with smaller base point and encodes the constant part of \(g^{(j)}\). The last \(3\) neurons act as “clock neurons” enabling and disabling the other ones.
+  For each region \(C^{(j)}\) we have \(n+1\)-neurons in the second layer. Each of the first \(n\) neurons encodes a component of the linear part of \(g^{(j)}\). They are also used to inform the \(n+1\)-th neuron of the group if the \(x\) has at least as big as the base point of \(C^{(j)}\). The \(n+1\)-th deactivates all other neurons of regions with smaller base point and encodes the constant part of \(g^{(j)}\). The last \(3\) neurons act as “clock neurons” enabling and disabling the other ones.
 
   % In the second layer we have \(m+1\)-neurons for each affine linear region \(C^{(j)}\). Each of the first \(m\) neurons encodes the linear part of a component of the output vector. The last, additional neuron acts as an activator to the specific region by recursively enabling the other neurons of this region and disabling all regions with smaller base point (that would otherwise be enabled).
   
-  %TODO: properly label/name and ref graphics
+  %DONE: properly label/name and ref graphics
   \input{src/figures/ch03-approx-first-layer-timeline}
   \begin{figure}[h!]
     \centering
@@ -294,7 +340,6 @@ We first proof that continuous differentiable functions with uniform continuous 
         \SpikeIn[][$x_i$]{$(O)+(0.3,0)$}
         \SpikeOut[dashed]{$(O)+(0.6,0)$}{}
         \dotsBtSp{$(O)+(0.8,0)$}{$(T2)+(-0.8,0)$}
-        % TODO:
         \SpikeIn[][$x_i$]{$(T2)+(-0.6,0)$}
         \SpikeOut[dashed]{$(T2)+(-0.3,0)$}
 
@@ -405,7 +450,7 @@ We first proof that continuous differentiable functions with uniform continuous 
 
   To obtain the normalized location of a value in \(C\) we will often us
   \[ o_i(z)=\frac{z_i-x_i^C}{y_i^C-x_i^C} \]
-  with \(i∈[n_1]\) in the following. 
+  with \(i∈[n]\) in the following. 
 
   \begin{enumerate}
   \item \textbf{First layer}:
@@ -429,8 +474,8 @@ We first proof that continuous differentiable functions with uniform continuous 
   %DONE: a_2 is used wrongly
   %DONE: add timeline
   \item \textbf{Second layer}:
-  Let us now construct the second layer in the following way: For each of the \(K^n\) subcubes in \(C\) we define \(n+1\) neurons like so: Let \(C^{(j)}=⟦x^{C^{(j)}},y^{C^{(j)}}⦆\) be one such subcube with position \(q^{(j)}∈([K-1]_0)^{n_1}\) in \(C\), i.e.
-  \[∀_{i∈[n_1]}q^{(j)}_i=Ko_i(x^{C^{(j)}}).\]
+  Let us now construct the second layer in the following way: For each of the \(K^n\) subcubes in \(C\) we define \(n+1\) neurons like so: Let \(C^{(j)}=⟦x^{C^{(j)}},y^{C^{(j)}}⦆\) be one such subcube with position \(q^{(j)}∈([K-1]_0)^n\) in \(C\), i.e.
+  \[∀_{i∈[n]}q^{(j)}_i=Ko_i(x^{C^{(j)}}).\]
   We will write \(ι_j(i)≔j(n+1)+i\) to index the first \(n\) neurons in the layer and \(ω_j≔(j+1)(n+1)\) to index the last neuron of each group.
 
   The \textbf{\(i\)-th neuron} of the first \(n\) neurons (of the \(j\)-th group), with index \(ι_j(i)\) in the second layer, has the parameters
@@ -441,9 +486,9 @@ We first proof that continuous differentiable functions with uniform continuous 
   \end{gathered}\tag{\(ι_j(i)\)}
   \end{equation}
   where “the switch” is
-  \[ r(q)≔e_{ω_{j(q)}}-\sum_{\substack{q'∈([K-1]_0)^{n_1} \\ q<q'}}e_{ω_{j(q')}}. \]
+  \[ r(q)≔e_{ω_{j(q)}}-\sum_{\substack{q'∈([K-1]_0)^n \\ q<q'}}e_{ω_{j(q')}}. \]
   with the index \(j(q)\) of the subcube at position \(q\). We further define the applied variant
-  \[ r_s(q;t)≔⟨r(q),s^{[2]}(t)⟩=s^{[2]}_{ω_{j(q)}}(t)-\sum_{\substack{q'∈([K-1]_0)^{n_1} \\ q<q'}}s^{[2]}_{ω_{j(q')}}(t). \]
+  \[ r_s(q;t)≔⟨r(q),s^{[2]}(t)⟩=s^{[2]}_{ω_{j(q)}}(t)-\sum_{\substack{q'∈([K-1]_0)^n \\ q<q'}}s^{[2]}_{ω_{j(q')}}(t). \]
   The \textbf{final neuron} of the group, with index \(ω_j\) in its layer, has the parameters
   \begin{equation}
   \begin{gathered}
@@ -451,7 +496,7 @@ We first proof that continuous differentiable functions with uniform continuous 
   \end{gathered}\tag{\(ω_j\)}
   \end{equation}
   We also define the two \textbf{“clock neurons”}, with index \(c_1≔(n+1)K^n+1\) and \(c_2≔(n+1)K^n+2\) with parameters:
-  %TODO: T_2=1?
+  %DONE: T_2=1?
   \begin{equation}
   \begin{gathered}
     w=0, \quad b=b_{c_i}, \quad v=-(T-1)e_{c_i}, \quad u_0=0, \quad i_0=0.
@@ -467,12 +512,12 @@ We first proof that continuous differentiable functions with uniform continuous 
   %DONE: use c_{-1}, c_0 and c_{1} and a (for alarm) for the first layer neuron.
   \item Output decoder:
     We further define the parameters of the output decoder by \(a_t=0\), for \(t≤T_3\) and otherwise \(a_t=1\). We further set \(b^{[L+1]}=0\) and
-    \[ (W^{[L+1]})_{k,ι_j(i)}=d(g^{(j)})_k((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{1}{T_r}e_i) \] %TODO: remove parantheses?
-    for \(k∈[m]\), \(j∈K^n\) and \(i∈[n]\). Here \(d(g^{(j)})\) is not only the total derivative, but also the linear part of \(g^{(j)}\), i.e. \(∀_{x∈C^{(j)}}g^{(j)}(x)=d(g^{(j)})(x-x^{C^{(j)}})+g(x^{C^{(j)}})\). We further set
-    \[ (W^{[L+1]})_{k,ω_j}=g_k(x^{C^{(j)}}) \]
+    \[ W^{[L+1]}_{k,ι_j(i)}=d(g^{(j)})_k((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{1}{T_r}e_i) \]
+    for \(k∈[m]\), \(j∈K^n\) and \(i∈[n]\). Here \(d(g^{(j)})\) is not only the total derivative, but also the linear part of \(g^{(j)}\), i.e. \(g^{(j)}(x)=d(g^{(j)})(x-x^{C^{(j)}})+g(x^{C^{(j)}})\) for all \(x∈C^{(j)}\). We further set
+    \[ W^{[L+1]}_{k,ω_j}=g_k(x^{C^{(j)}}) \]
     for \(k∈[m]\) and \(j∈K^n\). We finally define \(W^{[L+1]}_{k,c_i}=0\) for \(i∈\{2..4\}\).
-    %TODO: indices in correct order?
-    %TODO: make easier to read
+    %DONE: indices in correct order?
+    %DONE: make easier to read
   \end{enumerate}
 
   We will now proof that this construction indeed approximates \(g\) well enough. It will be helpful to consider the following, by choice of \(i^{[l]},α^{[l]},β^{[l]},ϑ^{[l]}\), simplified equations:
@@ -548,17 +593,17 @@ We first proof that continuous differentiable functions with uniform continuous 
   \begin{enumerate}
   \item Phase 1 \\
   We will show \(∀_{i∈[n]}s^{[2]}_{ι_j(i)}(t)=0\) and \(s^{[2]}_{ω_j}(t)=0\) for all \(j∈[K^n]\) and \(t∈[T_2-1]_0\) by induction over \(t\). Let \(t=0\). We then get \(s^{[2]}_{ι_j(i)}(0)=s^{[2]}_{ω_j}(0)=0\) by definition.
-  Let further \(1≤t≤T_2-1\). First notice that by induction hypothesis, we have \(∀_{i∈[n]}s^{[2]}_{ι_j(i)}(t')=0\) and \(r_s(q^{(j)};t')=0\) for \(t'<t\). It follows that
+  Let further \(1≤t≤T_2-1\). First notice that by induction hypothesis, we have \(∀_{i∈[n]}s^{[2]}_{ι_j(i)}(k)=0\) and \(r_s(q^{(j)};k)=0\) for \(k<t\). It follows that
   \begin{align*}
-   i^{[2]}_{ι_j(i)}(t')+b^{[2]}_{ι_j(i)}&=s^{[1]}_i(t')+T(s^{[2]}_{c_1}(t'-1)-2s^{[2]}_{c_2}(t'-1)+r_s(q^{(j)};t'-1))=s^{[1]}_i(t'), \\
-   i^{[2]}_{ω_j}(t')+b^{[2]}_{ω_j}&=\frac{1}{n}\sum_{i=1}^ns^{[2]}_{ι_j(i)}(t'-1)-2s^{[2]}_{a_2}(t'-1)+r_s(q^{(j)};t'-1)=0.
+   i^{[2]}_{ι_j(i)}(k)+b^{[2]}_{ι_j(i)}&=s^{[1]}_i(k)+T(s^{[2]}_{c_1}(k-1)-2s^{[2]}_{c_2}(k-1)+r_s(q^{(j)};k-1))=s^{[1]}_i(k), \\
+   i^{[2]}_{ω_j}(k)+b^{[2]}_{ω_j}&=\frac{1}{n}\sum_{i=1}^ns^{[2]}_{ι_j(i)}(k-1)-2s^{[2]}_{a_2}(k-1)+r_s(q^{(j)};k-1)=0.
   \end{align*}
-  for all \(t'≤t\). Thus, we further get
-  \begin{align*}%TODO: t' anstatt k
+  for all \(k≤t\). Thus, we further get
+  \begin{align*}%MAYBE: t' anstatt k
    p^{[2]}_{ι_j(i)}(t) &= -q^{(j)}_iT_r-T+1+\sum_{k=1}^ts^{[1]}_i(k)-\sum_{k=1}^{t-1}s^{[2]}_{ι_j(i)}(k)= -q^{(j)}_iT_r-T+1+\sum_{k=1}^ts^{[1]}_i(k),\\
    p^{[2]}_{ω_j}(t) &= \sum_{k=1}^t0-\sum_{k=1}^{t-1}s^{[2]}_{ω_j}(k) = 0.
   \end{align*}
-   Since \(\sum_{k=1}^ts^{[1]}_i(k)≤T_2-1<T-1\) and \(s^{[2]}_{c_1}(t)=χ_{\{T_2-1\}}(t)\), we in particular get \(p^{[2]}_{ι_j(i)}(t)≤0\). So we have prooven \(∀_{i∈[n]}s^{[2]}_{ι_j(i)}(t)=0\), \(s^{[2]}_{ω_j}(t)=0\).
+   Since \(\sum_{k=1}^ts^{[1]}_i(k)≤T_2-1<T-1\) and \(s^{[2]}_{c_1}(t)=χ_{\{T_2-1\}}(t)\), we in particular get \(p^{[2]}_{ι_j(i)}(t)≤0\). So we have proven \(∀_{i∈[n]}s^{[2]}_{ι_j(i)}(t)=0\), \(s^{[2]}_{ω_j}(t)=0\).
   \item Phase 2 \\
   Just as in phase 1, we have
   \begin{align*}
@@ -585,9 +630,9 @@ We first proof that continuous differentiable functions with uniform continuous 
   \begin{align*}
    p^{[2]}_{ω_j}(T_3) &= p^{[2]}_{ω_j}(T_2) + i^{[2]}_{ω_j}(T_3)+b^{[2]}_{ω_j} - s^{[2]}_{ω_j}(T_2) = \frac{1}{n}\sum_{i=1}^ns^{[2]}_{ι_j(i)}(T_2).
   \end{align*}
-  So \(0≤p^{[2]}_{ω_j}(T_3)≤1\) and we get \(p^{[2]}_{ω_j}(T_3)=1\), as well as \(s^{[2]}_{ω_j}(T_3)=1\) exactly if \(∀_{i∈[n_1]}x^{C^{(j)}}_i≤x_i\), so if \(x^{C^{(j)}}≤x\).
+  So \(0≤p^{[2]}_{ω_j}(T_3)≤1\) and we get \(p^{[2]}_{ω_j}(T_3)=1\), as well as \(s^{[2]}_{ω_j}(T_3)=1\) exactly if \(∀_{i∈[n]}x^{C^{(j)}}_i≤x_i\), so if \(x^{C^{(j)}}≤x\).
 
-  Let further \(i∈[n_1]\). We get
+  Let further \(i∈[n]\). We get
   \begin{align*}
    i^{[2]}_{ι_j(i)}(T_3)+b^{[2]}_{ι_j(i)}&=s^{[1]}_i(T_3)+T(s^{[2]}_{c_1}(T_2)-2s^{[2]}_{c_2}(T_2)+r_s(q^{(j)};T_2))=-2T
   \end{align*}
@@ -618,12 +663,12 @@ We first proof that continuous differentiable functions with uniform continuous 
     p^{[2]}_{ω_j}(T_4) &= p^{[2]}_{ω_j}(T_3)+i^{[2]}_{ι_j(i)}(T_4)+b^{[2]}_{ι_j(i)} - s^{[2]}_{ι_j(i)}(T_3) \\
                        &= p^{[2]}_{ω_j}(T_3)+r_s(q^{(j)};T_3) - s^{[2]}_{ι_j(i)}(T_3). \\
   \end{align*}
-  By definition of \(q\), \(q^{(j)}_i<q^{(j')}_i\) holds exactly if \(x^{C^{(j)}}_i<x^{C^{(j')}}_i\) holds for all \(i∈[n_1]\) and \(j,j'∈[K^n]\), so \(∀_{j,j'∈[K^n]}q^{(j)}<q^{(j')}⇔x^{C^{(j)}}<x^{C^{(j')}}\).
+  By definition of \(q\), \(q^{(j)}_i<q^{(j')}_i\) holds exactly if \(x^{C^{(j)}}_i<x^{C^{(j')}}_i\) holds for all \(i∈[n]\) and \(j,j'∈[K^n]\), so \(∀_{j,j'∈[K^n]}q^{(j)}<q^{(j')}⇔x^{C^{(j)}}<x^{C^{(j')}}\).
   We further have shown \(∀_{j'∈K^n}s^{[2]}_{ω_{j'}}(T_3)=1⇔x^{C^{(j')}}≤x\) before.
   \begin{align*}
-  r_s(q^{(j)};T_3)&=s^{[2]}_{ω_j}(T_3)-\sum_{\substack{q'∈([K-1]_0)^{n_1} \\ q^{(j)}<q'}}s^{[2]}_{ω_{j(q')}}(T_3) \\
+  r_s(q^{(j)};T_3)&=s^{[2]}_{ω_j}(T_3)-\sum_{\substack{q'∈([K-1]_0)^{n} \\ q^{(j)}<q'}}s^{[2]}_{ω_{j(q')}}(T_3) \\
                   &=s^{[2]}_{ω_j}(T_3)-\sum_{\substack{j'∈[K^n] \\ x^{C^{(j)}}<x^{C^{(j')}}≤x}}1
-  \end{align*}%TODO: n_1 vs n
+  \end{align*}%DONE: n_1 vs n
 
   Now if \(x∈C^{(j)}\), i.e. \(x^{C^{(j)}}≤x<y^{C^{(j)}}\), then \(s^{[2]}_{ω_j}(T_3)=1\) and if there was a \(s^{[2]}_{ω_{j'}}(T_3)=1\) with \(x^{C^{(j)}}<x^{C^{(j')}}≤x\), we would further get \(x^{C^{(j)}}<x^{C^{(j(q'))}}<y^{C^{(j)}}\) due to \(x<y^{C^{(j)}}\). But this contradicts the construction of the subcubes \((C^{(j)})_{j∈[K^n]}\).
   
@@ -631,7 +676,7 @@ We first proof that continuous differentiable functions with uniform continuous 
 
   Now suppose \(x∉C^{(j)}\). Since we assumed \(x∈C\) and constructed the subcubes \((C^{(j)})_{j∈[K^n]}\) as a partition of \(C\), we have \(x∈C^{(j')}\), \(j≠j'\). Now if \(x^{C^{(j)}}<x^{C^{(j')}}\), then \(r_s(q^{(j)};T_3)≤0\). We further have \(p^{[2]}_{ω_j}(T_3)=1\) and \(s^{[2]}_{ω_j}(T_3)=1\) in this case and therefore \(p^{[2]}_{ω_j}(T_4)≤0\) and \(s^{[2]}_{ω_j}(T_4)=0\).
 
-  Is on the other hand \(x^{C^{(j)}}≮x^{C^{(j')}}\), then there is a component \(i∈[n_1]\), such that \(x^{C^{(j')}}_i<x^{C^{(j)}}_i\) and therefore \(x_i<y^{C^{(j')}}_i≤x^{C^{(j)}}_i\). This implies \(x^{C^{(j)}}\nleq x\) and we also get \(r_s(q^{(j)};T_3)≤0\). We further have have \(p^{[2]}_{ω_j}(T_3)<1\) and \(s^{[2]}_{ω_j}(T_3)=0\) in this case and therefore \(p^{[2]}_{ω_j}(T_4)<1\) and \(s^{[2]}_{ω_j}(T_4)=0\).
+  Is on the other hand \(x^{C^{(j)}}≮x^{C^{(j')}}\), then there is a component \(i∈[n]\), such that \(x^{C^{(j')}}_i<x^{C^{(j)}}_i\) and therefore \(x_i<y^{C^{(j')}}_i≤x^{C^{(j)}}_i\). This implies \(x^{C^{(j)}}\nleq x\) and we also get \(r_s(q^{(j)};T_3)≤0\). We further have have \(p^{[2]}_{ω_j}(T_3)<1\) and \(s^{[2]}_{ω_j}(T_3)=0\) in this case and therefore \(p^{[2]}_{ω_j}(T_4)<1\) and \(s^{[2]}_{ω_j}(T_4)=0\).
 
   To summarize, we \(s^{[2]}_{ω_j}(T_4)=1\) exactly if \(x∈C^{(j)}\) just as we claimed, as well as \(p^{[2]}_{ω_j}(T_4)≤1\) in general.
   %DONE: more rigorous?
@@ -700,7 +745,6 @@ We first proof that continuous differentiable functions with uniform continuous 
     \sum_{t=T_4+1}^Ts^{[2]}_{ι_{j(i)}}(t)&=\left\lfloor u^{[2]}_{ι_{j(i)}}(T_4)+i^{[2]}_{ι_{j(i)}}(T_4+1)+b^{[2]}_{ι_{j(i)}} \right\rfloor \\
                                          &=-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x) \right\rfloor.
   \end{align*}
-
   \end{enumerate}
 
   \noindent We have now reached the final step, where we will show that the spikes actually approximate \(g\). Let us consolidate our results. For \(j\) with \(x∈C^{(j)}\) we have
@@ -708,47 +752,45 @@ We first proof that continuous differentiable functions with uniform continuous 
     &\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t)=\sum_{t=T_4+1}^Ts^{[2]}_{ι_{j(i)}}(t)= -KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x) \right\rfloor, \\
     &\sum_{t=T_4}^Ts^{[2]}_{ω_j}(t)=s^{[2]}_{ω_j}(T_4)=1.
   \end{align*}
-  And therefore for all \(k∈[m]\) %TODO: split into parts
+  And therefore for all \(k∈[m]\) %DONE: split into parts
   \begin{align*}
    W^{[L+1]}_{k,ω_j}\sum_{t=T_4}^Ts^{[2]}_{ω_j}(t) &= g_k(x^{C^{(j)}}), \\
-   W^{[L+1]}_{k,ι_{j(i)}}\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t) &= \left(-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x)\right\rfloor\right)\left(d(g^{(j)})_k((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{1}{T_r}e_i)\right).
+   W^{[L+1]}_{k,ι_{j(i)}}\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t) &= \left(-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x)\right\rfloor\right)d(g^{(j)})_k((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\tfrac{1}{T_r}e_i).
   \end{align*}
-          %CANCELLED: write from which steps
-          %TODO: make dependence on _i explicit
-          %DONE: introduce notation _k for functions
+    %CANCELLED: write from which steps
+    %MAYBE: make dependence on _i explicit
+    %DONE: introduce notation _k for functions
   Let now \(j\) be such that \(x∉C^{(j)}\), we have shown
   \begin{align*}
-    &\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t)=0, \\
-    &\sum_{t=T_4}^Ts^{[2]}_{ω_j}(t)=0.
+    \sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t)=0,\qquad \sum_{t=T_4}^Ts^{[2]}_{ω_j}(t)=0.
   \end{align*}
   So this group of neurons does not contribute to the output of the network:
   \begin{align*}
-   W^{[L+1]}_{k,ω_j}\sum_{t=T_4}^Ts^{[2]}_{ω_j}(t) &= 0, \\
-   W^{[L+1]}_{k,ι_{j(i)}}\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t) &= 0.
+   W^{[L+1]}_{k,ω_j}\sum_{t=T_4}^Ts^{[2]}_{ω_j}(t) = 0,\qquad W^{[L+1]}_{k,ι_{j(i)}}\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t) = 0.
   \end{align*}
   Finally note that by choice of \(W^{[L+1]}\), the neurons \(c_1,c_2,a_2\) don't contribute to the output as well. For any \(j∈\{c_1,c_2,a_2\}\)
   \[ W^{[L+1]}_{k,j}\sum_{t=T_4}^Ts^{[2]}_j(t)=0. \]
-          %TODO: introduce W_k,j?
+          %DONE: introduce W_k,j?
           %CANCELLED: g_k wiederspricht hier vorheriger notation g_j
           %DONE: notation e_i
   Let now \(j∈[K^n]\) be such that \(x∈C_j\) again. We can consequently have
   \[ R(Φ)_k(x)=\sum_{t=T_4}^T(W^{[L+1]}s^{[2]}(t))_k= W^{[L+1]}_{k,ω_j}\sum_{t=T_4}^Ts^{[2]}_{ω_j}(t)+W^{[L+1]}_{k,ι_{j(i)}}\sum_{t=T_4}^Ts^{[2]}_{ι_{j(i)}}(t). \]
   Which is further equal to
   \begin{align*}
-    & g_k(x^{C^{(j)}})+\sum_{i∈[n_1]}\left(d(g^{(j)})_k((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{1}{T_r}e_i)\right)\left(-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x) \right\rfloor\right) \\
-    &= g_k(\underset{≕x'}{\underbrace{x^{C^{(j)}}+\sum_{i∈[n_1]}\tfrac{y^{C^{(j)}}_i-x^{C^{(j)}}_i}{T_r}\left(-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x) \right\rfloor\right)e_i}})
+    & g_k(x^{C^{(j)}})+\sum_{i∈[n]}\left(d(g^{(j)})_k((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{1}{T_r}e_i)\right)\left(-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x) \right\rfloor\right) \\
+    &= g_k(\underset{≕x'}{\underbrace{x^{C^{(j)}}+\sum_{i∈[n]}\tfrac{y^{C^{(j)}}_i-x^{C^{(j)}}_i}{T_r}\left(-KT_ro_i(x^{C^{(j)}})+\left\lfloor KT_ro_i(x) \right\rfloor\right)e_i}})
   \end{align*}
   Now by assumption, we have
-  \[T_r=\sqrt{n_1}\frac{y^C_i-x^C_i}{K}\frac{\norm{df}_{∞,2}}{2ν}≥\sqrt{n_1}(y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{\norm{d(g^{(j)})}_{∞,2}}{2ν} \]
-  for any \(i∈[n_1]\) and hence
-  \[ ξ_i≔\frac{1}{T_r}\left(\left\lfloor KT_ro_i(x)\right\rfloor-KT_ro_i(x)\right)≤\frac{1}{\sqrt{n_1}(y^{C^{(j)}}_i-x^{C^{(j)}}_i)}\frac{2ν}{\norm{d(g^{(j)})}_{∞,2}}. \]
+  \[T_r=\sqrt{n}\frac{y^C_i-x^C_i}{K}\frac{\norm{df}_{∞,2}}{2ν}≥\sqrt{n}(y^{C^{(j)}}_i-x^{C^{(j)}}_i)\frac{\norm{d(g^{(j)})}_{∞,2}}{2ν} \]
+  for any \(i∈[n]\) and hence
+  \[ ξ_i≔\frac{1}{T_r}\left(\left\lfloor KT_ro_i(x)\right\rfloor-KT_ro_i(x)\right)≤\frac{1}{\sqrt{n}(y^{C^{(j)}}_i-x^{C^{(j)}}_i)}\frac{2ν}{\norm{d(g^{(j)})}_{∞,2}}. \]
   We now get the following inequality by definition of \(ξ_i\) and \((y^{C^(j)}_i-x^{C^(j)}_i)K = (y^{C}_i-x^{C}_i)\)
   \begin{align*}
-    \norm{x'-x}_2^2 &=\sum_{i∈[n_1]}\left(x'-x_i\right)^2 \\
-    &=\sum_{i∈[n_1]}\left((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\left(\tfrac{1}{T_r}\left\lfloor KT_ro_i(x)\right\rfloor- Ko_i(x^{C^{(j)}})\right)-(x_i-x^{C^{(j)}}_i)\right)^2 \\
-    &=\sum_{i∈[n_1]}\left((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\left(ξ_i+K\frac{x_i-x^{C^{(j)}}_i}{y^C_i-x^C_i}\right)-(x_i-x^{C^{(j)}}_i)\right)^2 \\
-    &=\sum_{i∈[n_1]}\left(\left(ξ_i(y^{C^{(j)}}_i-x^{C^{(j)}}_i)+(x_i-x^{C^{(j)}}_i)\right)-(x_i-x^{C^{(j)}}_i)\right)^2 \\
-    &=\sum_{i∈[n_1]}ξ_i^2(y^{C^{(j)}}_i-x^{C^{(j)}}_i)^2 \\
+    \norm{x'-x}_2^2 &=\sum_{i∈[n]}\left(x'-x_i\right)^2 \\
+    &=\sum_{i∈[n]}\left((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\left(\tfrac{1}{T_r}\left\lfloor KT_ro_i(x)\right\rfloor- Ko_i(x^{C^{(j)}})\right)-(x_i-x^{C^{(j)}}_i)\right)^2 \\
+    &=\sum_{i∈[n]}\left((y^{C^{(j)}}_i-x^{C^{(j)}}_i)\left(ξ_i+K\frac{x_i-x^{C^{(j)}}_i}{y^C_i-x^C_i}\right)-(x_i-x^{C^{(j)}}_i)\right)^2 \\
+    &=\sum_{i∈[n]}\left(\left(ξ_i(y^{C^{(j)}}_i-x^{C^{(j)}}_i)+(x_i-x^{C^{(j)}}_i)\right)-(x_i-x^{C^{(j)}}_i)\right)^2 \\
+    &=\sum_{i∈[n]}ξ_i^2(y^{C^{(j)}}_i-x^{C^{(j)}}_i)^2 \\
     &≤\frac{ν^2}{\norm{d(g^{(j)})}_{∞,2}^2}.
   \end{align*}
   So we can conclude
@@ -771,71 +813,74 @@ We first proof that continuous differentiable functions with uniform continuous 
 %CANCELLED: remark about SNN construction. By adding more neurons to first layer ((K-1)n to be exact) you can half the required time steps.
 % CANCELLED: steelman comparison by arguing that L can be replaced by sth like 1/δ(ε)
 
-Sadly the size of the network in this construction is not always smaller than the one from~\cref{thm:approx-snn-constant}. A concrete counter example is a sinus wave with high frequency and small ampitude, like \(f(x)≔\frac{\sin(nx)}{n}\) with \(n∈ℕ\) on \(C=[0,2π)\), \(Ω=[0,2π]\). Since \(f'(x)=\cos(nx)\) and \(\norm{f'|_{(0,2π)}}_{∞}=1\), \(Γ≔1\) is the optimal Lipschitz-constant for \(f\).
-At the same time, since \(f''(x)=n\sin(nx)\) and \(\norm{f''|_{(0,2π)}}_{∞}=n\), the biggest possible modulus of uniform continuity on \(C°\) we can give for \(f'\) is \(δ(ε)≔\frac{ε}{n}\). So we get
-\[ \max_{\substack{ξ,θ>0\\ξθ=ε}}\min(δ(ξ),θ)=\max_{\substack{ξ>0}}\min(\frac{ξ}{n},\frac{ε}{ξ})=\sqrt{εn} \]
-So we get \(K(ε)≔\lfloor \frac{π}{\sqrt{nε}} \rfloor\). We therefore get for the layer sizes:
+Sadly the size of the network in this construction is not always smaller than the one from~\cref{thm:approx-snn-constant}. A concrete counter example is a sinus wave with high frequency and small ampitude, like \(f(x)≔\frac{\sin(nx)}{n}\) with \(n∈ℕ\) on \(C=U=[0,3π)\) and \(Ω=[0,2π]\). Since \(f'(x)=\cos(nx)\) and \(\norm{f'|_{(0,3π)}}_{∞}=1\), \(Γ≔1\) is the optimal Lipschitz-constant for \(f\).
+At the same time, since \(f''(x)=n\sin(nx)\) and \(\norm{f''|_{(0,3π)}}_{∞}=n\), the biggest possible modulus of uniform continuity on \((0,3π)\) for \(f'\) is \(δ(ε)≔\frac{ε}{n}\). So we get
+\[ \max_{\substack{ξ,θ>0\\ξθ=ε}}\min(δ(ξ),θ)=\max_{\substack{ξ>0}}\min(\frac{ξ}{n},\frac{ε}{ξ})=\sqrt{\frac{ε}{n}}. \]
+So we get \(K(ε)≔\lfloor π\sqrt{\frac{n}{ε}} \rfloor\). We therefore get for the layer sizes:
 \begin{alignat*}{2}
-   & \cref{thm:approx-snn-constant} \qquad &\qquad  &\cref{thm:approx-snn} \\
+  & \cref{thm:approx-snn-constant} \qquad &\qquad  &\cref{thm:approx-snn} \\
   &n_1 =\left\lceil \tfrac{2π}{ε} \right\rceil+1 \qquad &\qquad &n_1 = 2 \\
-  &n_2 =\left\lceil \tfrac{2π}{ε} \right\rceil \qquad &\qquad &n_2 = 2\lfloor \tfrac{π}{\sqrt{nε}} \rfloor+3
+  &n_2 =\left\lceil \tfrac{2π}{ε} \right\rceil \qquad &\qquad &n_2 = 2\lfloor π\sqrt{\tfrac{n}{ε}} \rfloor+3
 \end{alignat*}
 While the first and second layer of~\cref{thm:approx-snn} are clearly arbitrarily smaller than the first layer of the other construction for small \(ε\), the second layer of~\cref{thm:approx-snn} is arbitrarily bad for \(n→∞\) compared to the second layer of~\cref{thm:approx-snn-constant}.
 
 On the other hand, even for large \(n∈ℕ\), the second layer of~\cref{thm:approx-snn} is arbitrarily more efficient for \(ε→0\), since the size of the second layer of~\cref{thm:approx-snn} only grows proportionally to \(\tfrac{1}{\sqrt{ε}}\) and not \(\tfrac{1}{ε}\).
-%TODO: image
+%MAYBE: image
 
-%TODO: burdon of Γ is placed on T in our theorem
+%MAYBE: burden of Γ is placed on T in our theorem
 
 %DONE: introduce notation C^0, C^1
 We generalize this observation with the following theorem.
-\begin{theorem} %DONE: switch to C
-  Let \(C≠∅\) be a cube in \(ℝ^n\), \(Ω⊂\overline{C}\) a compact subset with \(\operatorname{diam}_{∞}(Ω)≠0\) and \(f∈𝒞^0(\overline{C},ℝ)\) a continuous function that is \(Γ'\)-Lipschitz, such that \(f|_{C°}∈𝒞^1(C°,ℝ^m)\) is continuously differentiable and \(d(f|_{C°})\) is \(Γ\)-Lipschitz.
+\begin{theorem} %DONE: switch to U,Ω,C
+  Let the function \(f\) and the sets \(U\), \(C\), \(Ω\) be given as inf~\cref{thm:approx-snn}. Let further \(Ω\) be compact, assume that \(f\) is \(Γ'\)-Lipschitz, and \(d(f|_{U°})\) is \(Γ\)-Lipschitz.
 
-  We get
+  We then have
   \[ \lim_{ε→0}\frac{n_2(ε)}{n_2'(ε)}=0. \]
-  Where \(n_2'(ε)\) is \(n_2(ε)\) as defined in~\cref{thm:approx-snn-constant} for \(Ω\), \(f|_{Ω}\) with Lipschitz-constant \(Γ'\) and \(ε\); and where \(n_2(ε)\) is as defined in~\cref{thm:approx-snn} for \(C\), \(f|_C\) with modulus of continuity \(ω(x)≔Γx\) of \(d(f|_{C°})\) and \(μ≔\frac{ε}{2}\).
+  Where \(n_2'(ε)\) is \(n_2(ε)\) as defined in~\cref{thm:approx-snn-constant} for \(Ω\), \(f|_{Ω}\) with Lipschitz-constant \(Γ'\) and \(ε\); and where \(n_2(ε)\) is as defined in~\cref{thm:approx-snn} for sets \(U\), \(C\), \(Ω\) and function \(f\) with modulus of uniform continuity \(ω(x)≔Γx\) of \(d(f|_{U°})\) and approximation control \(μ≔\frac{ε}{2}\).
 \end{theorem}
 
+%DONE: (compare~\cref{rem:ch03-differential-lipschitz})
 %CANCELLED: proof modulus of continuity stuff?
 %DONE: fix statement, ω
 \begin{proof}
   First notice, that since
-  \[n_2'(ε)=\max\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{ε}Γ' \right\rceil^{n_0},1\right\}\]
-  we get
-  \[ \lim_{ε→0}n_2'(ε)ε=\operatorname{diam}_∞(Ω)Γ'. \]
-  We further have
+  \[n_2'(ε)=\max\left\{\left\lceil \frac{\operatorname{diam}_∞(Ω)}{ε}Γ' \right\rceil^n,1\right\}\]
+  we have
+  \[ \lim_{ε→0}n_2'(ε)ε=(\operatorname{diam}_∞(Ω)Γ')^n. \]
+  We further have (compare~\cref{rem:ch03-differential-lipschitz})
   \begin{align*}
-   n_2(ε)&=\min_{\substack{ξ,θ>0\\ξθ=\frac{ε}{2}}}\left\{\left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(ω^{†}(ξ) ,θ)} \right\rceil\right\}(n+1)+3.
+   n_2(ε)&= \left(1∨\left\lceil \frac{\operatorname{diam}_∞(C)}{\frac{2}{\sqrt{n}}\min(\sqrt{\frac{ε}{2Γ}},\frac{ρ}{2})} \right\rceil\right)(n+1)+3
   \end{align*}
-  Let now \((ξ_{ε})_{ε>0}\) and \((θ_{ε})_{ε>0}\) be given such that \(∀_{ε>0}ξ_{ε}θ_{ε}=\frac{ε}{2}\) and the minimum in \(n_2(ε)\) is obtained, i.e.
-  \[\min(ω^{†}(ξ_{ε}) ,θ_{ε})=\max_{\substack{ξ,θ>0\\ξθ=\frac{ε}{2}}}\min(ω^{†}(ξ) ,θ).\]
-  Note moreover that \(ω^{†}(s)=\inf\{t∈[0,∞]\mid Γt>s\}=\frac{s}{Γ}\) for \(Γ≠0\) and \(ω^{†}(s)=∞\) otherwise, since \(ω(x)=Γx\).
-  We now get
-  \begin{align*}
-   \min(ω^{†}(ξ_{ε}) ,θ_{ε}) = \min\left(\frac{ξ_{ε}}{Γ} ,\frac{ε}{ξ_{ε}2}\right) = \sqrt{\frac{Γε}{2}}
-  \end{align*}
-  and therefore
-  \begin{align*}%TODO: put this into remark after theorem? cor?
-   n_2(ε)&=\left\lceil \sqrt{\frac{n}{2Γε}}\operatorname{diam}_∞(C) \right\rceil(n+1)+3
-  \end{align*}
-  for \(Γ≠0\). Is \(Γ=0\), then \(\min(ω^{†}(ξ_{ε}),θ_{ε})=∞\) (TODO)
-  With this simplified definition, we get
-  \[ \lim_{ε→0}n_2(ε)\sqrt{ε}=\sqrt{\frac{n}{2Γ}}\operatorname{diam}_∞(C)(n+1). \]
+  such that we get
+  \[ \lim_{ε→0}n_2(ε)\sqrt{ε}=\sqrt{\frac{nΓ}{2}}\operatorname{diam}_∞(C)(n+1). \]
   We can conclude
-  \[ \lim_{ε→0}\frac{n_2(ε)}{n_2'(ε)}\frac{1}{\sqrt{ε}}=\lim_{ε→0}\frac{n_2(ε)ε}{n_2'(ε)\sqrt{ε}}=\frac{\sqrt{\frac{n}{2Γ}}\operatorname{diam}_∞(C)(n+1)}{\operatorname{diam}_∞(Ω)Γ'}∈ℝ \]
-  So the proof is finished, since we can deduce
+  \[ \lim_{ε→0}\frac{n_2(ε)}{n_2'(ε)}\frac{1}{\sqrt{ε}}=\lim_{ε→0}\frac{n_2(ε)ε}{n_2'(ε)\sqrt{ε}}=\frac{\sqrt{\frac{nΓ}{2}}\operatorname{diam}_∞(C)(n+1)}{\operatorname{diam}_∞(Ω)Γ'}∈ℝ \]
+  So we can deduce
   \[\lim_{ε→0}\frac{n_2(ε)}{n_2'(ε)}=0.\]
 \end{proof}
 
+\begin{figure}[ht!]
+  \centering
+  \input{src/figures/ch03-alternative-construction.tex}
+  \caption{Replacing the first hidden layer by non-recurrent structure}
+  \label{fig:ch03-alternative-construction}
+\end{figure}
+
+To conclude this section, we shall give one last remark. While we used \rdtlifsnn for our construction in~\cref{thm:approx-snn}, we do think that it is not too hard too remove the interdependencies inside of the layers too obtain a \dtlifsnn by replicating layers as often as needed and connecting where necessary.
+E.g.\ we can remove the interdependency of \(a_1\) on itself in the construction of~\cref{thm:approx-snn} by using \(u_0=-T_2\) and \(b=1\) to obtain the “alarm clock” behavior.
+Further its connections to the other neurons in the first layer can be removed by adding an intermediate layer between first and second hidden layer with \(n\) neurons that just forward the input from their respective neuron in the first layer (see also~\cref{ex:ch02-forward-spikes}) and also take in an input from \(a_1\), compare~\cref{fig:ch03-alternative-construction}.
+The reason why we have still chosen to go ahead with \rdtlifsnn in our proof is that the network complexity is smaller.
+
+%DONE: a1
+
 %CANCELLED: betrachtung durch kombinatorik/wahrscheinlichkeit?
 
-%TODO: there are also constructions for \dtlifsnn that use far less neurons, general structure like…
+%DONE: there are also constructions for \dtlifsnn that use far less neurons, general structure like…
 
 % CANCELLED: encoding with fewer layers for on finite segments continuously differentiable functions
 
 
 % DONE: wendeltreppe
-% TODO: flush nach KTr (high-level erklärung verhalten)
-% TODO: vergleich d.t.lif-nn, r.constr, auch ohne d.t.lifsnn möglich?
+% DONE: flush nach KTr (high-level erklärung verhalten)
+% DONE: vergleich d.t.lif-nn, r.constr, auch ohne d.t.lifsnn möglich?
 % DONE: g lin approx. graphic (von sinus)

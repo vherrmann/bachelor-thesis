@@ -16,12 +16,12 @@
   \caption{The landscape of the first layer of two different \rdtlifsnn}
 \end{figure}
 
-%TODO: remark about comparative strength of dt.lifsnn and rsnn, compare images
+% MAYBE: remark about comparative strength of dt.lifsnn and rsnn, compare images
 
-% TODO: what kind of shapes a d.t. …
-% TODO: what is meant with graph
-% TODO: etwas text zwischen aussagen
-In the following we will analyze what shape the graph of a \rdtlifsnn has. Of particular interest to us is the question how many different values a \rdtlifsnn can produce.
+% DONE: what kind of shapes a d.t. …
+% DONE: what is meant with graph
+% DONE: etwas text zwischen aussagen
+In the following we will analyze what shape the graph of the realized function \(R(Φ)\) of a \rdtlifsnn \(Φ\) has. Of particular interest to us is the question how many different values it can obtain.
 Since the number of different values of the following layers only depends on the spike trains of the first hidden layer, we can get an upper bound on that number by analyzing how many different spike trains the first hidden layer can produce. We will therefore only study the output landscape of the first hidden layer.
 We will further generally assume \(W^{[1]}=\idM{n_1}\). Let \(Φ\) be a \rdtlifsnn with \(W^{[1]}\) arbitrary and \(Φ'\) the same one, but with \(W^{[1]}=\idM{n_1}\). We then have \(R(Φ)(x)=R(Φ')(W^{[1]}x)\) since we are using direct encoding. So \(W^{[1]}\) just corresponds to a pre-transformation on the input vector and can therefore (1) only decrease the number of different output values and further the key to understanding the output landscape of a general \rdtlifsnn is to understand the landscape of one with \(W^{[1]}=\idM{n_1}\).
 
@@ -32,7 +32,7 @@ We can further simplify the notation in this section by writing \(W,b,V,α,β,ϑ
   s(t) & = H(p(t)-ϑ\oneV{n}) \\
   u(t) & = p(t)-ϑs(t)
 \end{align}
-Since the definitions recursively depend on \(x\), we will sometimes also write \(i(t;x)\), \(p(t;x)\), \(s(t;x)\) and \(u(t;x)\) to make the dependency explicit.
+Since the definitions recursively depend on \(x\), we will sometimes also write \(i(t;x)\), \(p(t;x)\), \(s(t;x)\) and \(u(t;x)\) to make the dependency explicit. It will further be helpful to write e.g. \(i(·;x)\) for \((i(t;x))_{t∈[T]}\).
 
 By using the simplified notation, we obtain the following definitions from~\cref{def:non-recursive-defs} for the input vector \(x∈ℝ^{n_0}\) and the first hidden layer spike-train \(σ\):
 \begin{align}
@@ -43,6 +43,7 @@ By using the simplified notation, we obtain the following definitions from~\cref
 \end{align}
 
 \begin{comment}
+
 \begin{remark}\label{rem:regions-non-recursive-defs}
   It is furthermore quite obvious that \(i\) grows linear in \(x\), given fixed \(σ\). The same holds therefore for \(u\) and \(p\).
 
@@ -53,7 +54,9 @@ By using the simplified notation, we obtain the following definitions from~\cref
   So we in particular have that \(p\) to is growing monotonically (regarding by-component ordering) on fixed \(σ\).
   Since \(H\) is a monotonically growing function, \(s\) is also growing monotonically with fixed \(σ\).
 \end{remark}
+
 \end{comment}
+
 Let us first introduce some preliminary definitions.
 
 \begin{definition}
@@ -184,7 +187,7 @@ We will now add an ordering to spike trains based on lexicographical ordering.
   We further define \(s'<_ls''\) as \(s'≤_ls''\) and \(s'≠s''\).
 \end{definition}
 
-\begin{lemma}\label{lem:spike-trains-ineq}%TODO: introduce s(·;y)
+\begin{lemma}\label{lem:spike-trains-ineq}%DONE: introduce s(·;y)
   Let \(x,y∈ℝ^{n_0}\). We then have \(x≤y⇒s(·;x)≤_ls(·;y)\).
 
   Is on the other hand \(s(·;x)<_ls(·;y)\) and \(i∈[n_1]\) such that \(s_i(t;x)≠s_i(t;y)\) holds at the minimal time \(t\) at which \(s(·;x)\) and \(s(·;y)\) are different, then \(x_i<y_i\) holds.
@@ -201,7 +204,7 @@ We will now add an ordering to spike trains based on lexicographical ordering.
   Let on the other hand \(s(·;x)<_ls(·;y)\). Then there is a smallest time \(t\) such that \(∃_{i∈[n_1]}s_i(t;x)≠s_i(t;y)\). By definition of the ordering on spike trains we get \(s_i(t;x)<_ls_i(t;y)\). Now \(s_i(t;x)\) is growing monotonically in \(x_i\) with \(σ(t)≔s(t;x)\) by choice of \(t\). We therefore have \(x_i<y_i\).
 \end{proof}
 
-We will now proof some theorems about specific kinds of spike trains. We first have to define them.
+We will further proof some theorems about specific kinds of spike trains. We first have to define them.
 
 \begin{definition}
   We call a spike train \(s'∈\{0,1\}^{n_1×T}\) constant in component \(i∈[n_1]\), if \(∀_{t,t'∈[T]}s'_i(t)=s'_i(t')\).
@@ -214,6 +217,8 @@ We also need some geometric definitions.
 \begin{definition}
   We call a point \(p∈(ℝ∪\{±∞\})^n\) vertex of a non-empty region \(⟦x,y⦆\), \(⟦x,y⟧\) or \(⦅x,y⦆\), if \(∀_{i∈[n]}p_i∈\{x_i,y_i\}\). We call a vertex \(p\) finite, if \(p∈ℝ^{n}\).
 \end{definition}
+
+We will continue by characterizing regions with constant spike trains in none/some/all components.
 
 \begin{lemma}\label{lem:inf-corner-regions}
   Let \(s'∈\{0,1\}^{n_1×T}\) be a spike train that is constant in every component. Then \(C_{s'}\) is non-empty.
@@ -235,7 +240,7 @@ We also need some geometric definitions.
 \begin{proof}
   First note that if \(s'\) is constant in component \(i∈[n_1]\), then either \(x^{s'}_i=-∞\) and \(y^{s'}_i∈ℝ\); or \(x^{s'}_i∈ℝ\) and \(y^{s'}_i=∞\). In either case \(\abs{ℝ∩\{x^{s'}_i,y^{s'}_i\}}=1\). Is on the other hand \(s'\) non-constant in \(i\), then \(x^{s'}_i,y^{s'}_i∈ℝ\). We therefore get
   \[ \abs{ℝ^{n_1}∩\prod_{j∈[n_1]}\{x^{s'}_j,y^{s'}_j\}}=\abs{\prod_{j∈[n_1]}ℝ∩\{x^{s'}_j,y^{s'}_j\}}=2^{n_1-k} \]
-  for the set of finite vertices, \(ℝ^{n_1}∩\prod_{j∈[n_1]}\{x^{s'}_j,y^{s'}_j\).
+  using~\cref{lem:intersection-and-product} for the set of finite vertices, \(ℝ^{n_1}∩\prod_{j∈[n_1]}\{x^{s'}_j,y^{s'}_j\}\).
 \end{proof}
 
 \begin{lemma}\label{lem:non-finite-regions}
@@ -398,12 +403,14 @@ We also need some geometric definitions.
 \end{proof}
 \end{comment}
 
+In the following, final proposition of this chapter we show that we can find a tight boundary around all finite vertices.
+
 %CANCELLED: read previous paper for inspiration in grammatical style
 \begin{proposition}\label{prop:finite-vertices-bounds}
   Let \(P\) be the set of all finite vertices of regions \(C_{s'}∈C_{Φ,1}\).
 
   We then have \(P⊂⟦x^C,y^C⟧\) for
-  %TODO: idea for x^C_i: leftmost border of the left-mostest regions
+  %CANCELLED: idea for x^C_i: leftmost border of the left-mostest regions
   \begin{align*}%MAYBE: factor indices under min/max out to defined set
    x^C_i &≔ \min_{\substack{t∈[T],\ σ∈\{0,1\}^{n_1×t}\\ ∀_{t∈[T]}σ_i(t)=0}}g(t;σ), \\
    y^C_i &≔ \max_{\substack{t∈[T],\ σ∈\{0,1\}^{n_1×t} \\ ∀_{t∈[T]}σ_i(t)=1}}g(t;σ).
@@ -420,7 +427,7 @@ We also need some geometric definitions.
 \end{proposition}
 
 \begin{remark}
-  From~\cref{prop:finite-vertices-bounds} we obtain in particular, that we \(C_{s'}⊂⟦x^C,y^C⦆\) for all regions \(C_{s'}∈C_{Φ,1}\) with non-constant spiketrain \(s'\):
+  From~\cref{prop:finite-vertices-bounds} we obtain in particular that \(C_{s'}⊂⟦x^C,y^C⦆\) for all regions \(C_{s'}∈C_{Φ,1}\) with non-constant spiketrain \(s'\):
   By~\cref{lem:non-finite-regions} all vertices of \(C_{s'}=⟦x^{s'},y^{s'}⦆\) are finite, so \(x^{s'},y^{s'}∈P⊂⟦x^C,y^C⟧\) and therefore \(⟦x^{s'},y^{s'}⦆⊂⟦x^C,y^C⦆\).
 \end{remark}
 
@@ -443,54 +450,11 @@ We also need some geometric definitions.
   Let us now show that it suffices to compute \(g\) on \(s_j^{x^C_i}\) and \(s_j^{y^C_i}\) to obtain the boundaries. For that purpose we have to take another look at the definition of \(g\). Since the definition is quite clunky we have split it up into the following functions
   \begin{align*}
     g^r_i(t;σ)&≔-\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki_i(0)+b+\sum_{l=1}^kα^{k-l}⟨v_i,σ(l-1)⟩\right) +β^tu_i(0)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}, \\
-    g^{ϑ}_i(t;σ)&≔\frac{ϑ\left(1+\sum_{k=1}^{t-1}β^{t-k}σ_i(k)\right)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}
+    g^{ϑ}_i(t;σ)&≔ϑ\frac{1+\sum_{k=1}^{t-1}β^{t-k}σ_i(k)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}
   \end{align*}
-  such that \(g(t;σ)=g^{r}(t;σ)+g^ϑ(t;σ)\). Now fixing \(t\) and requiring \(∀_{t∈[T]}σ_i(t)=0\), the function \(g^ϑ_i(t;σ)\) constant and \(g^r_i(t;σ)\) is minimal for \(σ_j(t)=1_{((v_i)_j>0)}\) for \(i≠j\), so in particular for \(σ=s^{x_i^C}\). Hence we indeed have \(x^C_i = \min_{t∈[T]}g_i(t;s^{x^C_i})\). We similarly get \(x^C_i = \min_{t∈[T]}g_i(t;s^{y^C_i})\).
-  %TODO: check if g_i or g
+  such that \(g(t;σ)=g^{r}(t;σ)+g^ϑ(t;σ)\). Now fixing \(t\) and requiring \(∀_{t∈[T]}σ_i(t)=0\), the function \(g^ϑ_i(t;σ)\) is constant; further \(g^r_i(t;σ)\) is minimal for \(∀_{i≠j}σ_j(t)=1_{((v_i)_j>0)}\), so in particular for \(σ=s^{x_i^C}\). Hence we indeed have \(x^C_i = \min_{t∈[T]}g_i(t;s^{x^C_i})\). We similarly get \(x^C_i = \min_{t∈[T]}g_i(t;s^{y^C_i})\).
+  %DONE: check if g_i or g
 \end{proof}
-
-Theorem 4.3 of~\cite{nguyen2025timespikeunderstandingrepresentational} states the following:
-
-\begin{theorem}\label{thm:regions-upper-bound}
-  Consider a discrete-time LIF-SNN \(Φ\) with \(T\) time steps, input dimension \(n_0\) and \(n_1\) neurons in the first hidden layer. Then the number of constant regions is bounded by
-  \begin{equation}
-\abs{C_{Φ}}≤\abs{C_{Φ,1}}≤\begin{cases} \sum_{i=0}^{n_0}\left(\frac{T^2+T}{2}\right)^i\binom{n_1}{i} & n_1>n_0, \\ \left(\frac{T^2+T+2}{2}\right)^{n_1} & \text{otherwise.} \\ \end{cases}
-  \end{equation}
-\end{theorem}
-
-While we were able to get promising empirical results in~\cref{ch:experiments} that seem to confirm that\cref{thm:regions-upper-bound} also holds for \rdtlifsnn, we were not able to proof them. We will therefore first give a simplified proof for the case of \(W=\idM{n_1}\) and \(V=\zeroV{n_1×n_1}\) and then showcase why the generalization to arbitrary \(V\) fails. Let us first state the stripped down version:
-
-\begin{theorem}\label{thm:regions-upper-bound-stripped}
-  Consider a \rdtlifsnn \(Φ\) with \(T\) time steps, input dimension \(n_0\), trivial weights, i.e. \(W=\idM{n_1}\) and no recurrent connections, i.e. \(V=\zeroV{n_1×n_1}\). Then the number of constant regions is bounded by
-  \begin{equation}
-    \abs{C_{Φ}}≤\abs{C_{Φ,1}}≤ \left(\frac{T^2+T+2}{2}\right)^{n_1}
-  \end{equation}
-\end{theorem}
-
-\begin{proof}
-  As we have stated before, \(\abs{C_{Φ}}≤\abs{C_{Φ,1}}\) follows directly from the fact that the output of the whole network only depends on the binary spike trains of the first layer.
-
-  Let us further proof \(\abs{C_{Φ,1}}≤ \left(\frac{T^2+T+2}{2}\right)^{n_1}\). In the following we will use \(Φ_τ\) to mean the \rdtlifsnn that only differ from \(Φ\) by \(T_{Φ_τ}=τ\). It suffices now to show \(\abs{C_{Φ_{τ},1}}≤ \left(\frac{τ^2+τ+2}{2}\right)^{n_1}\) inductively.
-  Let first \(\)
-\end{proof}
-
-% TODO: α does not increase
-
-We will now try to give a high-level overview on why this is the case. We will assume \(W=I_{n_1}\) again.
- The proof in~\cite{nguyen2025timespikeunderstandingrepresentational} makes use of two major facts:
-% \begin{itemize}
-%   \item For \(W=\idM{n_1}\), \(V=\zeroV{n_1×n_1}\) and \(α=0\) we get equations
-%     \begin{align}
-%     i(t) & = x \\
-%     p(t) & = βu(t-1)+i(t)+b \\
-%     s(t) & = H(p(t)-ϑ\oneV{n}) \\
-%     u(t) & = p(t)-ϑs(t).
-%     \end{align}
-%     and in particular
-%     \begin{align}
-%         p(t;x) &= β^tu(0)+(x+b)\sum_{k=1}^tβ^{t-k}-ϑ\sum_{k=1}^{t-1}β^{t-k}s(k)
-%     \end{align}
-%     Notice that the components \(i_i,p_i,s_i,u_i\) are computed in parallel, without affecting each other, in particular due to \(V=0\).
 
 \begin{figure}[!htbp]
   \centering
@@ -506,8 +470,65 @@ We will now try to give a high-level overview on why this is the case. We will a
     \caption{The landscape of a \rdtlifsnn.}
     \label{fig:ch04-upper-bound-rdtlifsnn}
   \end{subfigure}
-  \caption{Comparison of \dtlifsnn vs. \rdtlifsnn; White lines separate regions with a different spike count; Pink lines separate regions with a different spike count disregarding the latest spikes from the last times-step}
+  \caption{Comparison of \dtlifsnn vs. \rdtlifsnn; White lines separate regions with a different spike count; Pink lines separate regions with a different spike count on the previous time step}
 \end{figure}
+
+
+Theorem 4.3 of~\cite{nguyen2025timespikeunderstandingrepresentational} states the following:
+
+\begin{theorem}\label{thm:regions-upper-bound}
+  Consider a discrete-time LIF-SNN \(Φ\) with \(T\) time steps, input dimension \(n_0\) and \(n_1\) neurons in the first hidden layer. Then the number of constant regions is bounded by
+  \begin{equation}
+\abs{C_{Φ}}≤\abs{C_{Φ,1}}≤\begin{cases} \sum_{i=0}^{n_0}\left(\frac{T^2+T}{2}\right)^i\binom{n_1}{i} & n_1>n_0, \\ \left(\frac{T^2+T+2}{2}\right)^{n_1} & \text{otherwise.} \\ \end{cases}
+  \end{equation}
+\end{theorem}
+
+While we were able to get promising empirical results in~\cref{ch:experiments} that seem to confirm that\cref{thm:regions-upper-bound} also holds for \rdtlifsnn, we were not able to proof them. We will therefore first give a sketch of a proof for the case of \(W=\idM{n_1}\) and \(V=\zeroV{n_1×n_1}\) and then showcase why the generalization to arbitrary \(V\) fails. Let us first state the stripped down version:
+
+\begin{theorem}\label{thm:regions-upper-bound-stripped}
+  Consider a \rdtlifsnn \(Φ\) with \(T\) time steps, input dimension \(n_0\), trivial weights, i.e. \(W=\idM{n_1}\) and no recurrent connections, i.e. \(V=\zeroV{n_1×n_1}\). Then the number of constant regions is bounded by
+  \begin{equation}
+    \abs{C_{Φ}}≤\abs{C_{Φ,1}}≤ \left(\frac{T^2+T+2}{2}\right)^{n_1}
+  \end{equation}
+\end{theorem}
+
+\begin{proof}[Sketch]
+  As we have stated before, \(\abs{C_{Φ}}≤\abs{C_{Φ,1}}\) follows directly from the fact that the output of the whole network only depends on the binary spike trains of the first layer.
+
+  Note that the separating lines in~\cref{fig:ch04-upper-bound-dtlifsnn} are real lines instead of line segments like in~\cref{fig:ch04-upper-bound-rdtlifsnn}. This shows the independence of the two neurons in the first hidden layer of the used~\dtlifsnn. In fact this property is inherent to \dtlifsnn, since we get the following equations for \(W=\idM{n_1}\) and \(V=\zeroV{n_1×n_1}\)
+  \begin{align}
+    i(t) & = αi(t-1)+x, \\
+    p(t) & = βu(t-1)+i(t)+b, \\
+    s(t) & = H(p(t)-ϑ\oneV{n}), \\
+    u(t) & = p(t)-ϑs(t)
+  \end{align}
+  and in particular
+  \begin{align}
+    i(t;x) &= α^ti(0)+x\sum_{k=1}^tα^{t-k}, \\
+    p(t;x) &= β^tu(0)+\sum_{k=1}^tβ^{t-k}(i(k;x)+b)-ϑ\sum_{k=1}^{t-1}β^{t-k}s(k).
+  \end{align}
+  Notice that the components \(i_i,p_i,s_i,u_i\) are computed in parallel, without affecting each other, in particular due to \(V=0\). Further the result of \(i_i,p_i,s_i,u_i\) only depends on \(x_i\) since further \(W=\idM{n_1}\).
+
+  So it suffices to analyze the possible change of the output of \(s_i\) depending on different values for \(x_i\).
+  Let us first define \(Φ_{t,i}\) as the restriction of \(Φ\) on the \(i\)-th neuron in the first hidden layer, using \(t∈[T]\) for \(T_{Φ_{t,i}}\). Due to the previous analysis, the \(s_i\) of \(Φ\) has the same functionality as \(s_1\) of \(Φ_{t,i}\).
+
+  We will now proof that \((s(t'))_{t'∈[t]}\) can take on \(\frac{t^2+t+2}{2}\) many different values for \(t∈[T]\) by induction on \(t\).
+  This suffices to proof the theorem since we then have \(n_1\) independent neurons in the first layer that each can take on a maximal number of \(\frac{T^2+T+2}{2}\) many values.
+  Let \(t=1\). This case is obvious, since \(s_i(1)∈\{0,1\}\).
+  Suppose on the other hand now \(t>1\). From now on, all notations like \(s,α,β,…\) will refer to \(Φ_{t,i}\), so in particular \(s(t)∈\{0,1\}\). By induction hypothesis, we have \(\frac{t^2-t+2}{2}\) possible values for \((s(t'))_{t'∈[t-1]}\).
+  Let us further categorize \((s(t'))_{t'∈[t-1]}\) by the number of spikes it contains. The number must be at least \(0\) and can be at most \(t-1\), so we have \(t\) categories.
+
+  Let us further regard the definition of \(g\) for \(α=0\) and \(V=0\),
+  \[ g(t;σ)≔-\frac{\sum_{k=1}^tβ^{t-k}\left(α^ki(0)+b\right) +β^tu(0)-ϑ\left(1+\sum_{k=1}^{t-1}β^{t-k}σ(k)\right)}{\sum_{k=1}^tβ^{t-k}\sum_{l=1}^kα^{k-l}}. \]
+  Clearly \(g(t;σ)\) only changes in the subterm \(\sum_{k=1}^{t-1}β^{t-k}σ(k)\) in \(σ\).
+  % Since \(s_i(t;x)\) only depends on \(x_i∈ℝ\), we also write \(s_i(t;z)\) for \(z∈ℝ\) to mean \(s_i(t;x)\) with \(∀_{i≠j}x_j=0\) and \(x_i=z\).
+  Suppose \(x,x'∈ℝ\) are given with \(x<x'\) and \(s(·;x)≠s(·;x')\). Then there appears a spike earlier in \(s(·;x)\) than in \(s(·;x')\) due to~\cref{lem:spike-trains-ineq}.
+  In fact, if both \(s(·;x)\) and \(s(·;x')\) are located in the same category, every spike in \(s(·;x)\) appears earlier than the corresponding spike in \(s(·;x')\), though we won't proof this here. So \(\sum_{k=1}^{t-1}β^{t-k}s(k;x)≥\sum_{k=1}^{t-1}β^{t-k}s(k;x')\) and therefore \(g(t;s(·;x))≥g(t;s(·;x'))\). Notice that the ordering has been reversed.
+
+  Further, due to~\cref{prop:const-regions-cuboids}, a region \(C_{s'}\) with \(s'∈\{0,1\}^{t-1}\) is only split at time-step \(t\) if \(g(t;s')∈C^{s'}\). But since the regions are half-open cuboids, so half-open intervals in this case, given a category of regions \(κ∈[t-1]_0\), we have that only one region of those with spike count \(κ\) can be split, since the ordering of \(g(t;s(·;x))\) is reversed to \(x∈ℝ\) inside of category \(κ\).
+  So we get at a maximum, as many new regions as categories. So we obtain \(t+\frac{t^2-t+2}{2}=\frac{t^2+t+2}{2}\) regions in total.
+  %DONE: fix cites that should be cref
+\end{proof}
 
 \begin{figure}[!htbp]
   \centering
@@ -536,7 +557,8 @@ We will now try to give a high-level overview on why this is the case. We will a
     \includegraphics[width=\textwidth]{src/figures/ch04-upper-bound-dtlifsnn/ch04-upper-bound-dtlifsnn_5.png}
     \caption{\(T=5\)}
   \end{subfigure}
-  \caption{TODO}
+  \caption{Development of landscape of a \dtlifsnn through time; White lines separate regions with a different spike count; Pink lines separate regions with a different spike count on the previous time step}
+  \label{fig:ch04-dtlifsnn-through-time}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -566,49 +588,37 @@ We will now try to give a high-level overview on why this is the case. We will a
     \includegraphics[width=\textwidth]{src/figures/ch04-upper-bound-rlifsnn/ch04-upper-bound-rlifsnn_5.png}
     \caption{\(T=5\)}
   \end{subfigure}
-  \caption{TODO}
+  \caption{Development of landscape of a \rdtlifsnn through time; White lines separate regions with a different spike count; Pink lines separate regions with a different spike count on the previous time step}
+  \label{fig:ch04-rdtlifsnn-through-time}
 \end{figure}
 
-While we were able to get promising empirical results in~\cref{ch:experiments} that seem to confirm that\cref{thm:regions-upper-bound} also holds for \rdtlifsnn, we were not able to proof them.
+While we have not properly proven it, one interesting fact is that the introduction of \(α\) did not affect the theorem, only \(V\) creates problems. Let us now analyze we that is the case. One of the major properties the proof relies on is the neurons being independent of each other. While it is easily derived from the equations that this is not the case for \(V≠\zeroV{n_1×n_1}\), it might be more instructive to consider looking at~\cref{fig:ch04-upper-bound-rdtlifsnn}.
+To get out of this problem and “control” the chaos that the neurons might inflict on each other, one might consider it helpful to do the same categorization trick as in the previous proof, but applied on all neurons on the same time, i.e. we consider regions of equal number of spikes in each respective component one by one.
+Compare~\cref{fig:ch04-rdtlifsnn-through-time} and~\cref{fig:ch04-rdtlifsnn-through-time}. The pink lines are the white lines of the respective previous time-step and gray lines were at some point white/pink, since every separating line was at some point a new line and every new line separates regions with different spike count (the regions around a new line differ in exactly one spike).
 
-% TODO: α does not increase
+We further see that the plane is partitioned by the pink lines into similar shaped regions, that each contain a (potentially degenerated) white cross. Those white lines of the crosses correspond to \(g_i(T;s(·;x))\). The white lines are straight, even on different regions \(C_{s'}\) inside of one category, since we use \(β=1\) in both figures: In that case \(g_i\) is constant on spike trains with the same spike count. See e.g.~\cref{fig:ch04-non-cross} for \(β≠1\).
+Now for \(β=1\) it is not hard to proof that inside of a given category, there exists only this single cross without multiple parallel lines, which is quite a promising result.
+One would be forgiven for thinking that we can just finish the proof similarly to before, after all we now know how many new lines are getting added in time-step \(t\).
+But the devil being in the details, a considerable problem arises when considering how many regions will be added at a maximum. This can be deduced by finding the maximal number of regions from the previous time-step located horizontally/vertically next to each other in a category. In other words: How many regions can a straight line (that is parallel to a coordinate axis) touch inside of a category.
 
-We will now try to give a high-level overview on why this is the case. We will assume \(W=I_{n_1}\) again.
- The proof in~\cite{nguyen2025timespikeunderstandingrepresentational} makes use of two major facts:
-\begin{itemize}
-  \item For \(W=\idM{n_1}\), \(V=\zeroV{n_1×n_1}\) and \(α=0\) we get equations
-    \begin{align}
-    i(t) & = x \\
-    p(t) & = βu(t-1)+i(t)+b \\
-    s(t) & = H(p(t)-ϑ\oneV{n}) \\
-    u(t) & = p(t)-ϑs(t).
-    \end{align}
-    and in particular
-    \begin{align}
-        p(t;x) &= β^tu(0)+(x+b)\sum_{k=1}^tβ^{t-k}-ϑ\sum_{k=1}^{t-1}β^{t-k}s(k)
-    \end{align}
-    Notice that the components \(i_i,p_i,s_i,u_i\) are computed in parallel, without affecting each other, in particular due to \(V=0\).
-    
-    
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.35\textwidth]{src/figures/ch04-non-cross.png}
+    \caption{For \(β≠1\) and \(V≠\zeroV{n_1×n_1}\), the white crosses are not made of straight lines}
+    \label{fig:ch04-non-cross}
+\end{figure}
 
-        , the neurons of the first layer don't influence each other in \dtlifsnn and the proof can therefore just focus on how many different spikestrains a single neuron can possibly emit. Due to, each neurons input has its own independent input component. So the number of different values the whole first hidden layer can emit is just the product of the maximal number of spikes each neuron can emit. Since the parameters can be arbitrary, that maximal number is the same for each neuron. This is why the upper bound in~\cref{thm:regions-upper-bound} has an exponent \(n_1\).
-\item Let us regard the definition of \(g\) for \(α=0\) and \(V=0\):
-  \[ g(t;σ)=-b-\frac{β^tu(0)-ϑ\left(1+\sum_{k=1}^{t-1}β^{t-k}σ(k)\right)}{\sum_{k=1}^tβ^{t-k}} \]
-  Let us further regard a time-step \(t∈[T]\). If we regard the spiketrains \((s_i(t';x))_{t'∈[t]}\) we get for \(x∈ℝ^{n_1}\), we see that \(s_i(·;x)\) only changes depending on \(x_i\), since \(V=0\). Further, if we have \(x,y∈ℝ^{n_1}\) such that \(∀_{i≠j}x_j=y_j\) with \(x_i<y_i\) and \(s_i(·;x)≠s_i(·;y)\), then  \(s_i(·;x)<s_i(·;y)\) lexiographically by~\cref{lem:spike-trains-ineq}. In fact, not only lexiographically, but even stronger, but every spike appears earlier in \(s_i(·;y)\) than in \(s_i(·;x)\).
-        %TODO: clear up notation s_i(·;…) vs. ()_t∈[T]
+This question is very much non-trivial, especially since this question cannot be reduced to looking at the maximal number of regions that can be touched by a straight line in the whole plane like for \(V=\zeroV{n_1×n_1}\), since the categories as well as the crosses might be shifted in relation to each other, as can be seen in e.g.~\cref{fig:ch04-rdtlifsnn-through-time}.
 
-  If we now regard \(g\), we therefore see that \(g_i(t;s_i(·;x))≥g_i(t;s_i(·;y))\). So the ordering has been reversed. But since the points returned by \(g\) define the points where the regions are split (compare~\cref{prop:const-regions-cuboids}), this means that only one region among all of those that share the same number of spikes will be split in time-step \(t\). Since there are only \(t+1\) possible counts of spikes at \(t\), we therefore only get \(t+1\) possible splits when going from \(t\) to \(t+1\), wherefore we get \(≈\sum_{t=1}^Tt=\frac{T^2+T}{2}\) regions in this neuron.
-\end{itemize}
+% DONE: α does not increase
 
-%TODO: images (β≠1+V≠0, β=1+V≠0)
+% DONE: images (β≠1+V≠0, β=1+V≠0)
 
-Now since the neurons of the first layer of a \rdtlifsnn can influence each other, it does not suffice to look at the behavior of a single neuron. We instead have to look at all the neurons together. One approach that seemed quite promising was to focus on partitioning the input space into regions with the same number of spikes in every component. This gives some control onto the next regions, but still not enough to have the same reversed orderings of regions in \(C_{Φ,1}\) and points induced by \(g\): Consider …
-Further, even for \(β=1\), where we clearly get that \(g\) is constant on the whole region with constant number of spike trains, we don't quite have enough enough control on the behavior of the new regions.
-% TODO: refer to images
+% DONE: refer to images
 % crosses don't necessarily cross only so many
 
 % CANCELLED: remove lem 4.7?
-% TODO: more time-steps don't really increase the region that is getting fitted upon
+% MAYBE: more time-steps don't really increase the region that is getting fitted upon
 
 % DONE: lexiographic ordering even in general case (with specific def.) and
 

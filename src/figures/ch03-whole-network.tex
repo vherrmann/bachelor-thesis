@@ -1,5 +1,6 @@
 \usetikzlibrary{positioning, chains, shapes.geometric, fit, shapes, arrows.meta, calc, backgrounds}
 
+
 \begin{tikzpicture}[
     >=LaTeX, % Use default LaTeX arrows
     % Styles 
@@ -29,11 +30,6 @@
         -latex,
         thick
     },
-    backprop/.style={ % Backpropagation arrows
-        arrow,
-        dashed,
-        gray
-    }
 ]
     
     % Input
@@ -50,15 +46,16 @@
     \draw node at (2.5, -5*1.25) [node] (second_a1) {$a_1$};
 
     % Hidden 2
-    \newcommand{\nodeGroup}[2]{
+    \newcommand{\nodeGroup}[3]{
       \foreach \x in {1,...,2}
       \node at (5, #2-\x*0.25) [innerNode] (#1_\x){};
       \node at (5, #2-4*0.25) [innerNode] (#1_om){};
       \path (#1_2) -- (#1_om) node[pos=0.5, scale=0.5] {$\vdots$};
       \node[group, dashed, fit=(#1_1) (#1_om)] (#1) {};
+      \node[anchor=west] at ($(#1)+(0.03,0.65)$) {\tiny #3};
     }
-    \nodeGroup{third_1}{-0.25}
-    \nodeGroup{third_kn}{-2.4}
+    \nodeGroup{third_1}{-0.25}{$1$}
+    \nodeGroup{third_kn}{-2.4}{$K^n$}
     \path (third_1) -- (third_kn) node[pos=0.5, scale=2] {$\vdots$};
 
     \draw node at (5, -4.5) [node] (third_a2) {$a_2$};

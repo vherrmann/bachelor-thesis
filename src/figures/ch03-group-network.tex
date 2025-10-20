@@ -30,11 +30,6 @@
         -latex,
         thick
     },
-    backprop/.style={ % Backpropagation arrows
-        arrow,
-        dashed,
-        gray
-    }
 ]
     
     % Input
@@ -51,10 +46,10 @@
     \draw node at (2.5, -0.625-4*1.25) [node] (second_a1) {$a_1$};
 
     % Hidden 2
-    \node at (5, 0.25-1.1) [node] (third_1_1){$ι_j(1)$};
-    \node at (5, 0.25-2*1.1-0.75) [node] (third_1_n){$ι_j(n)$};
+    \node at (5, 0.25-1.1) [node] (third_1_1){$ι_1(1)$};
+    \node at (5, 0.25-2*1.1-0.75) [node] (third_1_n){$ι_1(n)$};
     \path (third_1_1) -- (third_1_n) node[pos=0.5, scale=2] {$\vdots$};
-    \node at (5, 0.25-3*1.1-0.75) [node] (third_1_om){$ω_j$};
+    \node at (5, 0.25-3*1.1-0.75) [node] (third_1_om){$ω_1$};
     \node[group, dashed, fit=(third_1_1) (third_1_om)] (third_1) {};
 
     \draw node at (5, -6) [node] (third_a2) {$a_2$};

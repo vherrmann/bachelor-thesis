@@ -14,19 +14,27 @@ We further use \(\operatorname{diam}_p(U)≔\sup_{x,y∈U}\norm{x-y}_p\) to mean
 \newcommand{\idM}[1]{I_{#1}}
 \newcommand{\zeroV}[1]{\mathbf{0}_{#1}}
 \newcommand{\oneV}[1]{\mathbf{1}_{#1}}
-Continuing, \(e_i≔(0,…,1,…,0)∈ℝ^n\) is the \(i\)-th standard basis vector, \(\zeroV{n}≔(0,…,0)∈ℝ^n\), \(\oneV{n}≔(1,…,1)∈ℝ^n\) the vectors containing \(0\) and \(1\)s in every component, respectively and \(\idM{n}∈ℝ^{n×n}\) the identity matrix of size \(n×n\). Is moreover \(W∈ℝ^{n×m}\) a matrix, then we will write \(w_i∈ℝ^{1×n}\) for the \(i\)-th row vector and \(W_{i,j}∈ℝ\) for the value of the cell at location \((i,j)\). We add an ordering \(≤\) to vectors: \(x≤y\) holds exactly for \(x,y∈ℝ^n\) if \(∀_{i∈[n]}x_i≤y_i\). Further \(x<y\) is canonically defined, so \(x<y\) holds exactly if \(x≤y\) but not \(x=y\).
+Continuing, \(e_i≔(0,…,1,…,0)∈ℝ^n\) is the \(i\)-th standard basis vector, \(\zeroV{n}≔(0,…,0)∈ℝ^n\), \(\oneV{n}≔(1,…,1)∈ℝ^n\) the vectors containing \(0\) and \(1\)s in every component, respectively and \(\idM{n}∈ℝ^{n×n}\) the identity matrix of size \(n×n\). Is moreover \(W∈ℝ^{n×m}\) a matrix, then we will write \(w_i∈ℝ^{1×n}\) for the \(i\)-th row vector and \(W_{i,j}∈ℝ\) for the value of the cell \((i,j)\). We add an ordering \(≤\) to vectors: \(x≤y\) holds exactly for \(x,y∈ℝ^n\) if \(∀_{i∈[n]}x_i≤y_i\). Further \(x<y\) is canonically defined, so \(x<y\) holds exactly if \(x≤y\) but not \(x=y\).
 
 Is further \(f:U→ℝ^n\) a function with arbitrary domain \(U\), then \(f_i≔π_i∘f\) is the \(i\)-th component function. \(π_i:ℝ^n→ℝ\) is the projection to the \(i\)-th component. We also write \(f^{-1}\) for the inverse of \(f\) and \(f^{-1}(W)≔\{x∈U \mid f(x)∈W\}\) for the preimage of \(W\) under \(f\). The set of continuous functions of type \(U→W\) will be written by \(𝒞^0(U,W)\). Correspondingly, the set of \(k\)-times continuously differentiable functions will be written \(𝒞^k(U,W)\). The total derivative of a differentiable function \(f:U→W\) is written as \(df:U→\operatorname{Hom}_{ℝ}(W,W)\).
 
-We moreover write \(\max{U}≔(\max_{u∈U}u_i)_{i∈[n]}\) with \(U⊂(ℝ∪\{±∞\})^n\) for the maximum by component of \(U\), we similarly define \(\min{U}\), \(\inf{U}\) and \(\sup{U}\). In addition we use the conventions \(\inf(∅)=∞\) and \(\sup(∅)=-∞\).
+The norms \(\norm{·}_p\) either are the \(p\)-norm on \(ℝ^n\) or the operator norm with regard to the \(p\)-norm \(\norm{·}_p\) in input and output space. Further, \(\norm{f}_{∞,p}≔\sup_{x∈U}\norm{f(x)}_p\) for a function \(f:U→ℝ^n\).
+
+Some further notation regarding geometry: \(\overline{A}\) is the closure of \(A⊂ℝ^n\), \(A°\) the interior; we further write \(B_{ε,p}(x)≔\{y\mid \norm{y-x}_p<ε\}\) for \(ε>0\), \(p≥1\) and \(x∈ℝ^n\).
+
+We moreover write \(\max{U}≔(\max_{u∈U}u_i)_{i∈[n]}\) with \(U⊂(ℝ∪\{±∞\})^n\) for the maximum by component of \(U\), we similarly define \(\min{U}\), \(\inf{U}\) and \(\sup{U}\). In addition we use the conventions \(\inf(∅)=∞\) and \(\sup(∅)=-∞\). We will also use \(∧\) and \(∨\) to write the supremum and infimum respectively when convenient.
 
 %DONE: f^-1 for the inverted function, f^-1(U) for preimage
 %DONE: define < for vectors (convention)
 
 %DONE: notation for total der.
 
-%TODO: introduce notation []_…^… as product
-% TODO: notation \(\norm{f}_{∞,2}\), \(\norm{g}_2\) für \(g\) linear
+%MAYBE: introduce notation []_…^… as product
+%DONE: notation \(\norm{f}_{∞,2}\), \(\norm{g}_2\) für \(g\) linear
+
+%DONE: notation \(\overline{}\), °, closure, interior
+%CANCELLED: introduce notation N_ρ(Ω)
+%DONE: introduce ∨,∧ notation
 
 \newcommand{\charac}[1]{χ_{#1}}
 \newcommand{\oneP}[1]{1_{#1}}
@@ -37,11 +45,6 @@ for the characteristic function of a set \(M\) and
 for a formula \(A\), such that in particular \(\charac{M}(x)=\oneP{(x∈M)}\).
 
 \subsection{Motivation}
-A neuron in the human brain has connections to other neurons, which may be weaker or stronger. A neuron further has an internal membrane potential that is increased or decreased by the input from other neurons. If that membrane potential reaches a certain point, the neuron will spike and the connected neurons will receive an update. This update is delivered by chemical transmitters or electric signals. Further this signal won't just be a binary spike, but will decay over time after the spike, e.g. because the chemical transmitters have some chance of taking a longer path to the next neuron.
-The membrane potential may also decay over time.
-
-From these biologic observations we can derive the following differential equations for a single neuron input \(I:ℝ→ℝ\) and membrane potential \(U:ℝ→ℝ\) (compare e.g.~\cite{neuronaldynamics2014}):
-%TODO: work in {neuronaldynamics2014} and figure
 
 \begin{figure}[ht]
   \centering
@@ -51,37 +54,74 @@ From these biologic observations we can derive the following differential equati
 \end{figure}
 \footnotetext{Source: By BruceBlaus - Own work, CC BY 3.0, \url{https://commons.wikimedia.org/w/index.php?curid=28761830 }}
 
+%DONE: hier überarbeiten
+
+A neuron as in~\cref{fig:ch02-structure-of-neuron} has been described in~\cite{neuronaldynamics2014} by the following:
+
+\begin{displayquote}
+  A typical neuron can be divided into three functionally distinct parts, called dendrites, soma [also called cell body], and axon; […]. Roughly speaking, the dendrites play the role of the ‘input device’ that collects signals from other neurons and transmits them to the soma. The soma is the ‘central processing unit’ that performs an important non-linear processing step: If the total input arriving at the soma exceeds a certain threshold, then an output signal is generated. The output signal is taken over by the ‘output device’, the axon, which delivers the signal to other neurons.
+\end{displayquote}
+
+The nature of the signals traveling between neurons is described in a following paragraph.
+
+\begin{displayquote}
+  The neuronal signals consist of short electrical pulses […]. The form of the pulse does not change as the action potential propagates along the axon. A chain of action potentials emitted by a single neuron is called a spike train – a sequence of stereotyped events which occur at regular or irregular intervals; […]. Since isolated spikes of a given neuron look alike, the form of the action potential does not carry any information. Rather, it is the number and the timing of spikes which matter. 
+\end{displayquote}
+
+Finally, the effect of signals on the state of the cell body is outlined in the last quote.
+
+\begin{displayquote}
+  The effect of a spike on the postsynaptic neuron can be recorded with an intracellular electrode which measures the potential difference u(t) between the interior of the cell and its surroundings. This potential difference is called the membrane potential. Without any input, the neuron is at rest corresponding to a constant membrane potential urest. After the arrival of a spike, the potential changes and finally decays back to the resting potential, […].
+\end{displayquote}
+
+\begin{comment}
+Finally the connection between two neurons has a small gap, called synapse:
+
+\begin{displayquote}
+  The site where the axon of a presynaptic neuron makes contact with the dendrite (or soma) of a postsynaptic cell is the synapse. […] At a chemical synapse, the axon terminal comes very close to the postsynaptic neuron, leaving only a tiny gap between pre- and postsynaptic cell membrane. This is called the synaptic cleft. When an action potential arrives at a synapse, it triggers a complex chain of bio-chemical processing steps that lead to a release of neurotransmitter from the presynaptic terminal into the synaptic cleft. As soon as transmitter molecules have reached the postsynaptic side, they will be detected by specialized receptors in the postsynaptic cell membrane […].
+\end{displayquote}
+\end{comment}
+
+To summarize: A neuron in the human brain has connections to other neurons, which may be weaker or stronger, as well as an internal membrane potential that is increased or decreased by the input from other neurons. If that membrane potential reaches a threshold, the neuron will spike and the subscribed neurons will receive an update. If it does not reach the threshold, the potential just decays to the rest potential. Updates from other neurons are delivered by chemical transmitters or electric signals. We will not model these signals as a single binary spike, such that in particular the input immediately drops down to the rest state, but will instead let it decay over time after the spike, e.g.\ because the chemical transmitters have some chance of taking a longer path to the next neuron.
+
+From these biologic observations we can derive the following differential equations for a single neuron input \(I:ℝ→ℝ\) and membrane potential \(U:ℝ→ℝ\):
+%DONE: work in {neuronaldynamics2014} and figure
+
 % DONE: graphic, https://en.wikipedia.org/wiki/Neuron#/media/File:Blausen_0657_MultipolarNeuron.png ?
 % DONE: link paper for equations
 \begin{align*}
- I'(t) &≔-τ_αI(t)+\sum_{j=1}^nw_js_j(t-Δt) \\
+ I'(t) &≔-τ_αI(t)+\sum_{j=1}^nw_is_i(t-Δt) \\
  U'(t) &≔-τ_βU(t)+I(t)+b-ϑs(t)
 \end{align*}
-Here \(s_j:ℝ→\{0,1\}\) represents the \(j\)-th connection of the given neuron spiking at time \(t\); the variables \(w_j∈ℝ\) represent the weights of the connections. Since we might get unresolvable dependencies between neurons otherwise, the connections need to have some latency \(Δt∈ℝ\). The variables \(τ_{α}\), \(τ_{β}\) specify the decay rate.
+Here \(s_i:ℝ→\{0,1\}\) represents the \(j\)-th connection of the given neuron spiking at time \(t\); the variables \(w_i∈ℝ\) represent the weights of the connections. The \(ϑs(t)\) resets the potential \(U(t)\) after a spike. Since we might get unresolvable dependencies between neurons otherwise, the connections need to have some latency \(Δt∈ℝ\). The variables \(τ_{α},τ_{β}>0\) specify the decay rate with which \(I\) and \(U\) respectively decay.
+We also include the bias \(b∈ℝ\) in the differential equation of \(U\) to simplify constructions of \rdtlifsnn later. %While not so much neurologically motivated, the bias \(b\) can be replaced by a constantly spiking neuron adding that bias through the input \(I\).
 
-Since we are in an analog scenario, it is quite reasonable to assume that \(I\) and \(U\) describe smoothly differentiable functions. We can therefore use the first-order exponential integrator method to obtain a discretization of \(I\) and \(U\) from the differential equations. Let \(t_0,h∈ℝ\) be arbitrary and \(t_{n+1}≔t_n+h\). By using the fundamental theorem of calculus we get
+%DONE: motivate bias
+
+Since we are in an analog scenario, it is reasonable to assume that \(I\) and \(U\) describe smoothly differentiable functions. We can therefore use the first-order exponential integrator method to obtain a discretization of \(I\) and \(U\) from the differential equations. Let \(t_0,h∈ℝ\) be arbitrary and \(t_{n+1}≔t_n+h\). By using the fundamental theorem of calculus we get
 \begin{align*}
   &e^{τ_{α}t_{n+1}}I(t_{n+1})-e^{τ_{α}t_n}I(t_n) \\
   &=\int_{t_n}^{t_{n+1}}\frac{d}{dt}\left(e^{τ_{α}t}I(t)\right)dt \\
   &=\int_{t_n}^{t_{n+1}}e^{τ_{α}t}(I'(t)+τ_αI(t))dt \\
-  &=\int_{t_n}^{t_{n+1}}e^{τ_{α}t}\left(\sum_{j=1}^nw_js_j(t-Δt)\right)dt
+  &=\int_{t_n}^{t_{n+1}}e^{τ_{α}t}\left(\sum_{j=1}^nw_is_i(t-Δt)\right)dt
 \end{align*}
 If we assume the input from the spikes of other neurons to be constant during \([t_n,t_{n+1}]\), we get
 \begin{align*}
- &=\frac{1}{τ_{α}}(e^{τ_{α}t_{n+1}}-e^{τ_{α}t_n})\sum_{j=1}^nw_js_j(t-Δt) \\
- &=\frac{1}{τ_{α}}e^{τ_{α}t_{n+1}}(1-e^{τ_{α}h})\sum_{j=1}^nw_js_j(t-Δt)
+ &=\frac{1}{τ_{α}}(e^{τ_{α}t_{n+1}}-e^{τ_{α}t_n})\sum_{j=1}^nw_is_i(t-Δt) \\
+ &=\frac{1}{τ_{α}}e^{τ_{α}t_{n+1}}(1-e^{τ_{α}h})\sum_{j=1}^nw_is_i(t-Δt)
 \end{align*}
 So we get
-\[ I(t_{n+1})=e^{-τ_{α}h}I(t_n)+\frac{1}{τ_{α}}(1-e^{τ_{α}h})\sum_{j=1}^nw_js_j(t-Δt) \]
-Let us now use \(h=1\) and absorb \(\frac{1-e^{τ_{α}}}{τ_{α}}\) into the weights \((w_j)_{j∈[n]}\), such that we have
+\[ I(t_{n+1})=e^{-τ_{α}h}I(t_n)+\frac{1}{τ_{α}}(1-e^{τ_{α}h})\sum_{j=1}^nw_is_i(t-Δt) \]
+Let us now use \(h=1\) and absorb \(\frac{1-e^{τ_{α}}}{τ_{α}}\) into the weights \((w_i)_{i∈[n]}\), such that we have
 \begin{equation}\label{eq:9}
-I(t_{n+1})=αI(t_n)+\sum_{j=1}^nw_js_j(t-Δt)
+I(t_{n+1})=αI(t_n)+\sum_{j=1}^nw_is_i(t-Δt)
 \end{equation}
-by using \(α≔e^{-τ_{α}}\). We similarly obtain
+by writing \(α≔e^{-τ_{α}}\). We similarly obtain
 \begin{equation}\label{eq:11}
 U(t_{n+1})=βU(t_n)+I(t)+b-ϑs(t)
 \end{equation}
-by using the first-order exponential integrator method, defining \(β≔e^{τ_{β}}\) and absorbing \(\frac{1-β}{τ_{β}}\) into \(I(0)\), \((w_j)_{j∈[n]}\), \(b\) and \(ϑ\).
+by using the first-order exponential integrator method, defining \(β≔e^{-τ_{β}}\) and absorbing \(\frac{1-β}{τ_{β}}\) into \(I(0)\), \((w_i)_{i∈[n]}\), \(b\) and \(ϑ\).
+Note that we have \(α,β∈[0,1]\) by construction.
 
 \begin{figure}[h]
   \centering
@@ -90,12 +130,13 @@ by using the first-order exponential integrator method, defining \(β≔e^{τ_{�
   \label{fig:network-layout}
 \end{figure}
 
+%DONE: motivate in def. why α,β∈[0,1]
 We will now arrange those neurons into layers like shown in~\cref{fig:network-layout}, such that neurons are only connected to neurons from the previous layer or their own layer. Of course, since we allow recurrent connections we can always just merge all layers into the first one, but the layers do give us more control over the network.
 For connections between different layers, we can use \(Δt=0\) in~\eqref{eq:9} since there can be no interdependent connections between neurons in different layers. For connections between neurons in the same layer we use \(Δt>0\) to prevent those interdependencies. Since we have previously chosen \(h=1\), it is natural to further choose \(Δt=1\).
 
-%TODO: define „spike train“
+%MAYBE: define „spike train“
 Since we want to work with arbitrary data and not just spike trains, we further need to encode our data to spikes trains and decode it from spike trains. Like~\cite{nguyen2025timespikeunderstandingrepresentational} we choose a simple direct encoding and membrane potential outputs.
-% TODO: why direct encoding, membrane potential output
+% DONE: why direct encoding, membrane potential output
 
 \subsection{Definitions}
 % DONE: graphic for whole network
@@ -125,9 +166,7 @@ We first define the structure of the hidden layers:
 \end{definition}
 
 \begin{remark}
-  While it is suppressed in the notation, \(i^{[l]}\), \(p^{[l]}\), \(s^{[l]}\) and \(u^{[l]}\) clearly not only depend on \(t\), but by recursion on \(s^{[0]}\).
-
-  Moreover we will also use \(s^{[l]}\) as if it was an element of \(\{0,1\}^{n_l×T}\).
+  While it is suppressed in the notation, \(i^{[l]}\), \(p^{[l]}\), \(s^{[l]}\) and \(u^{[l]}\) clearly not only depend on \(t\), but by recursion also on \(s^{[0]}\). Further, \(s^{[l]}\) can be represented as an element of \(\{0,1\}^{n_l×T}\), which will become useful later to quantify over spike trains. In particular, we will write \(σ(t)\) for \(σ∈\{0,1\}^{n_l×T}\) and \(1∈[T]\) to mean the \(t\)-th column vector of \(σ\).
 \end{remark}
 
 We further define recurrent d.t. LIF-SNN and the function the network realizes:
@@ -165,7 +204,7 @@ We further define recurrent d.t. LIF-SNN and the function the network realizes:
 
 Let us now take a look at some simple examples of \rdtlifsnn:
 
-\begin{example}
+\begin{example}\label{ex:ch02-forward-spikes}
   Let \(T,L∈ℕ\). Then there exists a \rdtlifsnn with \(∀_{t∈[T]}s^{[L]}(t)=s^{[0]}(t)\) for any \(s^{[0]}∈\{0,1\}^{n_0×T}\).
 
   Let us use constant width \(n_l=n\), weights \(W^{[l]}=\idM{n}\), \(V^{[l]}=\zeroV{n×n}\), biases \(b^{[l]}=0\), initial input \(i^{[l]}(0)=0\), initial membrane potential \(u^{[l]}(0)=0\), leaky terms  \(α^{[l]}=β^{[l]}=0\) and threshold \(ϑ^{[l]}=1\) for all \(l∈[L]\).
@@ -191,10 +230,10 @@ Let us now take a look at some simple examples of \rdtlifsnn:
   We then get by definition
   \[i^{[l]}(t)=Ts^{[l-1]}(t)\]
   and therefore
-  \begin{alignat*}{2}
-    s^{[l]}(t) & = H(&&p^{[l]}(t)-\oneV{n_l}) \\
-    p^{[l]}(t) & =   &&p^{[l]}(t-1)+Ts^{[l-1]}(t)-s^{[l]}(t-1)
-  \end{alignat*}
+  \begin{align*}
+    s^{[l]}(t) & = H(p^{[l]}(t)-\oneV{n_l}) \\
+    p^{[l]}(t) & =   p^{[l]}(t-1)+Ts^{[l-1]}(t)-s^{[l]}(t-1)
+  \end{align*}
   By induction over \(t\) (see also~\cref{lem:non-recursive-defs}) we obtain 
   \[ p^{[l]}(t) = \sum_{k=1}^t\left(Ts^{[l-1]}(k)-s^{[l]}(k-1)\right) \]
   Let now \(i∈[n]\). Since \(s^{[l]}(0)=0\), we have \(\sum_{k=1}^ts^{[l]}_i(k-1)≤t-1\). Now if and only if there is any \(t_0∈[T]\) with \(s^{[l-1]}_i(t_0)=1\), we get
@@ -232,12 +271,12 @@ In the following we present some technical but helpful notations and lemmas for 
 
 The notation for the previous definitions is justified due to
 
-%TODO: “Let \(s^{[0]}∈\{0,1\}^{n_0×T}\) be arbitrary.” ?
-\begin{lemma}\label{lem:non-recursive-defs} %TODO: introduce notation for s, σ, s'
+%DONE: “Let \(s^{[0]}∈\{0,1\}^{n_0×T}\) be arbitrary.” ?
+\begin{lemma}\label{lem:non-recursive-defs} %DONE: introduce notation for s, σ, s'
   The non-recursive formulas from~\cref{def:non-recursive-defs} are equivalent to the recursive definitions for \(l∈[L]\), \(t∈[T]\) assuming previous spikes are equal: \(∀_{l'∈[l-1]_0}σ^{[l']}=s^{[l']}\) and \(∀_{t'∈[t-1]}σ^{[l]}(t')=s^{[l]}(t')\) as well as \(∀_{l'∈[l]_0}σ'^{[l']}=s^{[l']}\).
 \end{lemma}
 
-%TODO: introduce convention regarding spike trains function or vector/matrix
+%DONE: introduce convention regarding spike trains function or vector/matrix
 \begin{proof}
   We first proof \(∀_{t∈[T]}i^{[l]}(t;σ)=i^{[l]}(t)\) and \(∀_{t∈[T]}u^{[l]}(t;σ)=u^{[l]}(t)\) for \(σ^{[l]}=s^{[l]}\) by induction: Let \(t=1\). We have
   \begin{align*}
@@ -289,109 +328,113 @@ The notation for the previous definitions is justified due to
 \end{proof}
 
 \begin{lemma}\label{lem:spike-sum}
-  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(β=1\), then \(0≤u^{[l]}_j(t_{ω})<ϑ\) holds if and only if
+  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(β=1\), then \(0≤u^{[l]}_i(t_{ω})<ϑ\) holds if and only if
   \begin{equation}\label{eq:10}
-    \left\lfloor \frac{1}{ϑ}\left(u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_j(t)+b^{[l]}_j)\right) \right\rfloor = \sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t).
+    \left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_{ω}}(i^{[l]}_i(t)+b^{[l]}_i)\right) \right\rfloor = \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t).
   \end{equation}
 \end{lemma}
 
 \begin{proof}
   We have 
-  \[ u^{[l]}_j(t_{ω})=u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}_j(k)+b^{[l]}_j-ϑs^{[l]}_j(k)\right) \]
-  by~\cref{lem:non-recursive-defs}. So~\eqref{eq:10} is equal to \(0≤u^{[l]}_j(t_{ω})<ϑ\) by~\cref{lem:charac-floor}.
+  \[ u^{[l]}_i(t_{ω})=u^{[l]}_i(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}_i(k)+b^{[l]}_i-ϑs^{[l]}_i(k)\right) \]
+  by~\cref{lem:non-recursive-defs}. So~\eqref{eq:10} is equal to \(0≤u^{[l]}_i(t_{ω})<ϑ\) by~\cref{lem:charac-floor}.
 \end{proof}
 
 \begin{lemma}\label{lem:u-p-nonz-eqiv}
-  Let \(t∈[T]\), \(l∈[L]\) and \(j∈[n_l]\). We then have \(u_j^{[l]}(t)≥0⇔p_j^{[l]}(t)≥0\).
+  Let \(t∈[T]\), \(l∈[L]\) and \(i∈[n_l]\). We then have \(u_i^{[l]}(t)≥0⇔p_i^{[l]}(t)≥0\).
 \end{lemma}
 
 \begin{proof}
-  Let \(u_j^{[l]}(t)≥0\). Then \(p_j^{[l]}(t)=u_j^{[l]}(t)+ϑs_j^{[l]}(t)≥0\).
+  Let \(u_i^{[l]}(t)≥0\). Then \(p_i^{[l]}(t)=u_i^{[l]}(t)+ϑs_i^{[l]}(t)≥0\).
 
-  If we know \(p_j^{[l]}(t)≥0\) instead, then suppose \(u_j^{[l]}(t)<0\). Since \(p_j^{[l]}(t)≠u_j^{[l]}(t)\), \(s_j^{[l]}(t)=1\) and therefore \(p_j^{[l]}(t)≥ϑ\). But this means \(u_j^{[l]}(t)=p_j^{[l]}(t)-ϑ≥0\).
+  If we know \(p_i^{[l]}(t)≥0\) instead, then suppose \(u_i^{[l]}(t)<0\). Since \(p_i^{[l]}(t)≠u_i^{[l]}(t)\), \(s_i^{[l]}(t)=1\) and therefore \(p_i^{[l]}(t)≥ϑ\). But this means \(u_i^{[l]}(t)=p_i^{[l]}(t)-ϑ≥0\).
 \end{proof}
 
 \begin{lemma}\label{lem:potential-through-time-plus}
-  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0+1…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≥0\) and \(u^{[l]}_j(t_0)≥0\), then \(u^{[l]}_j(t_ω)≥0\).
+  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0+1…t_{ω}\}}i^{[l]}_i(t)+b^{[l]}_i≥0\) and \(u^{[l]}_i(t_0)≥0\), then \(u^{[l]}_i(t_ω)≥0\).
 \end{lemma}
 
 \begin{proof}
-  Suppose there is a \(t\), \(t_0≤t≤t_{ω}\) with \(u^{[l]}_j(t)<0\). W.l.o.g.\ we can assume \(t\) to be minimal. Clearly \(t≠t_0\), since this contradicts our assumption. So we have \(u^{[l]}_j(t-1)≥0\) and \(i^{[l]}_j(t)+b^{[l]}_j≥0\). So from
-  \[0>u^{[l]}_j(t)=p^{[l]}_j(t)-ϑs^{[l]}(t)=β^{[l]}u^{[l]}_j(t-1)+β(i^{[l]}_j(t)+b^{[l]}_j)-ϑs^{[l]}_j(t).\]
-  we conclude \(s^{[l]}_j(t)=1\) and \(p^{[l]}_j(t)≥ϑ\). But this means \(u^{[l]}_j(t)≥0\) by~\cref{lem:u-p-nonz-eqiv}.
+  Suppose there is a \(t\), \(t_0≤t≤t_{ω}\) with \(u^{[l]}_i(t)<0\). W.l.o.g.\ we can assume \(t\) to be minimal. Clearly \(t≠t_0\), since this contradicts our assumption. So we have \(u^{[l]}_i(t-1)≥0\) and \(i^{[l]}_i(t)+b^{[l]}_i≥0\). So from
+  \[0>u^{[l]}_i(t)=p^{[l]}_i(t)-ϑs^{[l]}(t)=β^{[l]}u^{[l]}_i(t-1)+β(i^{[l]}_i(t)+b^{[l]}_i)-ϑs^{[l]}_i(t).\]
+  we conclude \(s^{[l]}_i(t)=1\) and \(p^{[l]}_i(t)≥ϑ\). But this means \(u^{[l]}_i(t)≥0\) by~\cref{lem:u-p-nonz-eqiv}.
 \end{proof}
 
 \begin{lemma}\label{lem:cont-bar}
-  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\rangeI{t_0}{t_{ω}}}i^{[l]}_j(t)+b^{[l]}_j≤ϑ\) and \(u^{[l]}_j(t_0-1)<ϑ\), then
+  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\rangeI{t_0}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≤ϑ\) and \(u^{[l]}_i(t_0-1)<ϑ\), then
   \begin{equation}\label{eq:8}
-    ∀_{t∈\rangeI{t_0-1}{t_{ω}}}u^{[l]}_j(t)<ϑ.
+    ∀_{t∈\rangeI{t_0-1}{t_{ω}}}u^{[l]}_i(t)<ϑ.
   \end{equation}
 \end{lemma}
 
 \begin{proof}
   We proof~\eqref{eq:8} by induction over \(t∈\rangeI{t_0-1}{t_{ω}}\). The base case is given by assumption. Let further \(t∈\{t_0…t_{ω}\}\). By definition of \(p^{[l]}\), the given assumptions and the induction hypothesis we get
-  \[ p^{[l]}_j(t)=β^{[l]}u^{[l]}_j(t-1)+i^{[l]}_j(t)+b^{[l]}_j ≤ u^{[l]}_j(t-1)+i^{[l]}_j(t)+b^{[l]}_j<2ϑ  \]
-  We further get \(u^{[l]}_j(t)<ϑ\) by definition of \(u^{[l]}\) and \(s^{[l]}\).
+  \[ p^{[l]}_i(t)=β^{[l]}u^{[l]}_i(t-1)+i^{[l]}_i(t)+b^{[l]}_i ≤ u^{[l]}_i(t-1)+i^{[l]}_i(t)+b^{[l]}_i<2ϑ  \]
+  We further get \(u^{[l]}_i(t)<ϑ\) by definition of \(u^{[l]}\) and \(s^{[l]}\).
 \end{proof}
 
 
 \begin{lemma}\label{lem:potential-through-time-minus}
-  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0+1…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≤0\) and \(u^{[l]}_j(t_ω)≥ϑ\), then \(∀_{t∈\{t_0…t_{ω}\}}u^{[l]}_j(t)≥ϑ\).
+  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If \(∀_{t∈\{t_0+1…t_{ω}\}}i^{[l]}_i(t)+b^{[l]}_i≤0\) and \(u^{[l]}_i(t_ω)≥ϑ\), then \(∀_{t∈\{t_0…t_{ω}\}}u^{[l]}_i(t)≥ϑ\).
 \end{lemma}
 
 \begin{proof}
-  Suppose there is a \(t\), \(t_0≤t≤t_{ω}\), with \(u^{[l]}_j(t)<ϑ\). Let \(t\) be maximal with this property. Clearly \(t≠t_{ω}\) by assumption. So we have a contradiction by
-  \[ ϑ≤u^{[l]}_j(t+1)-β^{[l]}(i^{[l]}_j(t+1)+b^{[l]}_j)+ϑs^{[l]}_j(t)=u^{[l]}_j(t). \]
+  Suppose there is a \(t\), \(t_0≤t≤t_{ω}\), with \(u^{[l]}_i(t)<ϑ\). Let \(t\) be maximal with this property. Clearly \(t≠t_{ω}\) by assumption. So we have a contradiction by
+  \[ ϑ≤u^{[l]}_i(t+1)-β^{[l]}(i^{[l]}_i(t+1)+b^{[l]}_i)+ϑs^{[l]}_i(t)=u^{[l]}_i(t). \]
 \end{proof}
 
-%TODO: i vs. j indices
+%DONE: i vs. j indices
 
 \begin{lemma}\label{lem:pos-input-pos-res-pos}
-  Let \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If
-  \[0≤(β^{[l]})^{t_{ω}-t_0}u^{[l]}_j(t_0)+\sum_{t=t_0+1}^{t_ω}(β^{[l]})^{t_{ω}-t}\left(i^{[l]}_j(t)+b^{[l]}_j\right)\]
-  and either \(∀_{t∈\rangeI{t_0+1}{t_{ω}}}s^{[l]}_j(t)=0\) or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_j(t)+b^{[l]}_j≥0\), where \(t'\) is the maximal time \(≤t_{ω}\) such that \(s^{[l]}_j(t')=1\), then \(u^{[l]}_j(t_{ω})≥0\).
+  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If both
+  \begin{equation}\label{eq:5}
+    0≤(β^{[l]})^{t_{ω}-t_0}u^{[l]}_i(t_0)+\sum_{t=t_0+1}^{t_ω}(β^{[l]})^{t_{ω}-t}\left(i^{[l]}_i(t)+b^{[l]}_i\right)
+  \end{equation}
+  and \(∀_{t∈\rangeI{t_0+1}{t_{ω}}}s^{[l]}_i(t)=0\) or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≥0\), where \(t'\) is the maximal time \(≤t_{ω}\) such that \(s^{[l]}_i(t')=1\), then \(u^{[l]}_i(t_{ω})≥0\).
 \end{lemma}
 
 \begin{proof}
-  If \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_j(t)=0\), we get by assumption
-  \begin{equation}\label{eq:5}
-    u^{[l]}_j(t_{ω})=u^{[l]}_j(t_{ω})+\sum_{t=t_0+1}^{t_{ω}}(β^{[l]})^{t_{ω}-t}s^{[l]}_j(t)=(β^{[l]})^{t_{ω}-t_0}u^{[l]}_j(t_0)+\sum_{t=t_0+1}^{t_ω}(β^{[l]})^{t_{ω}-t}\left(i^{[l]}_j(t)+b^{[l]}_j\right)≥0.
-  \end{equation}
-  Is there on the other hand a \(t'\) with \(s^{[l]}_j(t')=1\), then let \(t'\) be maximal \(≤t_{ω}\). By assumption we now have \(∀_{t∈\{t'+1…t_{ω}\}}i^{[l]}_j(t)+b^{[l]}_j≥0\). Since \(s^{[l]}_j(t')=1\) we further have \(p^{[l]}_j(t')≥ϑ\), so by~\autoref{lem:u-p-nonz-eqiv} \(u^{[l]}_j(t')≥0\) such that we can conclude by~\autoref{lem:potential-through-time-plus}.
+  If \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_i(t)=0\), we get by assumption
+  \begin{equation*}
+    u^{[l]}_i(t_{ω})=u^{[l]}_i(t_{ω})+\sum_{t=t_0+1}^{t_{ω}}(β^{[l]})^{t_{ω}-t}s^{[l]}_i(t)=(β^{[l]})^{t_{ω}-t_0}u^{[l]}_i(t_0)+\sum_{t=t_0+1}^{t_ω}(β^{[l]})^{t_{ω}-t}\left(i^{[l]}_i(t)+b^{[l]}_i\right)≥0.
+  \end{equation*}
+  Is there on the other hand a \(t'\) with \(s^{[l]}_i(t')=1\), then let \(t'\) be maximal \(≤t_{ω}\). By assumption we now have \(∀_{t∈\{t'+1…t_{ω}\}}i^{[l]}_i(t)+b^{[l]}_i≥0\). Since \(s^{[l]}_i(t')=1\) we further have \(p^{[l]}_i(t')≥ϑ\), so by~\autoref{lem:u-p-nonz-eqiv} \(u^{[l]}_i(t')≥0\) such that we can conclude by~\autoref{lem:potential-through-time-plus}.
 \end{proof}
-%TODO: remark why more general false
+%MAYBE: remark why more general false
 %DONE: β=1 oder nicht in Formeln nicht vergessen
 
-\begin{remark}
-  One might think that~\eqref{eq:5} should suffice as an assumption, since%TODO
-\end{remark}
+The following two propositions show that a neuron in a \rdtlifsnn has an internal “linear” structure.
 
-%TODO: comment about linear structure
+%DONE: comment about linear structure
 \begin{proposition}\label{lem:sum-spikes-slowly-through-time}
-  Let \(β=1\), \(t_0,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). Suppose \(u^{[l]}_j(t_0-1)<ϑ\) and further \(∀_{t∈\rangeI{t_0}{t_{ω}}}i^{[l]}_j(t)+b^{[l]}_j≤ϑ\) and \(0≤u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_ω}\left(i^{[l]}_j(t)+b^{[l]}_j\right)\). If moreover either \(∀_{t∈\rangeI{t_0}{t_{ω}}}s^{[l]}_j(t)=0\) or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_j(t)+b^{[l]}_j≥0\), where \(t'\) is the last time \(≤t_{ω}\) such that \(s^{[l]}_j(t')=1\), then
-  \[ \sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_j(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_j(t)+b^{[l]}_j\right)\right) \right\rfloor. \]
+  Let \(β=1\), \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). Suppose \(u^{[l]}_i(t_0-1)<ϑ\) and further \(∀_{t∈\rangeI{t_0}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≤ϑ\). If moreover both
+  \[ 0≤u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_ω}\left(i^{[l]}_i(t)+b^{[l]}_i\right) \]
+  and \(∀_{t∈\rangeI{t_0}{t_{ω}}}s^{[l]}_i(t)=0\) or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≥0\), where \(t'\) is the last time \(≤t_{ω}\) such that \(s^{[l]}_i(t')=1\), then
+  \[ \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)\right) \right\rfloor. \]
 \end{proposition}
 
 \begin{proof}
-  It suffices to show \(0≤u^{[l]}_j(t_{ω})<ϑ\) due to~\cref{lem:spike-sum}.
-  We get \(0≤u^{[l]}_j(t_{ω})\) due to~\cref{lem:pos-input-pos-res-pos} and \(u^{[l]}_j(t_{ω})<ϑ\) due to~\cref{lem:cont-bar}.
+  It suffices to show \(0≤u^{[l]}_i(t_{ω})<ϑ\) due to~\cref{lem:spike-sum}.
+  We get \(0≤u^{[l]}_i(t_{ω})\) due to~\cref{lem:pos-input-pos-res-pos} and \(u^{[l]}_i(t_{ω})<ϑ\) due to~\cref{lem:cont-bar}.
 
 \end{proof}
 
 \begin{proposition}\label{lem:sum-spikes-decaying}
-  Let \(β=1\), \(t_0,t_m,t_{ω}∈[T]\) and \(j∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_m≤t_{ω}\). If \(∀_{t∈\rangeI{t_m+1}{t_{ω}}}i^{[l]}_j(t)+b^{[l]}_j=0\), \(u^{[l]}_j(t_m)≥0\) and \(0≤u^{[l]}_j(t_0-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_j(t)+b^{[l]}_j\right)≤ϑ(t_ω-t_m+1)\), then
-  \[ \sum_{t=t_0}^{t_{ω}}s^{[l]}_j(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_j(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_j(t)+b^{[l]}_j\right)\right) \right\rfloor. \]
+  Let \(β=1\), \(t_0,t_m,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_m≤t_{ω}\). If \(∀_{t∈\rangeI{t_m+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i=0\), \(u^{[l]}_i(t_m)≥0\) and
+  \[ 0≤u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)≤ϑ(t_ω-t_m+1), \]
+  then
+  \[ \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)\right) \right\rfloor. \]
 \end{proposition}
 
 \begin{proof}
-  It suffices to show \(0≤u^{[l]}_j(t_{ω})<ϑ\) due to~\cref{lem:spike-sum}.
-  We get \(u^{[l]}_j(t_{ω})≥0\) from~\autoref{lem:potential-through-time-plus} using our assumptions, in particular \(u^{[l]}_j(t_m)≥0\).
-  Furthermore, \(u^{[l]}_j(t_{ω})<ϑ\); otherwise, if \(u^{[l]}_j(t_{ω})≥ϑ\), then we had \(∀_{t∈\{t_m…t_{ω}\}}u^{[l]}_j(t)≥ϑ\) by~\autoref{lem:potential-through-time-minus} and therefore in particular \(∀_{t∈\{t_m…t_{ω}\}}s^{[l]}_j(t)=1\), from which we get
+  It suffices to show \(0≤u^{[l]}_i(t_{ω})<ϑ\) due to~\cref{lem:spike-sum}.
+  We get \(u^{[l]}_i(t_{ω})≥0\) from~\autoref{lem:potential-through-time-plus} using our assumptions, in particular \(u^{[l]}_i(t_m)≥0\).
+  Furthermore, \(u^{[l]}_i(t_{ω})<ϑ\); otherwise, if \(u^{[l]}_i(t_{ω})≥ϑ\), then we had \(∀_{t∈\{t_m…t_{ω}\}}u^{[l]}_i(t)≥ϑ\) by~\autoref{lem:potential-through-time-minus} and therefore in particular \(∀_{t∈\{t_m…t_{ω}\}}s^{[l]}_i(t)=1\), from which we get
   \begin{align*}
-   u^{[l]}_j(t_{ω}) &= u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}(k)+b^{[l]}-ϑs^{[l]}(k)\right)\\
-                   &= u^{[l]}_j(t_0-1)+\sum_{k=t_0}^{t_m}\left(i^{[l]}(k)+b^{[l]}\right)-ϑ\sum_{k=t_0}^{t_{ω}}s^{[l]}(k) \\
+   u^{[l]}_i(t_{ω}) &= u^{[l]}_i(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}(k)+b^{[l]}-ϑs^{[l]}(k)\right)\\
+                   &= u^{[l]}_i(t_0-1)+\sum_{k=t_0}^{t_m}\left(i^{[l]}(k)+b^{[l]}\right)-ϑ\sum_{k=t_0}^{t_{ω}}s^{[l]}(k) \\
                  &≤ ϑ(t_ω-t_m+1)-ϑ(t_ω-t_m+1)-ϑ\sum_{k=t_0}^{t_{m}-1}s^{[l]}(k) \\
                  &≤ 0
   \end{align*}
-  contradicting \(u^{[l]}_j(t_{ω})≥ϑ\).
+  contradicting \(u^{[l]}_i(t_{ω})≥ϑ\).
 \end{proof}

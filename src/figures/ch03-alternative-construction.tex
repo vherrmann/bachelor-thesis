@@ -1,0 +1,74 @@
+\begin{tikzpicture}[
+    >=LaTeX, % Use default LaTeX arrows
+    % Styles 
+    node/.style={ % Input or output node
+        circle,
+        minimum width=2.25em,
+        draw,
+        fill=gray!10,
+        thick,
+        font=\scriptsize
+    },
+    group/.style={
+        rectangle,
+        rounded corners=1mm,
+        draw,
+        thick
+    }, 
+    innerNode/.style={
+        circle,
+        minimum width=0.3em,
+        inner sep=0pt,
+        draw,
+        fill=gray!10,
+        thick
+    },
+    arrow/.style={
+        -latex,
+        thick
+    },
+    backprop/.style={ % Backpropagation arrows
+        arrow,
+        dashed,
+        gray
+    }
+]
+    
+    % Input
+    \foreach \x in {1,...,2}
+        \draw node at (0, -\x*1.25 - 0.625) [node] (first_\x) {$x_\x$};
+    \draw node at (0, -5*1.25 + 0.625) [node] (first_n) {$x_n$};
+    \path (first_2) -- (first_n) node[pos=0.5, scale=2] {$\vdots$};
+    
+    % Hidden 1
+    \foreach \x in {1,...,2}
+        \node at (2.5, -\x*1.25 - 0.625) [node] (second_\x){$\x$};
+    \draw node at (2.5, -4*1.25 - 0.625) [node] (second_n) {$n$};
+    \path (second_2) -- (second_n) node[pos=0.5, scale=2] {$\vdots$};
+    \draw node at (2.5, -5*1.25 - 0.625) [node] (second_a1) {$a_1$};
+
+    % Intermediate
+    \foreach \x in {1,...,2}
+        \node at (6, -\x*1.25 - 0.625) [node] (third_\x){$\x$};
+    \draw node at (6, -4*1.25 - 0.625) [node] (third_n) {$n$};
+    \path (third_2) -- (third_n) node[pos=0.5, scale=2] {$\vdots$};
+
+    % Input -> hidden 1
+    \foreach \i in {1,2,n}
+        \draw [arrow] (first_\i) to (second_\i);
+
+    % A1 -> Intermediate
+    \foreach \i in {1,2,n}
+        \draw [arrow] (second_a1) to (third_\i);
+
+    % hidden 1 -> Intermediate
+    \foreach \i in {1,2,n}
+        \draw [arrow] (second_\i) to (third_\i);
+
+    % Layer Labels
+    \node[above=0.25cm of first_1] (xlabel) {Input};
+    \node[above=0.25cm of second_1] (h1label) {First hidden layer};
+    \node[above=0.25cm of third_1] (h2label) {Intermediate layer};
+\end{tikzpicture}
+
+% adapted from https://github.com/fraserlove/nntikz/tree/main

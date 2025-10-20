@@ -15,7 +15,7 @@ genListings() {
     name=$1
     repoLoc=$2
     langExts=(py ts tsx css glsl cpp)
-    echo "\subsection{$name}"
+    echo "\subsection{$name}\label{ch:$name}"
     echo "See~\cite{${name}} for the corresponding git repository."
     for ext in "${langExts[@]}"; do
         lang=$(extToLang "$ext")
