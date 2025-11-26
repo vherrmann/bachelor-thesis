@@ -17,7 +17,7 @@
     ]
     \addplot[thick, red, dashdotdotted]{(-cos(deg(floor(x*2+1)/2))+cos(deg(floor(x*2)/2)))*2};
     \addlegendentry{$ε=0.25$} % ε≈0.5*(1/2) (since sin(x)≈x for x≪1)
-    \addplot[thick, purple, dashed]{(-cos(deg(floor(x*5+1)/5))+cos(deg(floor(x*5)/5)))*5};
+    \addplot[thick, green, dashed]{(-cos(deg(floor(x*5+1)/5))+cos(deg(floor(x*5)/5)))*5};
     \addlegendentry{$ε=0.1$} % ε≈0.5*(1/5) (since sin(x)≈x for x≪1)
     \addplot[blue]{sin(deg(x))};
   \end{axis}

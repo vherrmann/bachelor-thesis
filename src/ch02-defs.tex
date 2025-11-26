@@ -2,27 +2,27 @@
 \label{ch:defs}
 
 \subsection{Notations and Conventions}
-First a few words about the notation we will use in the paper:
+First a few words about the notation we will use in the thesis:
 
 \newcommand{\rangeI}[2]{\{#1,…,#2\}}
-We write \(\rangeI{a}{b}≔\{a,a+1,…,b\}\) for the range of integers from \(a\) to \(b\) and in particular \([n]≔\rangeI{1}{n}\) for the integers from \(1\) to \(n\) and \([n]_0≔\rangeI{0}{n}\) for the integers from \(0\) to \(n\). Moreover \(∨\) is used to mean the logical “or”, \(∧\) to mean the logical “and”.
+We write \(\rangeI{a}{b}≔\{a,a+1,…,b\}\) for the range of integers from \(a\) to \(b\) and in particular \([n]≔\rangeI{1}{n}\) and \([n]_0≔\rangeI{0}{n}\) for the integers from \(1\) to \(n\) and from \(0\) to \(n\) respectively. Moreover \(∨\) is used to mean the logical “or” and \(∧\) to mean the logical “and”.
 
-We write \([x,y)≔\{z∈ℝ\mid x≤z<y\}\) for the half-open interval between \(x∈ℝ\) and \(y∈ℝ\) and further use \(⟦x,y⦆\) with \(x,y∈ℝ^n\) to write half-open cuboids \(\prod_{i=1}^n[x_i,y_i)\). Similarly \(⟦x,y⟧\) is the closed cuboid \(\prod_{i=1}^n[x_i,y_i]\). A cube is a cuboid such that all sides have the same length. We further take \([x,y)\) to be empty for \(x,y∈ℝ\) with \(x≥y\), and \([-∞,x)]\) to mean \((-∞,x)\). This means in particular, that \(⟦x,y⦆=∅\) holds exactly when \(y_i≤x_i\) for a \(i∈[n]\). 
+We write \([x,y)≔\{z∈ℝ\mid x≤z<y\}\) for the half-open interval between \(x∈ℝ\) and \(y∈ℝ\) and further use \(⟦x,y⦆\) with \(x,y∈ℝ^n\) to denote half-open cuboids \(\prod_{i=1}^n[x_i,y_i)\). Similarly \(⟦x,y⟧\) is the closed cuboid \(\prod_{i=1}^n[x_i,y_i]\). A cube is a cuboid such that all sides have the same length. We further take \([x,y)\) to be empty for \(x,y∈ℝ\) with \(x≥y\), and \([-∞,x)\) to mean \((-∞,x)\). Thus, \(⟦x,y⦆=∅\) holds exactly when \(y_i≤x_i\) for a \(i∈[n]\). 
 
 We further use \(\operatorname{diam}_p(U)≔\sup_{x,y∈U}\norm{x-y}_p\) to mean the diameter of \(U⊂ℝ^m\) regarding the \(p\)-norm \(\norm{·}_p\).
 
 \newcommand{\idM}[1]{I_{#1}}
 \newcommand{\zeroV}[1]{\mathbf{0}_{#1}}
 \newcommand{\oneV}[1]{\mathbf{1}_{#1}}
-Continuing, \(e_i≔(0,…,1,…,0)∈ℝ^n\) is the \(i\)-th standard basis vector, \(\zeroV{n}≔(0,…,0)∈ℝ^n\), \(\oneV{n}≔(1,…,1)∈ℝ^n\) the vectors containing \(0\) and \(1\)s in every component, respectively and \(\idM{n}∈ℝ^{n×n}\) the identity matrix of size \(n×n\). Is moreover \(W∈ℝ^{n×m}\) a matrix, then we will write \(w_i∈ℝ^{1×n}\) for the \(i\)-th row vector and \(W_{i,j}∈ℝ\) for the value of the cell \((i,j)\). We add an ordering \(≤\) to vectors: \(x≤y\) holds exactly for \(x,y∈ℝ^n\) if \(∀_{i∈[n]}x_i≤y_i\). Further \(x<y\) is canonically defined, so \(x<y\) holds exactly if \(x≤y\) but not \(x=y\).
+Continuing, \(e_i≔(0,…,1,…,0)∈ℝ^n\) is the \(i\)-th standard basis vector; \(\zeroV{n}≔(0,…,0)∈ℝ^n\) and \(\oneV{n}≔(1,…,1)∈ℝ^n\) are the vector containing \(0\)s and \(1\)s in every component respectively and \(\idM{n}∈ℝ^{n×n}\) is the identity matrix of size \(n×n\). Moreover, for a matrix \(W∈ℝ^{n×m}\) we write \(w_i∈ℝ^{1×n}\) for the \(i\)-th row vector and \(W_{i,j}∈ℝ\) for the value of the component \((i,j)\). We add an ordering \(≤\) to vectors via the following: For all \(x,y∈ℝ^n\), \(x≤y\) holds exactly if \(∀_{i∈[n]}x_i≤y_i\). Furthermore, \(x<y\) is canonically defined to hold if \(x≤y\) but not \(x=y\).
 
-Is further \(f:U→ℝ^n\) a function with arbitrary domain \(U\), then \(f_i≔π_i∘f\) is the \(i\)-th component function. \(π_i:ℝ^n→ℝ\) is the projection to the \(i\)-th component. We also write \(f^{-1}\) for the inverse of \(f\) and \(f^{-1}(W)≔\{x∈U \mid f(x)∈W\}\) for the preimage of \(W\) under \(f\). The set of continuous functions of type \(U→W\) will be written by \(𝒞^0(U,W)\). Correspondingly, the set of \(k\)-times continuously differentiable functions will be written \(𝒞^k(U,W)\). The total derivative of a differentiable function \(f:U→W\) is written as \(df:U→\operatorname{Hom}_{ℝ}(W,W)\).
+If \(f:U→ℝ^n\) is a function with arbitrary domain \(U\), then \(f_i≔π_i∘f\) is the \(i\)-th component function, where \(π_i:ℝ^n→ℝ\) is the projection to the \(i\)-th component. We also write \(f^{-1}\) for the inverse of \(f\) and \(f^{-1}(W)≔\{x∈U \mid f(x)∈W\}\) for the preimage of \(W\) under \(f\). The set of continuous functions from \(U\) to \(W\) will be written as \(𝒞^0(U,W)\). Analogously, the set of \(k\)-times continuously differentiable functions will be written \(𝒞^k(U,W)\). The total derivative of a differentiable function \(f:U→W\) is written as \(df:U→\operatorname{Hom}_{ℝ}(W,W)\).
 
-The norms \(\norm{·}_p\) either are the \(p\)-norm on \(ℝ^n\) or the operator norm with regard to the \(p\)-norm \(\norm{·}_p\) in input and output space. Further, \(\norm{f}_{∞,p}≔\sup_{x∈U}\norm{f(x)}_p\) for a function \(f:U→ℝ^n\).
+The norms \(\norm{·}_p\) are either the \(p\)-norm on \(ℝ^n\) or the operator norm with regard to the \(p\)-norm \(\norm{·}_p\) in input and output space. Furthermore, we define \(\norm{f}_{∞,p}≔\sup_{x∈U}\norm{f(x)}_p\) for a function \(f:U→ℝ^n\).
 
-Some further notation regarding geometry: \(\overline{A}\) is the closure of \(A⊂ℝ^n\), \(A°\) the interior; we further write \(B_{ε,p}(x)≔\{y\mid \norm{y-x}_p<ε\}\) for \(ε>0\), \(p≥1\) and \(x∈ℝ^n\).
+Some additional notation regarding geometry: \(\overline{A}\) is the closure of \(A⊂ℝ^n\), \(A°\) is the interior; the open balls in \(ℝ^n\) regarding \(p\)-Norm are notated by \(B_{ε,p}(x)≔\{y\mid \norm{y-x}_p<ε\}⊂ℝ^n\) for \(ε>0\), \(p≥1\) and \(x∈ℝ^n\).
 
-We moreover write \(\max{U}≔(\max_{u∈U}u_i)_{i∈[n]}\) with \(U⊂(ℝ∪\{±∞\})^n\) for the maximum by component of \(U\), we similarly define \(\min{U}\), \(\inf{U}\) and \(\sup{U}\). In addition we use the conventions \(\inf(∅)=∞\) and \(\sup(∅)=-∞\). We will also use \(∧\) and \(∨\) to write the supremum and infimum respectively when convenient.
+We write \(\max{U}≔(\max_{u∈U}u_i)_{i∈[n]}\) with \(U⊂(ℝ∪\{±∞\})^n\) for the maximum by component of \(U\), and similarly define \(\min{U}\), \(\inf{U}\) and \(\sup{U}\). In addition we use the conventions \(\inf(∅)=∞\) and \(\sup(∅)=-∞\).
 
 %DONE: f^-1 for the inverted function, f^-1(U) for preimage
 %DONE: define < for vectors (convention)
@@ -46,6 +46,10 @@ for a formula \(A\), such that in particular \(\charac{M}(x)=\oneP{(x∈M)}\).
 
 \subsection{Motivation}
 
+%DONE: hier überarbeiten
+
+In~\cite{neuronaldynamics2014} neurons are described as follows (\cref{fig:ch02-structure-of-neuron}):
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.7\linewidth]{src/figures/ch02-structure-of-neuron.png}
@@ -54,15 +58,19 @@ for a formula \(A\), such that in particular \(\charac{M}(x)=\oneP{(x∈M)}\).
 \end{figure}
 \footnotetext{Source: By BruceBlaus - Own work, CC BY 3.0, \url{https://commons.wikimedia.org/w/index.php?curid=28761830 }}
 
-%DONE: hier überarbeiten
-
-A neuron as in~\cref{fig:ch02-structure-of-neuron} has been described in~\cite{neuronaldynamics2014} by the following:
-
 \begin{displayquote}
   A typical neuron can be divided into three functionally distinct parts, called dendrites, soma [also called cell body], and axon; […]. Roughly speaking, the dendrites play the role of the ‘input device’ that collects signals from other neurons and transmits them to the soma. The soma is the ‘central processing unit’ that performs an important non-linear processing step: If the total input arriving at the soma exceeds a certain threshold, then an output signal is generated. The output signal is taken over by the ‘output device’, the axon, which delivers the signal to other neurons.
 \end{displayquote}
 
-The nature of the signals traveling between neurons is described in a following paragraph.
+The book further describes that the neuron signals consist of short electrical pulses which we will call spikes. Since the pulses of a neuron look alike and since the pulses never overlap we can regard the output of a neuron as a list of zeros and ones, as a list of bits. We will call such lists spike trains.
+
+Those spike trains update the cell-body by changing an internal variable, the membrane potential of the neuron. It is increased or decreased by incoming spikes depending on the neuron of origin. If the membrane potential reaches a threshold, the neuron will reset the potential to its resting potential and spike such that the subscribed neurons receive an update. If it does not reach the threshold, the potential just decays over time to the resting potential.
+
+We will model the update of subscribed neurons with a decay factor: Instead of having the input to a neuron drop down to the resting state immediately after receiving a spike, the input will decay over time.
+
+\begin{comment}
+
+The nature of the signals traveling between neurons is described in the following paragraph.
 
 \begin{displayquote}
   The neuronal signals consist of short electrical pulses […]. The form of the pulse does not change as the action potential propagates along the axon. A chain of action potentials emitted by a single neuron is called a spike train – a sequence of stereotyped events which occur at regular or irregular intervals; […]. Since isolated spikes of a given neuron look alike, the form of the action potential does not carry any information. Rather, it is the number and the timing of spikes which matter. 
@@ -74,54 +82,52 @@ Finally, the effect of signals on the state of the cell body is outlined in the 
   The effect of a spike on the postsynaptic neuron can be recorded with an intracellular electrode which measures the potential difference u(t) between the interior of the cell and its surroundings. This potential difference is called the membrane potential. Without any input, the neuron is at rest corresponding to a constant membrane potential urest. After the arrival of a spike, the potential changes and finally decays back to the resting potential, […].
 \end{displayquote}
 
-\begin{comment}
 Finally the connection between two neurons has a small gap, called synapse:
 
 \begin{displayquote}
   The site where the axon of a presynaptic neuron makes contact with the dendrite (or soma) of a postsynaptic cell is the synapse. […] At a chemical synapse, the axon terminal comes very close to the postsynaptic neuron, leaving only a tiny gap between pre- and postsynaptic cell membrane. This is called the synaptic cleft. When an action potential arrives at a synapse, it triggers a complex chain of bio-chemical processing steps that lead to a release of neurotransmitter from the presynaptic terminal into the synaptic cleft. As soon as transmitter molecules have reached the postsynaptic side, they will be detected by specialized receptors in the postsynaptic cell membrane […].
 \end{displayquote}
+
 \end{comment}
 
-To summarize: A neuron in the human brain has connections to other neurons, which may be weaker or stronger, as well as an internal membrane potential that is increased or decreased by the input from other neurons. If that membrane potential reaches a threshold, the neuron will spike and the subscribed neurons will receive an update. If it does not reach the threshold, the potential just decays to the rest potential. Updates from other neurons are delivered by chemical transmitters or electric signals. We will not model these signals as a single binary spike, such that in particular the input immediately drops down to the rest state, but will instead let it decay over time after the spike, e.g.\ because the chemical transmitters have some chance of taking a longer path to the next neuron.
-
-From these biologic observations we can derive the following differential equations for a single neuron input \(I:ℝ→ℝ\) and membrane potential \(U:ℝ→ℝ\):
-%DONE: work in {neuronaldynamics2014} and figure
+From these biologic observations one can derive the following system of differential equations for the input \(I:ℝ→ℝ\) and membrane potential \(U:ℝ→ℝ\) of a single neuron (c.f.~\cite{neuronaldynamics2014}):
+% DONE: work in {neuronaldynamics2014} and figure
 
 % DONE: graphic, https://en.wikipedia.org/wiki/Neuron#/media/File:Blausen_0657_MultipolarNeuron.png ?
 % DONE: link paper for equations
 \begin{align*}
- I'(t) &≔-τ_αI(t)+\sum_{j=1}^nw_is_i(t-Δt) \\
+ I'(t) &≔-τ_αI(t)+\sum_{i=1}^nw_is_i(t-Δt) \\
  U'(t) &≔-τ_βU(t)+I(t)+b-ϑs(t)
 \end{align*}
-Here \(s_i:ℝ→\{0,1\}\) represents the \(j\)-th connection of the given neuron spiking at time \(t\); the variables \(w_i∈ℝ\) represent the weights of the connections. The \(ϑs(t)\) resets the potential \(U(t)\) after a spike. Since we might get unresolvable dependencies between neurons otherwise, the connections need to have some latency \(Δt∈ℝ\). The variables \(τ_{α},τ_{β}>0\) specify the decay rate with which \(I\) and \(U\) respectively decay.
+Here \(s_i:ℝ→\{0,1\}\) represents the \(j\)-th connection of the given neuron spiking at time \(t\), the variables \(w_i∈ℝ\) represent the weights of the connections to other neuron and \(ϑs(t)\) resets the potential \(U(t)\) after a spike. To avoid unresolvable dependencies between neurons, the connections need to have some latency \(Δt∈ℝ\). The variables \(τ_{α},τ_{β}>0\) specify the rate with which \(I\) and \(U\) decay respectively.
 We also include the bias \(b∈ℝ\) in the differential equation of \(U\) to simplify constructions of \rdtlifsnn later. %While not so much neurologically motivated, the bias \(b\) can be replaced by a constantly spiking neuron adding that bias through the input \(I\).
 
 %DONE: motivate bias
 
-Since we are in an analog scenario, it is reasonable to assume that \(I\) and \(U\) describe smoothly differentiable functions. We can therefore use the first-order exponential integrator method to obtain a discretization of \(I\) and \(U\) from the differential equations. Let \(t_0,h∈ℝ\) be arbitrary and \(t_{n+1}≔t_n+h\). By using the fundamental theorem of calculus we get
+Since we are in an analog scenario, it is reasonable to assume that \(I\) and \(U\) are smoothly differentiable functions. We can therefore use the first-order exponential integrator method to obtain a discretization of \(I\) and \(U\) from the differential equations. Let \(t_0,h∈ℝ\) be arbitrary and \(t_{n+1}≔t_n+h\). By using the fundamental theorem of calculus we have
 \begin{align*}
   &e^{τ_{α}t_{n+1}}I(t_{n+1})-e^{τ_{α}t_n}I(t_n) \\
   &=\int_{t_n}^{t_{n+1}}\frac{d}{dt}\left(e^{τ_{α}t}I(t)\right)dt \\
   &=\int_{t_n}^{t_{n+1}}e^{τ_{α}t}(I'(t)+τ_αI(t))dt \\
-  &=\int_{t_n}^{t_{n+1}}e^{τ_{α}t}\left(\sum_{j=1}^nw_is_i(t-Δt)\right)dt
+  &=\int_{t_n}^{t_{n+1}}e^{τ_{α}t}\left(\sum_{i=1}^nw_is_i(t-Δt)\right)dt.
 \end{align*}
 If we assume the input from the spikes of other neurons to be constant during \([t_n,t_{n+1}]\), we get
 \begin{align*}
- &=\frac{1}{τ_{α}}(e^{τ_{α}t_{n+1}}-e^{τ_{α}t_n})\sum_{j=1}^nw_is_i(t-Δt) \\
- &=\frac{1}{τ_{α}}e^{τ_{α}t_{n+1}}(1-e^{τ_{α}h})\sum_{j=1}^nw_is_i(t-Δt)
+ &=\frac{1}{τ_{α}}(e^{τ_{α}t_{n+1}}-e^{τ_{α}t_n})\sum_{i=1}^nw_is_i(t-Δt) \\
+ &=\frac{1}{τ_{α}}e^{τ_{α}t_{n+1}}(1-e^{τ_{α}h})\sum_{i=1}^nw_is_i(t-Δt)
 \end{align*}
-So we get
-\[ I(t_{n+1})=e^{-τ_{α}h}I(t_n)+\frac{1}{τ_{α}}(1-e^{τ_{α}h})\sum_{j=1}^nw_is_i(t-Δt) \]
+which yields
+\[ I(t_{n+1})=e^{-τ_{α}h}I(t_n)+\frac{1}{τ_{α}}(1-e^{τ_{α}h})\sum_{i=1}^nw_is_i(t-Δt). \]
 Let us now use \(h=1\) and absorb \(\frac{1-e^{τ_{α}}}{τ_{α}}\) into the weights \((w_i)_{i∈[n]}\), such that we have
 \begin{equation}\label{eq:9}
-I(t_{n+1})=αI(t_n)+\sum_{j=1}^nw_is_i(t-Δt)
+I(t_{n+1})=αI(t_n)+\sum_{i=1}^nw_is_i(t-Δt)
 \end{equation}
 by writing \(α≔e^{-τ_{α}}\). We similarly obtain
 \begin{equation}\label{eq:11}
 U(t_{n+1})=βU(t_n)+I(t)+b-ϑs(t)
 \end{equation}
 by using the first-order exponential integrator method, defining \(β≔e^{-τ_{β}}\) and absorbing \(\frac{1-β}{τ_{β}}\) into \(I(0)\), \((w_i)_{i∈[n]}\), \(b\) and \(ϑ\).
-Note that we have \(α,β∈[0,1]\) by construction.
+Note that \(α,β∈[0,1]\) by construction.
 
 \begin{figure}[h]
   \centering
@@ -131,49 +137,49 @@ Note that we have \(α,β∈[0,1]\) by construction.
 \end{figure}
 
 %DONE: motivate in def. why α,β∈[0,1]
-We will now arrange those neurons into layers like shown in~\cref{fig:network-layout}, such that neurons are only connected to neurons from the previous layer or their own layer. Of course, since we allow recurrent connections we can always just merge all layers into the first one, but the layers do give us more control over the network.
+We will now arrange those neurons into layers as shown in~\cref{fig:network-layout}, such that neurons are only connected to neurons from the previous layer or their own layer. Of course, since we allow recurrent connections inside of layers we can always just merge all layers into the first one, but as we will see in~\cref{ch:partitions}, the layers allow us to analyze the networks more easily.
 For connections between different layers, we can use \(Δt=0\) in~\eqref{eq:9} since there can be no interdependent connections between neurons in different layers. For connections between neurons in the same layer we use \(Δt>0\) to prevent those interdependencies. Since we have previously chosen \(h=1\), it is natural to further choose \(Δt=1\).
 
 %MAYBE: define „spike train“
-Since we want to work with arbitrary data and not just spike trains, we further need to encode our data to spikes trains and decode it from spike trains. Like~\cite{nguyen2025timespikeunderstandingrepresentational} we choose a simple direct encoding and membrane potential outputs.
+Since we want to work with arbitrary data and not just spike trains, we further need to encode and decode our data to and from spikes trains. Like~\cite{nguyen2025timespikeunderstandingrepresentational} we choose a simple direct encoding for the encoder \(E\) and membrane potential outputs for the decoder \(D\).
 % DONE: why direct encoding, membrane potential output
 
 \subsection{Definitions}
 % DONE: graphic for whole network
-Our type of SNN should be thought of as a composition of an initial input layer, a number of hidden spiking layers with internal state and an affine-linear layer mapping spikes activations over time, so called spike trains, to the value of the output layer.
+Our type of SNN should be thought of as a composition of an initial input layer realizing the encoder \(E\), a number of hidden spiking layers with internal state and an affine-linear layer realizing the decoder \(D\). 
 
-We first define the structure of the hidden layers:
+We first define the structure of the neurons of a hidden layer. Note that for any given neuron \(i∈[n_l]\) in a layer \(l\), the functions \(i^{[l]}_i\) and \(u^{[l]}_i\) correspond to \(I\) and \(U\) from the previous section.
 
 % CANCELLED: graphic for single neuron/single layer
 \begin{definition}
-  The \textbf{input vector} \(i^{[l]}(t)∈\{0,1\}^{n_l}\), the \textbf{spike vector} \(s^{[l]}(t)∈\{0,1\}^{n_l}\), the \textbf{pre-spike membrane potential vector} \(p^{[l]}(t)\) and the \textbf{post-spike membrane potential vector} \(u^{[l]}(t)\) of a hidden layer \(λ=(W^{[l]},b^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\) with index \(l∈[L]\), are recursively defined as
+  The input vector \(i^{[l]}(t)∈\{0,1\}^{n_l}\), the spike vector \(s^{[l]}(t)∈\{0,1\}^{n_l}\), the pre-spike membrane potential vector \(p^{[l]}(t)\) and the post-spike membrane potential vector \(u^{[l]}(t)\) of a hidden layer \(λ=(W^{[l]},b^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\) with index \(l∈[L]\), are recursively defined as
   \begin{align}
     i^{[l]}(t) & ≔ α^{[l]}i^{[l]}(t-1)+W^{[l]}s^{[l-1]}(t)+V^{[l]}s^{[l]}(t-1), \\
     p^{[l]}(t) & ≔ β^{[l]}u^{[l]}(t-1)+i^{[l]}(t)+b^{[l]}, \\
     s^{[l]}(t) & ≔ H(p^{[l]}(t)-ϑ\oneV{n_l}), \\
     u^{[l]}(t) & ≔ p^{[l]}(t)-ϑs^{[l]}(t),
   \end{align}
-  with \(∀_{l∈[L]}s^{[l]}(0)=0\) and given
+  with \(s^{[l]}(0)=0\) for all \(l∈[l]\) and given
   \begin{enumerate}
-    \item[•] \textbf{initial membrane potential}: \(u^{[l]}(0)∈ℝ^{n_l}\),
-    \item[•] \textbf{initial input}: \(i^{[l]}(0)∈ℝ^{n_l}\),
-    \item[•] \textbf{weight matrices}: \(W^{[l]}∈ℝ^{n_l×n_{l-1}}\), \(V^{[l]}∈ℝ^{n_l×n_l}\),
-    \item[•] \textbf{bias vectors}: \(b^{[l]}∈ℝ^{n_l}\),
-    \item[•] \textbf{leaky terms}: \(α^{[l]},β^{[l]}∈[0,1]\),
-    \item[•] \textbf{threshold}: \(ϑ^{[l]}∈(0,∞)\),
+    \item[•] initial membrane potential \(u^{[l]}(0)∈ℝ^{n_l}\),
+    \item[•] initial input \(i^{[l]}(0)∈ℝ^{n_l}\),
+    \item[•] weight matrices \(W^{[l]}∈ℝ^{n_l×n_{l-1}}\), \(V^{[l]}∈ℝ^{n_l×n_l}\),
+    \item[•] bias vectors \(b^{[l]}∈ℝ^{n_l}\),
+    \item[•] leaky terms \(α^{[l]},β^{[l]}∈[0,1]\) and
+    \item[•] threshold \(ϑ^{[l]}∈(0,∞)\)
   \end{enumerate}
-  where \(H≔𝟙_{[0,∞)}\) is a step function, \(T∈ℕ\) is the number of \textbf{simulated time steps} and \(L∈ℕ\) the total \textbf{number of hidden layers}.
+  where \(H≔χ_{[0,∞)}\) is a step function, \(T∈ℕ\) is the number of simulated time steps and \(L∈ℕ\) the total number of hidden layers.
 \end{definition}
 
 \begin{remark}
-  While it is suppressed in the notation, \(i^{[l]}\), \(p^{[l]}\), \(s^{[l]}\) and \(u^{[l]}\) clearly not only depend on \(t\), but by recursion also on \(s^{[0]}\). Further, \(s^{[l]}\) can be represented as an element of \(\{0,1\}^{n_l×T}\), which will become useful later to quantify over spike trains. In particular, we will write \(σ(t)\) for \(σ∈\{0,1\}^{n_l×T}\) and \(1∈[T]\) to mean the \(t\)-th column vector of \(σ\).
+  While it is suppressed in the notation, \(i^{[l]}\), \(p^{[l]}\), \(s^{[l]}\) and \(u^{[l]}\) clearly not only depend on \(t\), but by recursion also on \(s^{[0]}\). Further, \(s^{[l]}\) can be represented as an element of \(\{0,1\}^{n_l×T}\), which will become useful later to quantify over spike trains. In particular, we will write \(σ(t)\) for \(σ∈\{0,1\}^{n_l×T}\) and \(t∈[T]\) to mean the \(t\)-th column vector of \(σ\).
 \end{remark}
 
 We further define recurrent d.t. LIF-SNN and the function the network realizes:
 \begin{definition}
   A \textbf{recurrent discrete-time LIF-SNN}, also called \rdtlifsnn, of \textbf{depth} \(L\) with \textbf{layer-widths} \((n_0,…,n_{L+1})\) and \(T∈ℕ\) time-steps is given by
   \[ Φ≔((W^{[l]},b^{[l]},V^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})_{l∈[L]},T,(E,D)) \]
-  where the \textbf{input encoder} \(E:ℝ^{n_0}→ℝ^{n_0×T}\) maps a vector \(x∈ℝ^{n_0}\) to a corresponding first layer spike activation \(∀_{t∈[T]}s^{[0]}(t)=E(x)(t)\) and the \textbf{output decoder} \(D:\{0,1\}^{n_L×T}→ℝ^{n_{L+1}}\) maps the spike activations of the last hidden layer to real values.
+  where the \textbf{input encoder} \(E:ℝ^{n_0}→ℝ^{n_0×T}\) maps a vector \(x∈ℝ^{n_0}\) to a corresponding first layer spike activation \(∀_{t∈[T]}s^{[0]}(t)=E(x)(t)\) and the \textbf{output decoder} \(D:\{0,1\}^{n_L×T}→ℝ^{n_{L+1}}\) maps the spike activations of the last hidden layer to values in \(ℝ^{n_{L+1}}\).
 \end{definition}
 % DONE: remark about spike trains being equiv. to \{0,1\}^…
 % DONE: replace „recursive SNN“ etc. by “recurrent SNN”
@@ -183,23 +189,23 @@ We further define recurrent d.t. LIF-SNN and the function the network realizes:
 % CANCELLED: layers mit kursiv?
 
 \begin{definition}
-  A recurrent discrete-time LIF-SNN \(ϕ\) \textbf{realizes} the function \(R(Φ):ℝ^{n_0}→ℝ^{n_{L+1}}\):
-  \[ R(Φ)(x)=D((s^{[L]}(t))_{t∈[T]})\quad \text{with }s^{[0]}≔E(x)\]
+  A recurrent discrete-time LIF-SNN \(ϕ\) \textbf{realizes} the function \(R(Φ):ℝ^{n_0}→ℝ^{n_{L+1}}\) defined by
+  \[ R(Φ)(x)=D((s^{[L]}(t))_{t∈[T]})\quad \text{with }s^{[0]}≔E(x).\]
 \end{definition}
 
 \begin{definition}
   A recurrent discrete-time LIF-SNN employs \textbf{direct encoding} if we have
   \[ ∀_{t∈[T]}E(x)(t)=x \]
   for the input encoder and has \textbf{membrane potential outputs} if the output decoder can be written as
-  \[ D((s(t))_{t∈[T]})=\sum_{t=1}^Ta_t(W^{[L+1]}s^{[L]}(t)+b^{[L+1]}) \]
+  \[ D((s^{[L]}(t))_{t∈[T]})=\sum_{t=1}^Ta_t(W^{[L+1]}s^{[L]}(t)+b^{[L+1]}) \]
   for some \((a_t)_{t∈[T]}∈ℝ^T\), \(b^{[L+1]}∈ℝ^{n_{L+1}}\) and \(W^{[L+1]}∈ℝ^{n_{L+1}×n_L}\).
 \end{definition}
 \begin{remark}
-  We will only consider recurrent discrete-time LIF-SNN with direct encoding and membrane potential outputs. In fact, we will use “recurrent discrete-time LIF-SNN” to mean “\rdtlifsnn with direct encoding and membrane potential”.
+  We will only consider recurrent discrete-time LIF-SNN with direct encoding and membrane potential outputs. In fact, we will use \rdtlifsnn to mean “\rdtlifsnn with direct encoding and membrane potential”.
 \end{remark}
 
 \begin{remark}
-  Our definition of \rdtlifsnn breaks now down to the definition \dtlifsnn of~\cite{nguyen2025timespikeunderstandingrepresentational} if we require \(α^{[l]}≔0\) and \(V^{[l]}\) for all layers \(l∈[L]\). So \rdtlifsnns can have recursive dependencies inside of the layers and decaying input vectors in contrast to the more simpler \dtlifsnns.
+  Our definition of \rdtlifsnn breaks down to the one of \dtlifsnn in~\cite{nguyen2025timespikeunderstandingrepresentational} if we require \(α^{[l]}≔0\) and \(V^{[l]}≔\zeroV{n_l×n_l}\) for all layers \(l∈[L]\). So \rdtlifsnns can have recursive dependencies inside of the layers and decaying input vectors in contrast to the more simpler \dtlifsnns.
 \end{remark}
 
 Let us now take a look at some simple examples of \rdtlifsnn:
@@ -209,9 +215,9 @@ Let us now take a look at some simple examples of \rdtlifsnn:
 
   Let us use constant width \(n_l=n\), weights \(W^{[l]}=\idM{n}\), \(V^{[l]}=\zeroV{n×n}\), biases \(b^{[l]}=0\), initial input \(i^{[l]}(0)=0\), initial membrane potential \(u^{[l]}(0)=0\), leaky terms  \(α^{[l]}=β^{[l]}=0\) and threshold \(ϑ^{[l]}=1\) for all \(l∈[L]\).
 
-  It follows from the definitions that \(i^{[l]}(t)=s^{[l-1]}(t)\) and therefore further
+  It follows from the definitions that \(p^{[l]}(t)=i^{[l]}(t)=s^{[l-1]}(t)\) and therefore further
   \[ s^{[l]}(t) = H(s^{[l-1]}(t)-\oneV{n_l}) = s^{[l-1]}(t). \]
-  So by induction we indeed get \(∀_{t∈[T]}s^{[L]}(t)=s^{[0]}(t)\).
+  Thus we indeed get \(∀_{t∈[T]}s^{[L]}(t)=s^{[0]}(t)\) by induction.
 \end{example}
 
 \begin{example}
@@ -220,41 +226,40 @@ Let us now take a look at some simple examples of \rdtlifsnn:
   Let us use constant width \(n_l=n\), weights \(W^{[l]}=\idM{n}\), \(V^{[l]}=\idM{n}\), biases \(b^{[l]}=0\), initial input \(i^{[l]}(0)=0\), initial membrane potential \(u^{[l]}(0)=0\), leaky terms \(α^{[l]}=0\), \(β^{[l]}=0\) and threshold \(ϑ^{[l]}=1\) for all \(l∈[L]\).
 
   We then get by definition
-  \[i^{[l]}(t)=s^{[l-1]}(t)+s^{[l]}(t-1)\]
+  \[p^{[l]}(t)=i^{[l]}(t)=s^{[l-1]}(t)+s^{[l]}(t-1)\]
   and therefore
   \[ s^{[l]}(t) = H(s^{[l-1]}(t)+s^{[l]}(t-1)-\oneV{n_l}). \]
-  So if and only if \(s^{[l-1]}_i(t)=1\) or \(s^{[l]}_i(t-1)=1\), then \(s^{[l]}_i(t)=1\). We therefore have \(∀_{t∈T}s^{[l]}_i(t)=1⇔∃_{t'∈[t]}(s^{[l-1]}_i(t'))=1\) for all \(i∈[n],l∈[L]\). Thus \(∀_{t∈T,i∈[n]}s^{[L]}_i(t)=1⇔∃_{t'∈[t-1]}(s^{[0]}_i(t'))=1\) by induction.
+  Hence \(s^{[l]}_i(t)=1\) if and only if \(s^{[l-1]}_i(t)=1\) or \(s^{[l]}_i(t-1)=1\). We therefore have \(∀_{t∈T}s^{[l]}_i(t)=1⇔∃_{t'∈[t]}(s^{[l-1]}_i(t'))=1\) for all \(i∈[n],l∈[L]\). Thus \(∀_{t∈T,i∈[n]}s^{[L]}_i(t)=1⇔∃_{t'∈[t-1]}(s^{[0]}_i(t'))=1\) by induction.
 
-  There also is a \dtlifsnn construction achieving the same behavior: We use the same parameters as before, but with \(V^{[l]}=\zeroV{n×n}\), \(W^{[l]}=T·\idM{n}\) and \(β^{[l]}=1\) for all layers \(l∈[L]\).
+  Even though this construction is more natural defined using \rdtlifsnn, there is also a \dtlifsnn construction achieving the same behavior using the same parameters as before, but with \(V^{[l]}=\zeroV{n×n}\), \(W^{[l]}=T·\idM{n}\) and \(β^{[l]}=1\) for all layers \(l∈[L]\).
 
-  We then get by definition
+  By definition
   \[i^{[l]}(t)=Ts^{[l-1]}(t)\]
   and therefore
   \begin{align*}
-    s^{[l]}(t) & = H(p^{[l]}(t)-\oneV{n_l}) \\
-    p^{[l]}(t) & =   p^{[l]}(t-1)+Ts^{[l-1]}(t)-s^{[l]}(t-1)
+    p^{[l]}(t) & =   p^{[l]}(t-1)+Ts^{[l-1]}(t)-s^{[l]}(t-1).
   \end{align*}
   By induction over \(t\) (see also~\cref{lem:non-recursive-defs}) we obtain 
-  \[ p^{[l]}(t) = \sum_{k=1}^t\left(Ts^{[l-1]}(k)-s^{[l]}(k-1)\right) \]
+  \[ p^{[l]}(t) = \sum_{k=1}^t\left(Ts^{[l-1]}(k)-s^{[l]}(k-1)\right). \]
   Let now \(i∈[n]\). Since \(s^{[l]}(0)=0\), we have \(\sum_{k=1}^ts^{[l]}_i(k-1)≤t-1\). Now if and only if there is any \(t_0∈[T]\) with \(s^{[l-1]}_i(t_0)=1\), we get
   \[p_i^{[l]}(t')=T\sum_{k=1}^{t'}s^{[l-1]}_i(k)-\sum_{k=1}^{t'}s^{[l]}_i(k-1)≥1\]
   for \(t'≥t_0\) and hence \(s_i^{[l]}(t')=1\).
   Just as before we now get the required property for the whole network by induction over the layers.
 \end{example}
 
-For a clearer construction of our networks we will additionally define neurons in our network:
+For a easier construction of our networks we will additionally define allow building networks up from single networks using the following definition.
 
-\begin{definition}
+\begin{definition}\label{def:ch02-def-neuron}
   The \textbf{\(i\)-th neuron} of a hidden layer \(λ=(W^{[l]},b^{[l]},V^{[l]},u^{[l]}(0),i^{[l]}(0),α^{[l]},β^{[l]},ϑ^{[l]})\) of a \rdtlifsnn is a tuple \((w,b,v,u_0,i_0)\) with \(w∈ℝ^{n_{l-1}}\), \(v∈ℝ^{n_l}\) and \(b,u_0,i_0∈ℝ\), such that \(b\), \(u_0\), \(i_0\) are the \(i\)-th component of \(b^{[l]}\), \(u^{[l]}(0)\), \(i^{[l]}(0)\) respectively and \(w\), \(v\) are the \(i\)-th row vector of \(W^{[l]}\), \(V^{[l]}\) respectively.
 \end{definition}
 
 \subsection{Basic properties}
 
-In the following we present some technical but helpful notations and lemmas for writing proofs about SNN. Of particular importance are \cref{def:non-recursive-defs} and \cref{lem:non-recursive-defs}, which introduce non-recursive formulas for the defining equations of \rdtlifsnns. 
+In the following we present some technical but helpful notations and lemmas for writing proofs on the behavior of \rdtlifsnns. Of particular importance are \cref{def:non-recursive-defs} and \cref{lem:non-recursive-defs}, which introduce non-recursive formulas for the defining equations of \rdtlifsnns. 
 %DONE: fix references to lem:non-recursive-defs
 
 \begin{definition}\label{def:non-recursive-defs}
-  Let \(t∈[T]\), \(l∈[L]\) and spike train families \(σ=(σ^{[l']})_{l'∈[l]_0}\), \(σ'=(σ'^{[l']})_{l'∈[l]_0}\) be given, such that \(∀_{l∈[l-1]_0}σ^{[l']}∈\{0,1\}^{n_{l'}×t}\) and \(σ^{[l]}∈\{0,1\}^{n_l×t}\) as well as \(∀_{l'∈[l]_0}σ'^{[l']}∈\{0,1\}^{n_{l'}×t}\), i.e. \(σ,σ'\) have to be chosen such that the terms in the following definitions are well-defined. We define
+  Let \(t∈[T]\), \(l∈[L]\) and spike train families \(σ=(σ^{[l']})_{l'∈[l]_0}\), \(σ'=(σ'^{[l']})_{l'∈[l]_0}\) be given, such that \(∀_{l'∈[l-1]_0}σ^{[l']}∈\{0,1\}^{n_{l'}×t}\) and \(σ^{[l]}∈\{0,1\}^{n_l×(t-1)}\) as well as \(∀_{l'∈[l]_0}σ'^{[l']}∈\{0,1\}^{n_{l'}×t}\), i.e. \(σ,σ'\) have to be chosen such that the following terms are well-defined. We define
   \begin{align}
    i^{[l]}(t;σ)&≔(α^{[l]})^ti^{[l]}(0)+\sum_{k=1}^t(α^{[l]})^{t-k}\left(W^{[l]}σ^{[l-1]}(k)+V^{[l]}σ^{[l]}(k-1)\right), \\
    p^{[l]}(t;σ) &≔ (β^{[l]})^tu^{[l]}(0)+\sum_{k=1}^t(β^{[l]})^{t-k}\left(i^{[l]}(k;σ)+b^{[l]}\right)-ϑ\sum_{k=1}^{t-1}(β^{[l]})^{t-k}σ^{[l]}(k),\\
@@ -264,9 +269,9 @@ In the following we present some technical but helpful notations and lemmas for 
 \end{definition}
 
 \begin{remark}
-  The spike train families \(σ\), \(σ'\) in \cref{def:non-recursive-defs} are chosen such that they only include the data that is actually needed in the definition of \(i^{[l]},p^{[l]},s^{[l]},u^{[l]}\). This is also the reason why we have to use \(σ'\) for \(u^{[l]}\); its definition requires in contrast to the definitions of \(i^{[l]},p^{[l]},s^{[l]}\) the newest spikes from the current layer layer.
+  The spike train families \(σ\), \(σ'\) in \cref{def:non-recursive-defs} are chosen such that they only include the data that is actually needed in the definition of \(i^{[l]},p^{[l]},s^{[l]},u^{[l]}\). This is also the reason why we have to use \(σ'\) in \(u^{[l]}\), in contrast to the definitions of \(i^{[l]},p^{[l]},s^{[l]}\) the definition of \(u^{[l]}\) requires the latest spikes from the current layer layer.
 
-  We will also allow using \(i^{[l]},p^{[l]},s^{[l]},u^{[l]}\) with extensions of the by the definition necessary spike train families, in particular we will use the functions with “complete” spike train families \((σ^{[l]})_{l∈[L]}\) with \(σ^{[l]}∈\{0,1\}^{n_l×T}\).
+  We will also allow using \(i^{[l]},p^{[l]},s^{[l]},u^{[l]}\) with extensions of the necessary spike trains. In particular, we will allow using the functions with “complete” spike trains \((σ^{[l]})_{l∈[L]}\) with \(σ^{[l]}∈\{0,1\}^{n_l×T}\).
 \end{remark}
 
 The notation for the previous definitions is justified due to
@@ -291,9 +296,9 @@ The notation for the previous definitions is justified due to
                             &= p^{[l]}(1)-ϑs^{[l]}(1) \\
                             &= u^{[l]}(1)
   \end{align*}
-  by using the definitions and using our assumption \(σ^{[l]}=s^{[l]}\). We have \(i^{[l]}(1;σ')=i^{[l]}(1)\), since \(σ'\) is an “extension” of \(σ\).
+  by using the definitions and using our assumption \(σ^{[l]}=s^{[l]}\). We even have \(i^{[l]}(1;σ')=i^{[l]}(1)\), since \(σ'\) is an “extension” of \(σ\).
 
-  Let further \(t>1\). We may assume \(i^{[l]}(t-1;σ)=i^{[l]}(t-1)\) and \(u^{[l]}(t-1;σ')=u^{[l]}(t-1)\) and obtain
+  Let now \(t>1\). We may assume \(i^{[l]}(t-1;σ)=i^{[l]}(t-1)\) and \(u^{[l]}(t-1;σ')=u^{[l]}(t-1)\) such that we obtain
   \begin{align*}
    i^{[l]}(t;σ)&=(α^{[l]})^ti^{[l]}(0)+\sum_{k=1}^t(α^{[l]})^{t-k}\left(W^{[l]}σ^{[l-1]}(k)+V^{[l]}σ^{[l]}(k-1)\right) \\
                            &=α^{[l]}i^{[l]}(t-1;σ)+\left(W^{[l]}σ^{[l-1]}(t)+V^{[l]}σ^{[l]}(t-1)\right) \\
@@ -320,7 +325,7 @@ The notation for the previous definitions is justified due to
 \end{proof}
 
 \begin{lemma}\label{lem:charac-floor}
-  Let \(a,x∈ℝ\), \(a≠0\) and \(b∈ℤ\). We then have \(\lfloor\tfrac{x}{a}\rfloor=b ⇔ 0≤x-ab<a\).
+  Let \(a,x∈ℝ\), \(a≠0\) and \(b∈ℤ\). Then \(\lfloor\tfrac{x}{a}\rfloor=b ⇔ 0≤x-ab<a\).
 \end{lemma}
 
 \begin{proof}
@@ -341,11 +346,11 @@ The notation for the previous definitions is justified due to
 \end{proof}
 
 \begin{lemma}\label{lem:u-p-nonz-eqiv}
-  Let \(t∈[T]\), \(l∈[L]\) and \(i∈[n_l]\). We then have \(u_i^{[l]}(t)≥0⇔p_i^{[l]}(t)≥0\).
+  Let \(t∈[T]\), \(l∈[L]\) and \(i∈[n_l]\). Then \(u_i^{[l]}(t)≥0⇔p_i^{[l]}(t)≥0\).
 \end{lemma}
 
 \begin{proof}
-  Let \(u_i^{[l]}(t)≥0\). Then \(p_i^{[l]}(t)=u_i^{[l]}(t)+ϑs_i^{[l]}(t)≥0\).
+  Let \(u_i^{[l]}(t)≥0\). Then \(p_i^{[l]}(t)=u_i^{[l]}(t)+ϑs_i^{[l]}(t)≥0\) by definition.
 
   If we know \(p_i^{[l]}(t)≥0\) instead, then suppose \(u_i^{[l]}(t)<0\). Since \(p_i^{[l]}(t)≠u_i^{[l]}(t)\), \(s_i^{[l]}(t)=1\) and therefore \(p_i^{[l]}(t)≥ϑ\). But this means \(u_i^{[l]}(t)=p_i^{[l]}(t)-ϑ≥0\).
 \end{proof}
@@ -355,9 +360,9 @@ The notation for the previous definitions is justified due to
 \end{lemma}
 
 \begin{proof}
-  Suppose there is a \(t\), \(t_0≤t≤t_{ω}\) with \(u^{[l]}_i(t)<0\). W.l.o.g.\ we can assume \(t\) to be minimal. Clearly \(t≠t_0\), since this contradicts our assumption. So we have \(u^{[l]}_i(t-1)≥0\) and \(i^{[l]}_i(t)+b^{[l]}_i≥0\). So from
+  Suppose there is a \(t\) with \(t_0≤t≤t_{ω}\) and \(u^{[l]}_i(t)<0\). W.l.o.g.\ we can assume \(t\) to be minimal. Clearly \(t≠t_0\), since this would contradict our assumptions. So we have \(u^{[l]}_i(t-1)≥0\) and \(i^{[l]}_i(t)+b^{[l]}_i≥0\). So from
   \[0>u^{[l]}_i(t)=p^{[l]}_i(t)-ϑs^{[l]}(t)=β^{[l]}u^{[l]}_i(t-1)+β(i^{[l]}_i(t)+b^{[l]}_i)-ϑs^{[l]}_i(t).\]
-  we conclude \(s^{[l]}_i(t)=1\) and \(p^{[l]}_i(t)≥ϑ\). But this means \(u^{[l]}_i(t)≥0\) by~\cref{lem:u-p-nonz-eqiv}.
+  we conclude \(s^{[l]}_i(t)=1\) and \(p^{[l]}_i(t)≥ϑ\). But this means \(u^{[l]}_i(t)≥0\) by~\cref{lem:u-p-nonz-eqiv} since \(ϑ>0\) by definition.
 \end{proof}
 
 \begin{lemma}\label{lem:cont-bar}
@@ -379,26 +384,26 @@ The notation for the previous definitions is justified due to
 \end{lemma}
 
 \begin{proof}
-  Suppose there is a \(t\), \(t_0≤t≤t_{ω}\), with \(u^{[l]}_i(t)<ϑ\). Let \(t\) be maximal with this property. Clearly \(t≠t_{ω}\) by assumption. So we have a contradiction by
+  Suppose there is a \(t\) with \(t_0≤t≤t_{ω}\) and \(u^{[l]}_i(t)<ϑ\). Let \(t\) be maximal with this property. Clearly \(t≠t_{ω}\) by assumption. We therefore have a contradiction by
   \[ ϑ≤u^{[l]}_i(t+1)-β^{[l]}(i^{[l]}_i(t+1)+b^{[l]}_i)+ϑs^{[l]}_i(t)=u^{[l]}_i(t). \]
 \end{proof}
 
 %DONE: i vs. j indices
 
 \begin{lemma}\label{lem:pos-input-pos-res-pos}
-  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). If both
+  Let \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). Then \(u^{[l]}_i(t_{ω})≥0\) if both
   \begin{equation}\label{eq:5}
     0≤(β^{[l]})^{t_{ω}-t_0}u^{[l]}_i(t_0)+\sum_{t=t_0+1}^{t_ω}(β^{[l]})^{t_{ω}-t}\left(i^{[l]}_i(t)+b^{[l]}_i\right)
   \end{equation}
-  and \(∀_{t∈\rangeI{t_0+1}{t_{ω}}}s^{[l]}_i(t)=0\) or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≥0\), where \(t'\) is the maximal time \(≤t_{ω}\) such that \(s^{[l]}_i(t')=1\), then \(u^{[l]}_i(t_{ω})≥0\).
+  and \(∀_{t∈\rangeI{t_0+1}{t_{ω}}}s^{[l]}_i(t)=0\) hold or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≥0\), where \(t'\) is the maximal time \(≤t_{ω}\) such that \(s^{[l]}_i(t')=1\), .
 \end{lemma}
 
 \begin{proof}
-  If \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_i(t)=0\), we get by assumption
+  If \(∀_{t∈\{t_0…t_{ω}\}}s^{[l]}_i(t)=0\), then we get by assumption
   \begin{equation*}
     u^{[l]}_i(t_{ω})=u^{[l]}_i(t_{ω})+\sum_{t=t_0+1}^{t_{ω}}(β^{[l]})^{t_{ω}-t}s^{[l]}_i(t)=(β^{[l]})^{t_{ω}-t_0}u^{[l]}_i(t_0)+\sum_{t=t_0+1}^{t_ω}(β^{[l]})^{t_{ω}-t}\left(i^{[l]}_i(t)+b^{[l]}_i\right)≥0.
   \end{equation*}
-  Is there on the other hand a \(t'\) with \(s^{[l]}_i(t')=1\), then let \(t'\) be maximal \(≤t_{ω}\). By assumption we now have \(∀_{t∈\{t'+1…t_{ω}\}}i^{[l]}_i(t)+b^{[l]}_i≥0\). Since \(s^{[l]}_i(t')=1\) we further have \(p^{[l]}_i(t')≥ϑ\), so by~\autoref{lem:u-p-nonz-eqiv} \(u^{[l]}_i(t')≥0\) such that we can conclude by~\autoref{lem:potential-through-time-plus}.
+  Is there on the other hand a \(t'\) with \(s^{[l]}_i(t')=1\), then let \(t'\) be maximal \(≤t_{ω}\). By assumption we now have \(∀_{t∈\{t'+1…t_{ω}\}}i^{[l]}_i(t)+b^{[l]}_i≥0\). Since \(s^{[l]}_i(t')=1\) we further have \(p^{[l]}_i(t')≥ϑ>0\), so by~\autoref{lem:u-p-nonz-eqiv} \(u^{[l]}_i(t')≥0\) such that we can conclude by~\autoref{lem:potential-through-time-plus}.
 \end{proof}
 %MAYBE: remark why more general false
 %DONE: β=1 oder nicht in Formeln nicht vergessen
@@ -408,33 +413,40 @@ The following two propositions show that a neuron in a \rdtlifsnn has an interna
 %DONE: comment about linear structure
 \begin{proposition}\label{lem:sum-spikes-slowly-through-time}
   Let \(β=1\), \(t_0,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_{ω}\). Suppose \(u^{[l]}_i(t_0-1)<ϑ\) and further \(∀_{t∈\rangeI{t_0}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≤ϑ\). If moreover both
-  \[ 0≤u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_ω}\left(i^{[l]}_i(t)+b^{[l]}_i\right) \]
+  \begin{equation}
+    0≤u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_ω}\left(i^{[l]}_i(t)+b^{[l]}_i\right)
+  \end{equation}
   and \(∀_{t∈\rangeI{t_0}{t_{ω}}}s^{[l]}_i(t)=0\) or \(∀_{t∈\rangeI{t'+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i≥0\), where \(t'\) is the last time \(≤t_{ω}\) such that \(s^{[l]}_i(t')=1\), then
-  \[ \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)\right) \right\rfloor. \]
+  \begin{equation}
+    \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)\right) \right\rfloor.
+  \end{equation}
 \end{proposition}
 
 \begin{proof}
   It suffices to show \(0≤u^{[l]}_i(t_{ω})<ϑ\) due to~\cref{lem:spike-sum}.
   We get \(0≤u^{[l]}_i(t_{ω})\) due to~\cref{lem:pos-input-pos-res-pos} and \(u^{[l]}_i(t_{ω})<ϑ\) due to~\cref{lem:cont-bar}.
-
 \end{proof}
 
 \begin{proposition}\label{lem:sum-spikes-decaying}
   Let \(β=1\), \(t_0,t_m,t_{ω}∈[T]\) and \(i∈[n_l]\) for an \(l∈[L]\) such that \(t_0≤t_m≤t_{ω}\). If \(∀_{t∈\rangeI{t_m+1}{t_{ω}}}i^{[l]}_i(t)+b^{[l]}_i=0\), \(u^{[l]}_i(t_m)≥0\) and
-  \[ 0≤u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)≤ϑ(t_ω-t_m+1), \]
+  \begin{equation}
+    0≤u^{[l]}_i(t_0-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)≤ϑ(t_ω-t_m+1),
+  \end{equation}
   then
-  \[ \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)\right) \right\rfloor. \]
+  \begin{equation}
+    \sum_{t=t_0}^{t_{ω}}s^{[l]}_i(t)=\left\lfloor \frac{1}{ϑ}\left(u^{[l]}_i(t_{0}-1)+\sum_{t=t_0}^{t_m}\left(i^{[l]}_i(t)+b^{[l]}_i\right)\right) \right\rfloor.
+  \end{equation}
 \end{proposition}
 
 \begin{proof}
   It suffices to show \(0≤u^{[l]}_i(t_{ω})<ϑ\) due to~\cref{lem:spike-sum}.
   We get \(u^{[l]}_i(t_{ω})≥0\) from~\autoref{lem:potential-through-time-plus} using our assumptions, in particular \(u^{[l]}_i(t_m)≥0\).
-  Furthermore, \(u^{[l]}_i(t_{ω})<ϑ\); otherwise, if \(u^{[l]}_i(t_{ω})≥ϑ\), then we had \(∀_{t∈\{t_m…t_{ω}\}}u^{[l]}_i(t)≥ϑ\) by~\autoref{lem:potential-through-time-minus} and therefore in particular \(∀_{t∈\{t_m…t_{ω}\}}s^{[l]}_i(t)=1\), from which we get
+  Furthermore, \(u^{[l]}_i(t_{ω})<ϑ\); otherwise, if \(u^{[l]}_i(t_{ω})≥ϑ\), then we have \(∀_{t∈\{t_m…t_{ω}\}}u^{[l]}_i(t)≥ϑ\) by~\autoref{lem:potential-through-time-minus} and in particular \(∀_{t∈\{t_m…t_{ω}\}}s^{[l]}_i(t)=1\). This then yields
   \begin{align*}
    u^{[l]}_i(t_{ω}) &= u^{[l]}_i(t_0-1)+\sum_{k=t_0}^{t_{ω}}\left(i^{[l]}(k)+b^{[l]}-ϑs^{[l]}(k)\right)\\
                    &= u^{[l]}_i(t_0-1)+\sum_{k=t_0}^{t_m}\left(i^{[l]}(k)+b^{[l]}\right)-ϑ\sum_{k=t_0}^{t_{ω}}s^{[l]}(k) \\
                  &≤ ϑ(t_ω-t_m+1)-ϑ(t_ω-t_m+1)-ϑ\sum_{k=t_0}^{t_{m}-1}s^{[l]}(k) \\
-                 &≤ 0
+                 &≤ 0,
   \end{align*}
   contradicting \(u^{[l]}_i(t_{ω})≥ϑ\).
 \end{proof}
